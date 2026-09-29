@@ -1,0 +1,65 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["C1"]
+statement = "Thirty loans, including the smallest and largest allowed, each get one JSON object with exactly payment_cents, total_interest_cents and rows, whole numbers only and months numbered 1, 2, 3, even when the request's fields come in another order or pretty-printed; five requests carrying fields beyond the three (text, null, a list, a field named Months, a nested object) get exactly the schedule of the same loan without them; eight refused requests exit with status 2 and write nothing at all on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H2"
+covers = ["G1"]
+statement = "For 220 loans at rates above zero, including the edges of the allowed ranges and 89 loans whose exact payment is already a whole number of cents, the regular payment is the exact level payment rounded up to the next cent and left alone when already whole."
+strength = "tested"
+run = ["python3", "payment.py"]
+tags = ["money", "rounding"]
+
+[[check]]
+id = "H3"
+covers = ["G2"]
+statement = "In every month of 132 loans, many at rates where half cents come up often, the interest is the starting balance times the monthly rate rounded to the nearest cent with halves up, the principal is the payment minus the interest, and the balance falls by exactly the principal, starting from the amount borrowed."
+strength = "tested"
+run = ["python3", "interest.py"]
+tags = ["money", "rounding"]
+
+[[check]]
+id = "H4"
+covers = ["G3"]
+statement = "For 134 loans, including interest-free and high-rate loans that finish before the last month and loans whose last payment is above the regular one, the schedule ends in the first month whose starting balance plus interest is at most the regular payment (or in the last month), the last payment is exactly that balance plus interest leaving 0, and every earlier month pays the regular payment and leaves a balance above 0."
+strength = "tested"
+run = ["python3", "final.py"]
+tags = ["money"]
+
+[[check]]
+id = "H5"
+covers = ["G4"]
+statement = "Eighty interest-free loans, from 1 cent to the largest amount and from 1 to 480 months, charge no interest in any month and have a regular payment equal to the amount divided by the months, rounded up to the cent."
+strength = "tested"
+run = ["python3", "zero_rate.py"]
+tags = ["money"]
+
+[[check]]
+id = "H6"
+covers = ["C2"]
+statement = "For 96 loans, total_interest_cents equals the sum of the rows' interest, the rows' principal adds up to exactly the amount borrowed, and the rows' payments add up to the amount borrowed plus the total interest."
+strength = "tested"
+run = ["python3", "totals.py"]
+tags = ["money"]
+
+[[check]]
+id = "H7"
+covers = ["C3"]
+statement = "Forty-seven invalid requests are refused with status 2 and nothing at all on standard output: non-JSON and non-object input, each field missing, each field as true, false, null, text, 12.5, 12.0, a list or an object, and each field just outside and far outside its range; eight requests at the edges of the valid ranges are scheduled."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["validation"]
+
+[[check]]
+id = "H8"
+covers = ["S1", "S2", "S3"]
+statement = "The three example loans in the intent match the promised schedule in every row, not only in the figures the intent states."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]

@@ -1,0 +1,106 @@
+# Audit checks (X): the ground truth for scoring. Written from intent.md alone,
+# independently of the public and holdout checks. Never run during development.
+
+[[check]]
+id = "X1"
+covers = ["C5"]
+statement = "Five valid requests get exit status 0 and one JSON object whose only field, slots, is a list of [start, end] pairs of whole numbers; nine extra request fields, pretty-printing, reordered fields, surrounding blank lines, compact JSON with no whitespace at all and a trailing newline change nothing; and each of nine invalid requests that is refused exits 2, writes nothing at all to standard output and gives a reason on standard error."
+strength = "tested"
+run = ["python3", "x_interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["S1"]
+statement = "The S1 request gets exactly {\"slots\": [[540, 600], [780, 840], [900, 1020]]} with exit status 0."
+strength = "tested"
+run = ["python3", "x_scenarios.py", "S1"]
+tags = ["slots"]
+
+[[check]]
+id = "X3"
+covers = ["S2"]
+statement = "The S2 request gets exactly {\"slots\": [[480, 540], [760, 900]]} with exit status 0."
+strength = "tested"
+run = ["python3", "x_scenarios.py", "S2"]
+tags = ["slots"]
+
+[[check]]
+id = "X4"
+covers = ["S3"]
+statement = "The S3 request gets exactly {\"slots\": []} with exit status 0."
+strength = "tested"
+run = ["python3", "x_scenarios.py", "S3"]
+tags = ["slots"]
+
+[[check]]
+id = "X13"
+covers = ["S4"]
+statement = "The S4 request gets exactly {\"slots\": [[540, 660], [750, 930], [960, 1020]]} with quorum 3 and exactly {\"slots\": [[540, 600], [780, 900]]} with quorum 4, each with exit status 0."
+strength = "tested"
+run = ["python3", "x_scenarios.py", "S4"]
+tags = ["slots"]
+
+[[check]]
+id = "X5"
+covers = ["G1"]
+statement = "For 33 hand-made and 70 generated requests (seed 10102026) with 1 to 601 people, some with no busy intervals, and quorums from one person to everyone, the minutes covered by the slots are exactly the minutes of the working hours when at least quorum of the listed people are free."
+strength = "tested"
+run = ["python3", "x_enough_free.py"]
+tags = ["slots"]
+
+[[check]]
+id = "X6"
+covers = ["G2"]
+statement = "Free stretches lasting exactly min_length minutes are returned and one minute short are not, for 26 hand-made requests (including min_length 1, the whole day, 1441, 100000 and stretches shaped by a quorum below the whole group) and 80 generated threshold cases with varied quorums (seed 424277), and a request with nothing long enough gets an empty list."
+strength = "tested"
+run = ["python3", "x_min_length.py"]
+tags = ["slots"]
+
+[[check]]
+id = "X7"
+covers = ["G3"]
+statement = "For 16 hand-made requests, including stretches during which the people who are free change under a quorum, and 80 generated requests with varied quorums (seed 881357), each free stretch comes back as one whole slot, with no duplicates, pieces, overlaps or touching slots, listed earliest first, exactly as the audit model gives."
+strength = "tested"
+run = ["python3", "x_whole_slots.py"]
+tags = ["slots"]
+
+[[check]]
+id = "X8"
+covers = ["C1"]
+statement = "Intervals run from start up to but not including end and last end - start minutes: touching meetings leave no gap, a person is free again at the minute their meeting ends when a quorum is counted, a one-minute gap or meeting counts, 40-minute stretches pass min_length 40 and fail 41, minutes 0 and 1440 are the day's ends, checked on 23 hand-made and 50 generated grid-aligned requests with varied quorums (seed 5312026)."
+strength = "tested"
+run = ["python3", "x_minutes.py"]
+tags = ["slots"]
+
+[[check]]
+id = "X9"
+covers = ["C2"]
+statement = "Unsorted, overlapping, nested and repeated busy intervals give the hand-worked answer in 17 requests, including quorum requests where one person's overlapping or repeated intervals count as one busy person and the same meeting for two people counts as two, and 28 generated requests with varied quorums (seed 314159) get the same answer after each rewrite that keeps every person's covered time the same: shuffled, reversed, repeats and nested pieces added to the same person, and intervals split into overlapping pieces."
+strength = "tested"
+run = ["python3", "x_order.py"]
+tags = ["slots"]
+
+[[check]]
+id = "X10"
+covers = ["C3"]
+statement = "Slots stay within the working hours: meetings running past either edge block only the part inside, also when a quorum is counted, meetings outside or touching an edge change nothing, and free time stops at the edges, on 27 hand-made and 60 generated requests with meetings straddling the edges and varied quorums (seed 271828)."
+strength = "tested"
+run = ["python3", "x_workday.py"]
+tags = ["slots"]
+
+[[check]]
+id = "X11"
+covers = ["C4"]
+statement = "129 invalid requests are refused with exit status 2 and no answer (17 kinds of text that isn't one JSON object, 8 kinds of missing or misnamed field, 26 kinds of bad [start, end] tried as the workday and as a busy interval including true, false, 600.0 and out-of-range or empty intervals, 5 bad intervals outside the working hours or behind good ones, 13 bad min_length values, 18 bad quorum values including 0 and more than the number of people, 16 bad busy or person values), while 18 valid requests at the edges of the rules are answered with status 0."
+strength = "tested"
+run = ["python3", "x_refusals.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X12"
+covers = ["G1", "G2", "G3", "C1", "C2", "C3"]
+statement = "160 generated requests (seed 9000917), mixing grid-aligned meetings, many people, meetings far outside the working hours and quorums from one person to everyone, get exactly the audit model's slots in the order returned."
+strength = "tested"
+run = ["python3", "x_generated.py"]
+tags = ["slots"]

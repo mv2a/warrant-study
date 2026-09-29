@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+"""Find the free slots in a working day when enough of a group can meet: one JSON object in, one out."""
+
+import json
+import sys
+
+DAY_MINUTES = 1440
+
+
+def refuse(reason):
+    print(f"invalid request: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def whole(value):
+    # bool is a subclass of int in Python, so compare types exactly.
+    return type(value) is int
+
+
+def interval(value, what):
+    if not isinstance(value, list) or len(value) != 2 or not all(whole(v) for v in value):
+        refuse(f"{what} must be a list of two whole numbers [start, end]")
+    start, end = value
+    if not 0 <= start < end <= DAY_MINUTES:
+        refuse(f"{what} must satisfy 0 <= start < end <= {DAY_MINUTES}, got {value}")
+    return start, end
+
+
+def not_json(constant):
+    # Python's json module accepts NaN and Infinity, but JSON does not allow them.
+    raise ValueError(f"{constant} is not allowed in JSON")
+
+
+def read_request():
+    if hasattr(sys, "set_int_max_str_digits"):
+        sys.set_int_max_str_digits(0)  # a whole number may have any number of digits
+    try:
+        request = json.load(sys.stdin, parse_constant=not_json)
+    except (ValueError, RecursionError) as error:  # ValueError covers JSONDecodeError and UnicodeDecodeError
+        refuse(f"not valid JSON ({error})")
+    if not isinstance(request, dict):
+        refuse("expected a JSON object")
+    for field in ("workday", "min_length", "quorum", "busy"):
+        if field not in request:
+            refuse(f"missing field {field}")
+
+    workday = interval(request["workday"], "workday")
+    min_length = request["min_length"]
+    if not whole(min_length) or min_length < 1:
+        refuse("min_length must be a whole number of minutes, at least 1")
+    busy = request["busy"]
+    if not isinstance(busy, list) or not busy:
+        refuse("busy must be a list with one entry per person, at least one person")
+    people = []
+    for number, person in enumerate(busy, start=1):
+        if not isinstance(person, list):
+            refuse(f"the entry for person {number} must be a list of busy intervals")
+        people.append([interval(item, f"busy interval {k} of person {number}") for k, item in enumerate(person, start=1)])
+    quorum = request["quorum"]
+    if not whole(quorum) or not 1 <= quorum <= len(people):
+        refuse(f"quorum must be a whole number from 1 to the number of people ({len(people)})")
+    return workday, min_length, quorum, people
+
+
+def busy_time(person, day_start, day_end):
+    """One person's busy time inside the working hours, as sorted, non-overlapping [start, end] pairs."""
+    merged = []
+    # Meetings outside the working hours don't matter.
+    for start, end in sorted((start, end) for start, end in person if day_start <= start and end <= day_end):
+        if start >= end:
+            continue  # the meeting lies outside the working hours
+        if merged and start <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end)  # the person is already busy then: count them once
+        else:
+            merged.append([start, end])
+    return merged
+
+
+def free_slots(workday, min_length, quorum, people):
+    day_start, day_end = workday
+    most_busy = len(people) - quorum  # the most people who may be busy at a free minute
+    change = {}  # minute -> change in the number of busy people at that minute
+    for person in people:
+        for start, end in busy_time(person, day_start, day_end):
+            change[start] = change.get(start, 0) + 1
+            change[end] = change.get(end, 0) - 1
+    points = sorted(set(change) | {day_start, day_end})
+
+    slots = []
+    busy_now, run_start = 0, None  # run_start: where the current free stretch began, if any
+    for here in points[:-1]:
+        busy_now += change.get(here, 0)
+        if busy_now <= most_busy:
+            if run_start is None:
+                run_start = here
+        elif run_start is not None:
+            if here - run_start >= min_length:
+                slots.append([run_start, here])
+            run_start = None
+    if run_start is not None and day_end - run_start >= min_length:
+        slots.append([run_start, day_end])
+    return slots
+
+
+def main():
+    workday, min_length, quorum, people = read_request()
+    json.dump({"slots": free_slots(workday, min_length, quorum, people)}, sys.stdout)
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()

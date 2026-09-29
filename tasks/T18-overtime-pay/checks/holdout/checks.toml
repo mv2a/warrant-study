@@ -1,0 +1,57 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "On ordinary days, 66 weeks (single days of 1 to 1440 minutes on every weekday, including 480, 481, 660 and 661, and random weeks of at most five worked days) split into regular minutes 1-480, overtime minutes 481-660 and double time after that."
+strength = "tested"
+run = ["python3", "daily.py"]
+tags = ["time"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Regular time stops at exactly 2400 minutes a week, including partway through a day, only the excess becomes overtime, daily and seventh-day overtime and double time neither count toward it nor change category, across 15 fixed and 50 random weeks."
+strength = "tested"
+run = ["python3", "weekly.py"]
+tags = ["time"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "Day 7 pays its first 480 minutes as overtime and the rest as double time exactly when all seven days are worked, and is an ordinary day when any of days 1-6 is off, across 89 weeks."
+strength = "tested"
+run = ["python3", "seventh.py"]
+tags = ["time"]
+
+[[check]]
+id = "H4"
+covers = ["C1"]
+statement = "Regular, overtime and double-time pay are each priced once from the week's minutes in that category and rounded to the nearest cent with halves up (500.5 pays 501, 0.48 pays 0, halves split over two days round once), and the total is their sum, across 91 weeks and rates."
+strength = "tested"
+run = ["python3", "rounding.py"]
+tags = ["money"]
+
+[[check]]
+id = "H5"
+covers = ["C2"]
+statement = "Valid requests, including reordered, pretty-printed and extra-field ones, exit 0 with exactly the seven fields as JSON integers, minutes adding up to the week and total_cents the sum of the three amounts, and refusals exit 2 with no output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H6"
+covers = ["C3"]
+statement = "Thirty-five kinds of invalid request (non-JSON, non-object, missing fields, wrong week lengths, days outside 0-1440 or not whole, rates outside 1-100000 or not whole, true/false, null and text values) are refused with status 2 and no output, while the extreme valid requests are paid."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["validation"]
+
+[[check]]
+id = "H7"
+covers = ["S1", "S2", "S3", "S4", "S5"]
+statement = "The five example weeks in the intent get exactly the responses the intent gives, both as written and with the request fields reordered and pretty-printed."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]

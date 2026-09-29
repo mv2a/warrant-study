@@ -1,0 +1,108 @@
+# Audit checks (X): written from intent.md alone, independently of the visible and hidden
+# checks. They are the ground truth for scoring and never run during development.
+# _expect.py holds the expected answers; the minute-split checks compare only the three
+# minute fields, and the money check prices the minutes each response reports.
+
+[[check]]
+id = "X1"
+covers = ["C2"]
+statement = "Eight valid weeks, including all zeros and all 1440-minute days, get exit status 0 and exactly the seven integer fields with the minutes adding up to the week; extra request fields, key order and whitespace leave the answer unchanged; and six invalid requests exit 2 with nothing at all on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["C3"]
+statement = "Over 130 invalid requests (not JSON, not an object, a missing field, a minutes list that is not 7 entries, a day or rate out of range, a boolean, a string, or a number written with a decimal point or an exponent, many generated from a fixed seed) exit 2 with no output, the refused example in C3 exits 2 with nothing at all on standard output, and days of 0 and 1440 minutes and rates of 1 and 100000 are still paid."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["input"]
+
+[[check]]
+id = "X3"
+covers = ["G1"]
+statement = "In weeks with day 7 off and under 40 hours worked, each day's first 480 minutes are regular, minutes 481 to 660 overtime and the rest double time, checked on and around both marks on every weekday and in 130 weeks generated from a fixed seed."
+strength = "tested"
+run = ["python3", "daily.py"]
+tags = ["time"]
+
+[[check]]
+id = "X4"
+covers = ["G2"]
+statement = "In weeks with day 7 off, regular minutes beyond 2400 become overtime, checked at 2399, 2400 and 2401 regular minutes, in long weeks where daily overtime and double time do not count toward the 40 hours, with double time never moved, and in 150 weeks generated from a fixed seed."
+strength = "tested"
+run = ["python3", "weekly.py"]
+tags = ["time"]
+
+[[check]]
+id = "X5"
+covers = ["G3"]
+statement = "In weeks under 40 hours worked, day 7 of a week with every day worked has its first 480 minutes as overtime and the rest as double time while days 1 to 6 stay ordinary, and a day off on any of days 1 to 6 makes day 7 an ordinary day, checked around day 7's 8-hour mark and in 150 weeks generated from a fixed seed."
+strength = "tested"
+run = ["python3", "seventh.py"]
+tags = ["time"]
+
+[[check]]
+id = "X6"
+covers = ["G2", "G3"]
+statement = "In weeks with all seven days worked and days 1 to 6 of at most 8 hours, day 7's overtime and double time do not count toward the 40 hours and only regular minutes beyond 2400 become overtime, checked around the cap and in 150 weeks generated from a fixed seed."
+strength = "tested"
+run = ["python3", "week_mix.py"]
+tags = ["time"]
+
+[[check]]
+id = "X7"
+covers = ["G1", "G2", "G3"]
+statement = "Over 200 weeks generated from a fixed seed across the whole valid range, plus six extreme weeks, get exactly the regular, overtime and double-time minutes the daily, weekly and seventh-day rules give together."
+strength = "tested"
+run = ["python3", "full_week.py"]
+tags = ["time"]
+
+[[check]]
+id = "X8"
+covers = ["C1"]
+statement = "Each response's regular, overtime and double-time cents equal the rate times 1, 1.5 and 2 times its category minutes over 60, priced once from the week's totals and rounded to the nearest cent with halves up, and total_cents is their sum, over exact halves, near-halves, multi-day totals, the largest amounts, floating-point traps and 200 generated weeks."
+strength = "tested"
+run = ["python3", "money.py"]
+tags = ["money"]
+
+[[check]]
+id = "X9"
+covers = ["S1"]
+statement = "The S1 request, sent as written, reordered and indented, and packed, gets exactly the S1 response."
+strength = "tested"
+run = ["python3", "scenarios.py", "S1"]
+tags = ["money"]
+
+[[check]]
+id = "X10"
+covers = ["S2"]
+statement = "The S2 request, sent as written, reordered and indented, and packed, gets exactly the S2 response."
+strength = "tested"
+run = ["python3", "scenarios.py", "S2"]
+tags = ["money"]
+
+[[check]]
+id = "X11"
+covers = ["S3"]
+statement = "The S3 request, sent as written, reordered and indented, and packed, gets exactly the S3 response."
+strength = "tested"
+run = ["python3", "scenarios.py", "S3"]
+tags = ["money"]
+
+[[check]]
+id = "X12"
+covers = ["S4"]
+statement = "The S4 request, sent as written, reordered and indented, and packed, gets exactly the S4 response."
+strength = "tested"
+run = ["python3", "scenarios.py", "S4"]
+tags = ["money"]
+
+[[check]]
+id = "X13"
+covers = ["S5"]
+statement = "The S5 request, sent as written, reordered and indented, and packed, gets exactly the S5 response."
+strength = "tested"
+run = ["python3", "scenarios.py", "S5"]
+tags = ["money"]

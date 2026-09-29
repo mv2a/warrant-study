@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+"""Compute a course grade: one JSON request on standard input, one JSON result on standard output."""
+
+import json
+import math
+import sys
+from fractions import Fraction
+
+WEIGHTS = {"quizzes": 15, "homework": 25, "midterm": 25, "final": 35}  # percent of the course
+PENALTY_PER_DAY = 10  # percent of the homework's own score
+ZERO_FROM_DAYS_LATE = 5
+# Lowest rounded percentage for each letter, in tenths of a percent.
+LETTERS = [(900, "A"), (860, "B+"), (800, "B"), (760, "C+"), (700, "C"), (600, "D")]
+
+
+def refuse(reason):
+    print(f"invalid request: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def is_score(value):
+    # bool is a subclass of int in Python, so compare types exactly.
+    return type(value) is int and 0 <= value <= 100
+
+
+def not_json(constant):
+    raise ValueError(f"{constant} is not JSON")
+
+
+def read_request():
+    if hasattr(sys, "set_int_max_str_digits"):
+        sys.set_int_max_str_digits(0)  # a very long integer is still a JSON integer
+    try:
+        # Strict UTF-8, whatever the locale; NaN and Infinity are not JSON.
+        request = json.loads(sys.stdin.buffer.read().decode("utf-8"), parse_constant=not_json)
+    except (ValueError, RecursionError):  # ValueError covers JSONDecodeError and UnicodeDecodeError
+        refuse("not valid JSON")
+    if not isinstance(request, dict):
+        refuse("expected a JSON object")
+    for field in ("quizzes", "homework", "midterm", "final"):
+        if field not in request:
+            refuse(f"missing field {field}")
+
+    quizzes = request["quizzes"]
+    if type(quizzes) is not list or not quizzes:
+        refuse("quizzes must be a non-empty list")
+    if not all(is_score(quiz) for quiz in quizzes):
+        refuse("every quiz score must be a whole number from 0 to 100")
+
+    homework = request["homework"]
+    if type(homework) is not list or not homework:
+        refuse("homework must be a non-empty list")
+    for item in homework:
+        if type(item) is not dict or "score" not in item or "days_late" not in item:
+            refuse("each homework must be an object with score and days_late")
+        if not is_score(item["score"]):
+            refuse("every homework score must be a whole number from 0 to 100")
+        days = item["days_late"]
+        if type(days) is not int:
+            refuse("days_late must be a whole number")
+
+    for field in ("midterm", "final"):
+        if not is_score(request[field]):
+            refuse(f"{field} must be a whole number from 0 to 100")
+    return request
+
+
+def quiz_average(quizzes):
+    kept = sorted(quizzes)[1:] if len(quizzes) >= 2 else quizzes
+    return Fraction(sum(kept), len(kept))
+
+
+def after_penalty(score, days_late):
+    if days_late >= ZERO_FROM_DAYS_LATE:
+        return Fraction(0)
+    return Fraction(score * (100 - PENALTY_PER_DAY * days_late), 100)
+
+
+def homework_average(homework):
+    scores = [after_penalty(item["score"], item["days_late"]) for item in homework]
+    return sum(scores, Fraction(0)) / len(scores)
+
+
+def main():
+    request = read_request()
+    parts = {
+        "quizzes": quiz_average(request["quizzes"]),
+        "homework": homework_average(request["homework"]),
+        "midterm": Fraction(request["midterm"]),
+        "final": Fraction(request["final"]),
+    }
+    percent = sum((WEIGHTS[name] * value for name, value in parts.items()), Fraction(0)) / 100
+    tenths = math.floor(percent * 10 + Fraction(1, 2))  # one decimal place, exact halves up
+    letter = next((letter for lowest, letter in LETTERS if tenths >= lowest), "F")
+    json.dump({"percent": tenths / 10, "letter": letter}, sys.stdout)
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()

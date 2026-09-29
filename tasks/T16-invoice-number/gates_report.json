@@ -1,0 +1,93 @@
+{
+ "task": "T16-invoice-number",
+ "reference": {
+  "V": {
+   "P1": true,
+   "P2": true
+  },
+  "H": {
+   "H1": true,
+   "H2": true,
+   "H3": true,
+   "H4": true,
+   "H5": true,
+   "H6": true,
+   "H7": true,
+   "H8": true,
+   "H9": true
+  },
+  "X": {
+   "X1": true,
+   "X2": true,
+   "X3": true,
+   "X4": true,
+   "X5": true,
+   "X6": true,
+   "X7": true,
+   "X8": true,
+   "X9": true,
+   "X10": true,
+   "X11": true,
+   "X12": true,
+   "X13": true,
+   "X14": true,
+   "X15": true,
+   "X16": true
+  }
+ },
+ "broken": {
+  "G1": {
+   "caught_by_X": [
+    "X3"
+   ],
+   "passes_V": true
+  },
+  "G2": {
+   "caught_by_X": [
+    "X4"
+   ],
+   "passes_V": true
+  },
+  "G3": {
+   "caught_by_X": [
+    "X5"
+   ],
+   "passes_V": true
+  },
+  "C1": {
+   "caught_by_X": [
+    "X6"
+   ],
+   "passes_V": false
+  },
+  "C2": {
+   "caught_by_X": [
+    "X7",
+    "X8",
+    "X9"
+   ],
+   "passes_V": true
+  },
+  "C3": {
+   "caught_by_X": [
+    "X10"
+   ],
+   "passes_V": true
+  },
+  "C4": {
+   "caught_by_X": [
+    "X11"
+   ],
+   "passes_V": true
+  },
+  "C5": {
+   "caught_by_X": [
+    "X2"
+   ],
+   "passes_V": true
+  }
+ },
+ "warrant_check": 0,
+ "fails": [],
+ "passed": true
+}

@@ -1,0 +1,2 @@
+{"id": "T11", "slug": "reorder-quantity", "language": "python", "command": "reorder",
+ "promises": ["G1", "G2", "G3", "G4", "C1", "C2", "C3", "S1", "S2", "S3"]}

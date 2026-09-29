@@ -1,0 +1,86 @@
+{
+ "task": "T03-bus-fare",
+ "reference": {
+  "V": {
+   "P1": true,
+   "P2": true
+  },
+  "H": {
+   "H1": true,
+   "H2": true,
+   "H3": true,
+   "H4": true,
+   "H5": true,
+   "H6": true,
+   "H7": true,
+   "H8": true,
+   "H9": true
+  },
+  "X": {
+   "X1": true,
+   "X2": true,
+   "X3": true,
+   "X4": true,
+   "X5": true,
+   "X6": true,
+   "X7": true,
+   "X8": true,
+   "X9": true,
+   "X10": true,
+   "X11": true,
+   "X12": true
+  }
+ },
+ "broken": {
+  "G1": {
+   "caught_by_X": [
+    "X1",
+    "X12"
+   ],
+   "passes_V": true
+  },
+  "G2": {
+   "caught_by_X": [
+    "X2",
+    "X12"
+   ],
+   "passes_V": true
+  },
+  "G3": {
+   "caught_by_X": [
+    "X3",
+    "X12"
+   ],
+   "passes_V": true
+  },
+  "G4": {
+   "caught_by_X": [
+    "X4",
+    "X12"
+   ],
+   "passes_V": true
+  },
+  "C1": {
+   "caught_by_X": [
+    "X5",
+    "X12"
+   ],
+   "passes_V": true
+  },
+  "C2": {
+   "caught_by_X": [
+    "X6"
+   ],
+   "passes_V": true
+  },
+  "C3": {
+   "caught_by_X": [
+    "X8"
+   ],
+   "passes_V": false
+  }
+ },
+ "warrant_check": 0,
+ "fails": [],
+ "passed": true
+}

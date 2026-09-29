@@ -1,0 +1,107 @@
+# Audit checks (X): written independently from intent.md alone, the ground truth for scoring.
+# Never run during development. Shared code: _cmd.py (the harness template) and _audit.py
+# (a model of intent.md, seeded generators and runners).
+
+[[check]]
+id = "X1"
+covers = ["C1"]
+statement = "Six valid requests, including ones that break no rule, one rule and several rules, plus one sent as raw multi-line UTF-8, exit 0 and print exactly one JSON object with only ok (true or false) and violations (a list of strings), while six invalid requests exit 2 with nothing at all on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["G1"]
+statement = "Passwords of 0 to 11 code points break too_short, 12 to 64 break neither length rule and 65 or more break too_long, for ASCII, accented letters, emoji, CJK, decomposed accents and leading or trailing whitespace, for 140 passwords generated with seed 7310041, and for four sent as raw UTF-8."
+strength = "tested"
+run = ["python3", "length.py"]
+tags = ["rules"]
+
+[[check]]
+id = "X3"
+covers = ["G2"]
+statement = "A password breaks classes exactly when it uses fewer than three of ASCII lowercase, ASCII uppercase, ASCII digits and symbols, with whitespace, NUL, non-ASCII letters and digits, fullwidth forms, emoji and the ASCII neighbours of each range all counted as symbols, over 53 hand-picked and 150 generated passwords (seed 8120353)."
+strength = "tested"
+run = ["python3", "classes.py"]
+tags = ["rules"]
+
+[[check]]
+id = "X4"
+covers = ["G3"]
+statement = "A password breaks username exactly when it contains four consecutive characters of the username with only ASCII letter case ignored: windows at the start, middle and end, usernames of 1 to 32 characters, dots taken literally, and non-ASCII look-alikes (Kelvin sign, long s, dotless or dotted I, sharp s, ligatures, fullwidth) never matching, over 44 hand-picked and 160 generated requests (seed 9030467)."
+strength = "tested"
+run = ["python3", "username.py"]
+tags = ["rules"]
+
+[[check]]
+id = "X5"
+covers = ["G4"]
+statement = "A password breaks repeat exactly when one character appears three or more times in a row, case-sensitively: runs at the start, middle and end, whitespace and punctuation runs, aAa-style and look-alike triples that are not repeats, and non-ASCII and emoji runs, over 45 hand-picked and 160 generated passwords (seed 1140589)."
+strength = "tested"
+run = ["python3", "repeat.py"]
+tags = ["rules"]
+
+[[check]]
+id = "X6"
+covers = ["G5"]
+statement = "A password breaks banned exactly when it contains a banned entry as plain text with only ASCII letter case ignored: entries at every position, lists of up to 20, regular-expression and format characters taken literally, whitespace entries, and non-ASCII case differences (e-acute, sharp s, Kelvin sign, Greek sigma) never matching, over 66 hand-picked and 160 generated requests (seed 2250613)."
+strength = "tested"
+run = ["python3", "banned.py"]
+tags = ["rules"]
+
+[[check]]
+id = "X7"
+covers = ["C2"]
+statement = "Sixteen requests breaking zero to five rules get exactly the intended violations in ascending order with each code once, and for 260 generated requests (seed 3360721) violations holds only the six codes, none twice, in ascending order, with ok true exactly when it is empty."
+strength = "tested"
+run = ["python3", "order.py"]
+tags = ["rules"]
+
+[[check]]
+id = "X8"
+covers = ["C3"]
+statement = "Invalid requests exit 2 with nothing on standard output: 76 hand-written objects with extra or missing fields, non-string passwords, bad usernames (empty, 33 or more characters, disallowed ASCII or non-ASCII characters, a trailing newline) and bad banned values (not a list, 21 or more entries, empty or non-string entries), 21 texts that are not one JSON object, bytes that are not UTF-8, and 90 seeded mutations (seed 4470829)."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X9"
+covers = ["C1", "C3"]
+statement = "Valid requests at the edge of C3 are judged with status 0 and a well-formed answer rather than refused: usernames of 1 and 32 characters or only dots, hyphens and underscores, banned lists of 0, 19 and 20 entries including whitespace and non-ASCII entries, empty and 10,000-character passwords, the request written as other legal JSON text, and 80 generated valid requests (seed 5580937)."
+strength = "tested"
+run = ["python3", "boundaries.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X10"
+covers = ["S1"]
+statement = "The request of scenario S1, sent in three JSON layouts, exits 0 with exactly {\"ok\": true, \"violations\": []}."
+strength = "tested"
+run = ["python3", "scenarios.py", "S1"]
+tags = ["scenario"]
+
+[[check]]
+id = "X11"
+covers = ["S2"]
+statement = "The request of scenario S2, sent in three JSON layouts, exits 0 with exactly {\"ok\": false, \"violations\": [\"banned\", \"username\"]}."
+strength = "tested"
+run = ["python3", "scenarios.py", "S2"]
+tags = ["scenario"]
+
+[[check]]
+id = "X12"
+covers = ["S3"]
+statement = "The request of scenario S3, sent in three JSON layouts, exits 0 with exactly {\"ok\": false, \"violations\": [\"banned\", \"classes\", \"repeat\", \"too_short\"]}."
+strength = "tested"
+run = ["python3", "scenarios.py", "S3"]
+tags = ["scenario"]
+
+[[check]]
+id = "X13"
+covers = ["S4"]
+statement = "The request of scenario S4, whose username holds a space, is refused in three JSON layouts: exit status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "scenarios.py", "S4"]
+tags = ["scenario"]

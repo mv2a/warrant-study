@@ -1,0 +1,226 @@
+#!/usr/bin/env python3
+"""validate: check rows of tabular data against a small schema.
+
+Reads {"schema": [...], "rows": [...]} as JSON on standard input and writes
+{"valid": ..., "errors": [{"row": ..., "field": ..., "code": ...}, ...]} on standard output.
+A malformed request is refused: nothing on standard output, a reason on standard error, exit 2.
+"""
+
+import json
+import re
+import sys
+from collections import Counter
+
+TYPES = ("string", "integer", "number", "boolean")
+RULE_KEYS = {"name", "type", "required", "unique", "min", "max", "allowed"}
+REQUEST_KEYS = ("schema", "rows")
+
+
+class Refused(Exception):
+    """The request is malformed and must not be validated."""
+
+
+NUMBER_TEXT = re.compile(r"(-?)([0-9]+)(?:\.([0-9]+))?(?:[eE]([-+]?[0-9]+))?")
+
+
+class Number:
+    """A JSON number kept exactly as written: sign * int(digits) * 10 ** scale.
+
+    Floats would read 1e400 as infinity and 9007199254740993.0 as 9007199254740992.0, so a whole
+    number could fail the integer test and different numbers could look equal. This keeps each
+    number's exact value, so equality and order are by value (2 equals 2.0, 0 equals -0.0).
+    """
+
+    __slots__ = ("sign", "digits", "scale")
+
+    def __init__(self, text):
+        negative, whole, fraction, exponent = NUMBER_TEXT.fullmatch(text).groups()
+        fraction = fraction or ""
+        digits = (whole + fraction).lstrip("0")
+        significant = digits.rstrip("0")
+        if not significant:
+            self.sign, self.digits, self.scale = 0, "", 0
+            return
+        self.sign = -1 if negative else 1
+        self.digits = significant
+        self.scale = int(exponent or "0") - len(fraction) + len(digits) - len(significant)
+
+    def is_whole(self):
+        return self.scale >= 0
+
+    def _compare(self, other):
+        if self.sign != other.sign:
+            return -1 if self.sign < other.sign else 1
+        if self.sign == 0:
+            return 0
+        # Same sign, both nonzero: compare magnitudes by the position of the leading digit, then digit by digit.
+        top, other_top = self.scale + len(self.digits), other.scale + len(other.digits)
+        if top != other_top:
+            larger = top > other_top
+        else:
+            width = max(len(self.digits), len(other.digits))
+            mine, theirs = self.digits.ljust(width, "0"), other.digits.ljust(width, "0")
+            if mine == theirs:
+                return 0
+            larger = mine > theirs
+        return self.sign if larger else -self.sign
+
+    def __eq__(self, other):
+        if not isinstance(other, Number):
+            return NotImplemented
+        return (self.sign, self.digits, self.scale) == (other.sign, other.digits, other.scale)
+
+    def __hash__(self):
+        return hash((self.sign, self.digits, self.scale))
+
+    def __lt__(self, other):
+        return self._compare(other) < 0
+
+    def __gt__(self, other):
+        return self._compare(other) > 0
+
+    def __le__(self, other):
+        return self._compare(other) <= 0
+
+    def __ge__(self, other):
+        return self._compare(other) >= 0
+
+
+def is_number(value):
+    return isinstance(value, Number)
+
+
+def has_type(value, kind):
+    if kind == "string":
+        return isinstance(value, str)
+    if kind == "boolean":
+        return isinstance(value, bool)
+    if kind == "number":
+        return is_number(value)
+    # integer: a number with no fractional part, so 4.0 counts and 4.5 does not
+    return is_number(value) and value.is_whole()
+
+
+def read_request(text):
+    def no_constant(name):
+        raise Refused(f"{name} is not valid JSON")
+
+    try:
+        request = json.loads(text, parse_int=Number, parse_float=Number, parse_constant=no_constant)
+    except (ValueError, RecursionError) as error:
+        raise Refused(f"the request is not valid JSON ({error})") from None
+    if not isinstance(request, dict):
+        raise Refused("the request must be a JSON object")
+    for key in REQUEST_KEYS:
+        if key not in request:
+            raise Refused(f"the request has no {key!r}")
+    extra = sorted(set(request) - set(REQUEST_KEYS))
+    if extra:
+        raise Refused(f"unknown top-level key {extra[0]!r}")
+    return read_schema(request["schema"]), read_rows(request["rows"])
+
+
+def read_schema(schema):
+    if not isinstance(schema, list) or not schema:
+        raise Refused("schema must be a non-empty list of field rules")
+    names = set()
+    for number, rule in enumerate(schema):
+        where = f"field rule {number}"
+        if not isinstance(rule, dict):
+            raise Refused(f"{where} is not an object")
+        unknown = sorted(set(rule) - RULE_KEYS)
+        if unknown:
+            raise Refused(f"{where} has an unknown key {unknown[0]!r}")
+        name = rule.get("name")
+        if not isinstance(name, str) or not name:
+            raise Refused(f"{where} needs a non-empty string name")
+        if name in names:
+            raise Refused(f"field {name!r} is defined twice")
+        names.add(name)
+        kind = rule.get("type")
+        if not isinstance(kind, str) or kind not in TYPES:
+            raise Refused(f"field {name!r} has an unknown type {kind!r}")
+        for flag in ("required", "unique"):
+            if flag in rule and not isinstance(rule[flag], bool):
+                raise Refused(f"field {name!r}: {flag} must be true or false")
+        for bound in ("min", "max"):
+            if bound in rule:
+                if kind not in ("integer", "number"):
+                    raise Refused(f"field {name!r}: {bound} only applies to integer and number fields")
+                if not is_number(rule[bound]):
+                    raise Refused(f"field {name!r}: {bound} must be a number")
+        if "min" in rule and "max" in rule and rule["min"] > rule["max"]:
+            raise Refused(f"field {name!r}: min is greater than max")
+        if "allowed" in rule:
+            allowed = rule["allowed"]
+            if not isinstance(allowed, list) or not allowed:
+                raise Refused(f"field {name!r}: allowed must be a non-empty list")
+            if not all(has_type(value, kind) for value in allowed):
+                raise Refused(f"field {name!r}: every allowed value must be of type {kind}")
+    return schema
+
+
+def read_rows(rows):
+    if not isinstance(rows, list):
+        raise Refused("rows must be a list")
+    for number, row in enumerate(rows):
+        if not isinstance(row, dict):
+            raise Refused(f"row {number} is not an object")
+    return rows
+
+
+def check_cell(rule, row, counts):
+    """Return the first error code that applies to this field of this row, or None."""
+    value = row.get(rule["name"])
+    if value is None:
+        return "missing" if rule.get("required", False) else None
+    if not has_type(value, rule["type"]):
+        return "type"
+    if "min" in rule and value < rule["min"]:
+        return "range"
+    if "max" in rule and value > rule["max"]:
+        return "range"
+    if "allowed" in rule and value not in rule["allowed"]:
+        return "allowed"
+    if rule.get("unique", False) and counts[value] > 1:
+        return "duplicate"
+    return None
+
+
+def validate(schema, rows):
+    # How often each value of the right type occurs in each field.
+    counts = {rule["name"]: Counter() for rule in schema}
+    for row in rows:
+        for rule in schema:
+            value = row.get(rule["name"])
+            if value is not None and has_type(value, rule["type"]):
+                counts[rule["name"]][value] += 1
+    errors = []
+    for index, row in enumerate(rows):
+        for rule in schema:
+            code = check_cell(rule, row, counts[rule["name"]])
+            if code is not None:
+                errors.append({"row": index, "field": rule["name"], "code": code})
+    return errors
+
+
+def main():
+    if hasattr(sys, "set_int_max_str_digits"):
+        sys.set_int_max_str_digits(0)  # an exponent of any length is still a JSON number
+    try:
+        try:
+            text = sys.stdin.buffer.read().decode("utf-8")
+        except UnicodeDecodeError:
+            raise Refused("the request is not UTF-8 text") from None
+        schema, rows = read_request(text)
+    except Refused as reason:
+        print(f"validate: refused: {reason}", file=sys.stderr)
+        return 2
+    errors = validate(schema, rows)
+    json.dump({"valid": not errors, "errors": errors}, sys.stdout)
+    sys.stdout.write("\n")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

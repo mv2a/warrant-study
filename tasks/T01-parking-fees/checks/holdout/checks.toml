@@ -1,0 +1,81 @@
+# Hidden checks: never shown to the builder. Used only by Warrant's gate in conditions B and C.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "Every stay of 16 to 130 minutes, every whole number of hours from 2 to 6 and the minute either side, and 30 seeded random stays up to 360 minutes are charged 250 cents per started hour."
+strength = "tested"
+run = ["python3", "started_hours.py"]
+tags = ["money"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Twelve stays of 0 to 15 minutes, including four around Tuesday 02:00, have no time or overnight charge, and eleven stays of 16 minutes or more are charged from their first minute, including 75 minutes at 500 cents, 16 minutes over 02:00 with its night, and 24 hours 15 minutes at 1850 cents plus one night."
+strength = "tested"
+run = ["python3", "grace.py"]
+tags = ["money"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "The time charge is capped at 1600 cents per 24-hour period from entry: 25 stays at the cap and period boundaries from 360 to 10079 minutes, and 60 seeded random stays, get the capped charge."
+strength = "tested"
+run = ["python3", "cap.py"]
+tags = ["money"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "Fifteen stays at the 02:00 boundaries (entering or leaving at exactly 02:00, crossing midnight only, capped days, all seven nights of a week) and 80 seeded random stays get 600 cents per 02:00 inside the stay, added on top of the capped time charge."
+strength = "tested"
+run = ["python3", "overnight.py"]
+tags = ["money"]
+
+[[check]]
+id = "H5"
+covers = ["G5"]
+statement = "For 41 stays, from zero minutes and free stays to capped week-long ones, a lost ticket adds exactly 2500 cents to the total and leaves the stay length, time charge and overnight fee unchanged, and a kept ticket adds nothing."
+strength = "tested"
+run = ["python3", "lost_ticket.py"]
+tags = ["money"]
+
+[[check]]
+id = "H6"
+covers = ["C1"]
+statement = "Forty valid requests exit with status 0 and return one JSON object with all five non-negative integer fields, the right stay length and a total equal to the three charges, and three refused requests exit with status 2, write nothing on standard output and give a reason on standard error."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H7"
+covers = ["C2"]
+statement = "Twelve fixed stays (ending next week around the free 15 minutes and Monday 02:00, lasting up to 10079 minutes, or exiting at their own entry minute) and 40 seeded random stays whose exit is earlier than their entry get the stay length and charges of a stay that ends in the following week."
+strength = "tested"
+run = ["python3", "week_wrap.py"]
+tags = ["money"]
+
+[[check]]
+id = "H8"
+covers = ["C3"]
+statement = "Thirty kinds of invalid request are refused with status 2 and no output (not JSON, deeply nested lists, not an object, missing fields, entry or exit that is true, false, null, 1.5, 600.0, 7e2, text, a list, negative or 10080 and over, and lost_ticket that is 0, 1, null or text), and four valid extreme requests are charged, as are four requests with an entry or exit written -0 or with extra fields, each getting exactly the answer of the same request with 0 or without the extra fields."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H9"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "Each of the four example stays in the intent, run twice, gets exactly the output object the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]
+
+[[check]]
+id = "H10"
+covers = ["G1", "G2", "G3", "G4", "G5", "C2"]
+statement = "One hundred and fifty seeded random stays across the week, many near the free 15 minutes or the daily cap and many ending in the following week, some with a lost ticket, get exactly the five fields the tariff gives."
+strength = "tested"
+run = ["python3", "random_stays.py"]
+tags = ["money"]

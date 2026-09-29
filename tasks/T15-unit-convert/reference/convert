@@ -1,0 +1,101 @@
+#!/usr/bin/env python3
+"""convert: exact conversion of lengths, masses and volumes.
+
+Reads one JSON request on standard input and writes one JSON result on standard output.
+A refused request exits with status 2 and writes nothing on standard output.
+"""
+
+import json
+import re
+import sys
+from fractions import Fraction
+
+INCH_MM = Fraction("25.4")
+POUND_MG = Fraction("453.59237") * 1000
+GALLON_ML = Fraction("3785.411784")
+
+# Each unit's size in the base unit of its kind: millimetres, milligrams, millilitres.
+UNITS = {
+    "mm": ("length", Fraction(1)),
+    "cm": ("length", Fraction(10)),
+    "m": ("length", Fraction(1000)),
+    "km": ("length", Fraction(1000000)),
+    "in": ("length", INCH_MM),
+    "ft": ("length", INCH_MM * 12),
+    "yd": ("length", INCH_MM * 36),
+    "mi": ("length", INCH_MM * 12 * 5280),
+    "mg": ("mass", Fraction(1)),
+    "g": ("mass", Fraction(1000)),
+    "kg": ("mass", Fraction(1000000)),
+    "t": ("mass", Fraction(1000000000)),
+    "lb": ("mass", POUND_MG),
+    "oz": ("mass", POUND_MG / 16),
+    "st": ("mass", POUND_MG * 14),
+    "ml": ("volume", Fraction(1)),
+    "l": ("volume", Fraction(1000)),
+    "m3": ("volume", Fraction(1000000)),
+    "gal": ("volume", GALLON_ML),
+    "qt": ("volume", GALLON_ML / 4),
+    "pt": ("volume", GALLON_ML / 8),
+    "floz": ("volume", GALLON_ML / 128),
+}
+FIELDS = {"value", "from", "to", "places"}
+AMOUNT = re.compile(r"[0-9]+(?:\.[0-9]+)?")
+
+
+class Refused(Exception):
+    pass
+
+
+def parse(raw):
+    try:
+        request = json.loads(raw.decode("utf-8"))
+    except ValueError:
+        raise Refused("the input is not JSON") from None
+    if not isinstance(request, dict):
+        raise Refused("the request must be a JSON object")
+    if set(request) != FIELDS:
+        raise Refused("the request must have exactly the fields value, from, to and places")
+    value, source, target, places = (request[k] for k in ("value", "from", "to", "places"))
+    if not isinstance(value, str) or AMOUNT.fullmatch(value) is None:
+        raise Refused("value must be a string of digits, optionally with a decimal point")
+    if not isinstance(source, str) or not isinstance(target, str):
+        raise Refused("from and to must be strings")
+    if type(places) is not int or not 0 <= places <= 12:
+        raise Refused("places must be an integer from 0 to 12")
+    for unit in (source, target):
+        if unit not in UNITS:
+            raise Refused(f"unknown unit {unit!r}")
+    if UNITS[source][0] != UNITS[target][0]:
+        raise Refused(f"cannot convert {UNITS[source][0]} to {UNITS[target][0]}")
+    return Fraction(value), source, target, places
+
+
+def render(amount, places):
+    """Round a non-negative exact amount half up to `places` decimals and write it out."""
+    scaled = amount * 10**places
+    units = (scaled + Fraction(1, 2)).__floor__()
+    if places == 0:
+        return str(units)
+    whole, fraction = divmod(units, 10**places)
+    return f"{whole}.{fraction:0{places}d}"
+
+
+def main():
+    try:
+        sys.set_int_max_str_digits(0)
+    except AttributeError:
+        pass
+    try:
+        amount, source, target, places = parse(sys.stdin.buffer.read())
+    except Refused as refusal:
+        print(f"convert: refused: {refusal}", file=sys.stderr)
+        return 2
+    exact = amount * UNITS[source][1] / UNITS[target][1]
+    result = {"value": render(exact, places), "unit": target, "dimension": UNITS[target][0]}
+    print(json.dumps(result))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

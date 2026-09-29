@@ -1,0 +1,106 @@
+# Audit checks (X): written from intent.md alone, independently of the visible and hidden checks.
+# The ground truth for scoring; never run during development.
+
+[[check]]
+id = "X1"
+covers = ["G1"]
+statement = "For every check-in day and every length from 1 to 30 nights (except the refused short Saturday stays), the room charge equals the sum of the nightly rate on Sunday to Thursday nights and the rate plus 25% on Friday and Saturday nights, naming nights by weekday through every week, using rates divisible by 4 so no rounding is involved."
+strength = "tested"
+run = ["python3", "night_names.py"]
+tags = ["money"]
+
+[[check]]
+id = "X2"
+covers = ["G2"]
+statement = "On 123 stays of 1 to 30 nights from every check-in day, the discount is nothing below 7 nights, exactly 10% of the reported room charge (weekend surcharges included) for 7 to 13 nights and exactly 15% from 14 nights, with rates chosen so that the percentage is a whole number of cents."
+strength = "tested"
+run = ["python3", "discount_tiers.py"]
+tags = ["money"]
+
+[[check]]
+id = "X3"
+covers = ["G3"]
+statement = "On 60 stays of every length from 1 to 30 nights, the city tax is 275 cents per night for the first 10 nights and nothing after, the discount never takes a share of the tax, and the total is the room charge minus the reported discount plus the full tax."
+strength = "tested"
+run = ["python3", "city_tax.py"]
+tags = ["money"]
+
+[[check]]
+id = "X4"
+covers = ["G4"]
+statement = "Of 95 stays covering every check-in day at 1 to 7 nights and Friday and Saturday check-ins up to 30 nights, exactly the three short stays over a Saturday night (Saturday for 1 or 2 nights, Friday for 2) are refused with exit status 2 and no price, and every other stay, including one-night stays on Friday and Sunday to Thursday and 3-night stays from Thursday, Friday and Saturday, is priced."
+strength = "tested"
+run = ["python3", "saturday_minimum.py"]
+tags = ["rules"]
+
+[[check]]
+id = "X5"
+covers = ["C1"]
+statement = "Valid requests for all seven check-in day names, 1 and 30 nights and a 1-cent rate exit 0 with standard output being exactly one JSON object with exactly the fields room_cents, discount_cents, tax_cents and total_cents, all JSON integers; extra input fields (even ones named like output fields), key order and whitespace do not change the answer; and every refusal of eight requests the intent refuses exits 2 with empty standard output and a reason on standard error."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X6"
+covers = ["C2"]
+statement = "On 147 stays with small or chosen rates, every amount matches whole-cent arithmetic: the 25% weekend surcharge is rounded to the nearest cent night by night with half a cent rounded up, the discount is rounded down even when a half cent or more is left over, and the total is room charge minus discount plus tax."
+strength = "tested"
+run = ["python3", "rounding.py"]
+tags = ["money"]
+
+[[check]]
+id = "X7"
+covers = ["G1", "G2", "G3", "C2"]
+statement = "300 stays generated with fixed seeds 29092026 and 7171717, over every check-in day, 1 to 30 nights and rates from 1 cent to 2,000,000,000 cents, get exactly the room charge, discount, tax and total that the intent's rules give."
+strength = "tested"
+run = ["python3", "generated.py"]
+tags = ["money"]
+
+[[check]]
+id = "X8"
+covers = ["C2"]
+statement = "Twelve stays with nightly rates from 2**31 to about 10**18 cents are priced to the exact cent, as whole-cent integer arithmetic requires."
+strength = "tested"
+run = ["python3", "large_rates.py"]
+tags = ["money"]
+
+[[check]]
+id = "X9"
+covers = ["C3"]
+statement = "89 invalid requests are refused with exit status 2 and no price: input that is not one JSON object (empty, a list, a string, truncated or trailing text, bytes that are not UTF-8 sent under the POSIX locale), a missing or misspelt field, a check-in day other than the seven lowercase names, a night count or rate that is not a JSON integer (true, 2.5, 2.0, 1e1, \"3\", null, NaN), nights below 1 or above 30, and a rate below 1."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X10"
+covers = ["S1"]
+statement = "Scenario S1: a Wednesday check-in for 2 nights at 12000 cents is priced exactly room 24000, discount 0, tax 550, total 24550, in compact, indented and reordered JSON."
+strength = "tested"
+run = ["python3", "scenarios.py", "S1"]
+tags = ["scenario"]
+
+[[check]]
+id = "X11"
+covers = ["S2"]
+statement = "Scenario S2: a Thursday check-in for 3 nights at 12000 cents is priced exactly room 42000, discount 0, tax 825, total 42825, in compact, indented and reordered JSON."
+strength = "tested"
+run = ["python3", "scenarios.py", "S2"]
+tags = ["scenario"]
+
+[[check]]
+id = "X12"
+covers = ["S3"]
+statement = "Scenario S3: a Saturday check-in for 2 nights at 12000 cents is refused with exit status 2 and no price, in compact, indented and reordered JSON."
+strength = "tested"
+run = ["python3", "scenarios.py", "S3"]
+tags = ["scenario"]
+
+[[check]]
+id = "X13"
+covers = ["S4"]
+statement = "Scenario S4: a Sunday check-in for 14 nights at 8000 cents is priced exactly room 120000, discount 18000, tax 2750, total 104750, in compact, indented and reordered JSON."
+strength = "tested"
+run = ["python3", "scenarios.py", "S4"]
+tags = ["scenario"]

@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""Price a hotel stay from a check-in weekday, a number of nights and a nightly rate.
+
+Reads one JSON object on standard input, writes one JSON object on standard output.
+A refused request writes nothing on standard output, a reason on standard error, and
+exits with status 2.
+"""
+
+import json
+import sys
+
+DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+WEEKEND_NIGHTS = {"fri", "sat"}
+SURCHARGE_PERCENT = 25
+TAX_PER_NIGHT_CENTS = 275
+TAXED_NIGHTS = 10
+MIN_NIGHTS_WITH_SATURDAY = 3
+MAX_NIGHTS = 30
+
+
+class Refused(Exception):
+    pass
+
+
+def whole_number(request, field):
+    value = request[field]
+    if type(value) is not int:  # bool is a subclass of int; floats and strings are not integers
+        raise Refused(f"{field} must be a JSON integer, got {json.dumps(value)}")
+    return value
+
+
+def read_request(data):
+    """Decode the raw bytes of standard input ourselves, so the locale cannot change the answer."""
+    try:
+        request = json.loads(data.decode("utf-8"))
+    except UnicodeDecodeError:
+        raise Refused("the request is not UTF-8 text") from None
+    except ValueError:
+        raise Refused("the request is not valid JSON") from None
+    if not isinstance(request, dict):
+        raise Refused("the request must be a JSON object")
+    for field in ("check_in", "nights", "rate_cents"):
+        if field not in request:
+            raise Refused(f"the request has no {field}")
+    check_in = request["check_in"]
+    if not isinstance(check_in, str) or check_in not in DAYS:
+        raise Refused(f"check_in must be one of {', '.join(DAYS)}")
+    nights = whole_number(request, "nights")
+    if not 1 <= nights <= MAX_NIGHTS:
+        raise Refused(f"nights must be from 1 to {MAX_NIGHTS}")
+    rate = whole_number(request, "rate_cents")
+    if rate < 1:
+        raise Refused("rate_cents must be at least 1")
+    return check_in, nights, rate
+
+
+def night_days(check_in, nights):
+    """The weekday each night begins on, starting with the check-in day."""
+    first = DAYS.index(check_in)
+    return [DAYS[(first + i) % 7] for i in range(nights)]
+
+
+def weekend_surcharge(rate):
+    """25% of the rate, to the nearest cent, an exact half cent rounded up."""
+    return (rate * SURCHARGE_PERCENT + 50) // 100
+
+
+def discount_percent(nights):
+    if nights >= 14:
+        return 15
+    if nights >= 7:
+        return 10
+    return 0
+
+
+def price(check_in, nights, rate):
+    days = night_days(check_in, nights)
+    if check_in == "sat" and nights < MIN_NIGHTS_WITH_SATURDAY:
+        raise Refused(f"a stay that includes a Saturday night must be at least {MIN_NIGHTS_WITH_SATURDAY} nights")
+    room = sum(rate + (weekend_surcharge(rate) if day in WEEKEND_NIGHTS else 0) for day in days)
+    discount = room * discount_percent(nights) // 100
+    tax = TAX_PER_NIGHT_CENTS * min(nights, TAXED_NIGHTS)
+    return {"room_cents": room, "discount_cents": discount, "tax_cents": tax, "total_cents": room - discount + tax}
+
+
+def main():
+    try:
+        quote = price(*read_request(sys.stdin.buffer.read()))
+    except Refused as reason:
+        print(f"stay: refused: {reason}", file=sys.stderr)
+        return 2
+    print(json.dumps(quote))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

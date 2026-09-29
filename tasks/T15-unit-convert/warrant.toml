@@ -1,0 +1,15 @@
+# Warrant project for one study task. The harness passes --workspace for each run.
+[project]
+name = "Unit conversion"
+intent = "intent.md"
+workspace = "reference"
+ledger = "ledger"
+
+[checks]
+public = "checks/public"
+holdout = "checks/holdout"
+
+[gates.merge]
+checks = ["all"]
+min_strength = "tested"
+cover_all_intent = true

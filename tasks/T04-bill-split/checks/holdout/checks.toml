@@ -1,0 +1,75 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "For 100 bills, including 20 fixed single-item cases, most on or next to an exact half-cent tip, and 40 bills whose tip ends in exactly half a cent, subtotal_cents is the sum of the item prices, tip_cents is tip_percent of it rounded to the nearest cent with halves up, and total_cents is their sum."
+strength = "tested"
+run = ["python3", "tip.py"]
+tags = ["money"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "In 113 bills that mix own-payers with and without items and sharers with a non-empty pool, every own-payer who ordered nothing pays exactly 0 and every other own-payer pays less than a cent away from their own items' prices times total over subtotal."
+strength = "tested"
+run = ["python3", "own.py"]
+tags = ["money"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "In 104 bills with 2 to 6 sharers, some of whom ordered nothing, every sharer pays less than a cent away from the sharers' pool divided by the number of sharers times total over subtotal, sharers pay within a cent of each other, and in 36 of them moving items between sharers leaves every share unchanged."
+strength = "tested"
+run = ["python3", "share.py"]
+tags = ["money"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "In 95 bills with very unequal parts and tips from 0% to 100%, every diner pays less than a cent away from their part of the subtotal times total_cents over the subtotal."
+strength = "tested"
+run = ["python3", "rate.py"]
+tags = ["money"]
+
+[[check]]
+id = "H5"
+covers = ["C1"]
+statement = "For 204 bills with 1 to 15 diners, shares has exactly one entry per diner, each a whole number of cents of zero or more, and the shares add up to total_cents."
+strength = "tested"
+run = ["python3", "sums.py"]
+tags = ["money"]
+
+[[check]]
+id = "H6"
+covers = ["C2"]
+statement = "For 206 bills, including fixed cases with equal fractional parts among diners listed out of alphabetical order, the shares are exactly the fair amounts rounded down plus one leftover cent each for the largest fractional parts, ties going to the diner listed earlier."
+strength = "tested"
+run = ["python3", "leftover.py"]
+tags = ["money"]
+
+[[check]]
+id = "H7"
+covers = ["C3"]
+statement = "Forty-two kinds of invalid request are refused with status 2 and no output: text that is not JSON or not an object, each missing field, diners or items that are empty or not lists, entries that are not objects (among them a diner that is false and an item that is true), missing, empty, non-string or duplicate names, bad pays values, prices that are missing, zero, negative, fractional, 800.0, text or true, items for unlisted diners or for a listed name written with different case or a trailing space, and tips below 0, above 100, fractional, 15.0, text, true, false or null."
+strength = "tested"
+run = ["python3", "invalid.py"]
+
+[[check]]
+id = "H8"
+covers = ["C4"]
+statement = "Valid requests, including unusual names and 25 bills sent again with extra fields at every level, exit 0 with one JSON object holding exactly the four promised fields as integers and a name-to-cents shares object, extra fields change nothing, and three refusals exit 2 with nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+# S1 to S3 list their diners in alphabetical order, so H9 cannot tell a tie broken by
+# listing order (C2) from one broken by name. H6 tests that rule with diners listed out of
+# alphabetical order.
+[[check]]
+id = "H9"
+covers = ["S1", "S2", "S3"]
+statement = "The three example requests in the intent, sent exactly as written there, get exactly the responses the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]

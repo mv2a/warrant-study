@@ -1,0 +1,116 @@
+# Audit checks (X): written from intent.md alone, independently of the holdout checks,
+# the reference and the broken implementations. Ground truth for scoring; never run
+# during development. _model.py holds an exact integer model of the intent, and _invalid.py
+# the invalid requests shared by X1 and X9. Each check judges only its own promise.
+
+[[check]]
+id = "X1"
+covers = ["C4"]
+statement = "Five valid requests, each sent plain, with the keys in the other order, pretty-printed, compact and with extra fields, exit with status 0 and write exactly one JSON object with exactly the six fields as JSON integers, the same object for every spelling; two refused requests exit with status 2 and write nothing at all on standard output, and each of the 69 invalid requests of X9 that the command does not tax writes nothing at all on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["G1"]
+statement = "At and around every band edge (taxable income 0, 10,000.00, 40,000.00, 100,000.00 and a mark either side, up to 10,000,000,000.00), the tax before credit equals the exact band tax (5%, 15%, 25%, 38%) on the reported taxable income, which is zero for a taxable income of zero or less, whatever the number of dependents."
+strength = "tested"
+run = ["python3", "bands_edges.py"]
+tags = ["money"]
+
+[[check]]
+id = "X3"
+covers = ["G1"]
+statement = "For 102 generated filers (seed 91417263) spread over every band, the allowance taper and incomes up to 900,000,000.00, the tax before credit is the exact band tax on the reported taxable income (zero for a taxable income of zero or less) rounded down or up to a whole cent."
+strength = "tested"
+run = ["python3", "bands_random.py"]
+tags = ["money", "generated"]
+
+[[check]]
+id = "X4"
+covers = ["G2"]
+statement = "The allowance is 12,000.00 for incomes up to 80,000.00, shrinks by one fifth of the income above 80,000.00, is zero from 140,000.00 upward and never negative, on 24 hand-picked incomes and 54 generated ones (seed 5530881); where the fifth is not a whole cent, rounding it either way is accepted here."
+strength = "tested"
+run = ["python3", "allowance.py"]
+tags = ["money", "generated"]
+
+[[check]]
+id = "X5"
+covers = ["G3"]
+statement = "On 14 hand-picked and 72 generated filers (seed 3086452) with 0 to 20 dependents, the credit reported is the smaller of 450.00 per dependent and the reported tax before credit, and the tax owed is what remains, so the tax is never below zero and the unused credit is lost."
+strength = "tested"
+run = ["python3", "credit.py"]
+tags = ["money", "generated"]
+
+[[check]]
+id = "X6"
+covers = ["C1"]
+statement = "On 33 hand-picked incomes the tax before credit is the exact band tax on the reported taxable income rounded to the nearest cent with exact half cents rounded up (0.5 cent gives 1, 2.5 gives 3, 500,000.5 gives 500,001), exactly even for incomes above 2 to the 53rd cents, and in the taper a fractional allowance reduction is rounded up (80,000.01 of income gives an allowance of 11,999.99); a tax more than a cent from the band tax (G1), or an allowance more than a cent from the exact one or not reduced at all (G2), is not judged here."
+strength = "tested"
+run = ["python3", "rounding_edges.py"]
+tags = ["money"]
+
+[[check]]
+id = "X7"
+covers = ["C1"]
+statement = "For 100 generated filers (seed 7702319), 56 of them built to land on an exact half cent in one of the four bands, the tax before credit is the exact band tax on the reported taxable income rounded half up, and for incomes strictly between 80,000.00 and 140,000.00 the allowance is 12,000.00 minus one fifth of the income above 80,000.00 rounded up to a whole cent; a tax more than a cent from the band tax (G1), or an allowance more than a cent from the exact one or not reduced at all (G2), is not judged here."
+strength = "tested"
+run = ["python3", "rounding_random.py"]
+tags = ["money", "generated"]
+
+[[check]]
+id = "X8"
+covers = ["C2"]
+statement = "For 9 extreme and 80 generated filers (seed 6184027), the response repeats the income, the taxable income is the income minus the reported allowance or zero when the allowance is larger, and the tax owed is the tax before credit minus the credit."
+strength = "tested"
+run = ["python3", "figures.py"]
+tags = ["money", "generated"]
+
+[[check]]
+id = "X9"
+covers = ["C3"]
+statement = "69 invalid requests are refused with exit status 2 and no tax response on standard output: empty or non-JSON input, JSON that is not one object, one object followed by a second object or by other text, missing fields, fields that are floats (including 1200.0), strings, booleans, null, lists, objects or non-finite numbers, a negative income, and dependents below 0 or above 20."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X10"
+covers = ["C3"]
+statement = "Eleven valid edge requests are taxed, with exit status 0 and a JSON object carrying tax_cents: an income of zero, 0 and 20 dependents, incomes of 10 to the 20th and 30th cents, keys in any order with extra whitespace, and extra fields that look invalid."
+strength = "tested"
+run = ["python3", "accepted.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X11"
+covers = ["S1"]
+statement = "Scenario S1: 30,000.00 of income and no dependents gives exactly the response in the intent (tax 1,700.00), on two runs."
+strength = "tested"
+run = ["python3", "scenario.py", "S1"]
+tags = ["scenario"]
+
+[[check]]
+id = "X12"
+covers = ["S2"]
+statement = "Scenario S2: 95,000.00 of income and 2 dependents gives exactly the response in the intent (allowance 9,000.00, tax 15,600.00), on two runs."
+strength = "tested"
+run = ["python3", "scenario.py", "S2"]
+tags = ["scenario"]
+
+[[check]]
+id = "X13"
+covers = ["S3"]
+statement = "Scenario S3: 14,000.00 of income and 3 dependents gives exactly the response in the intent (credit used 100.00, tax 0), on two runs."
+strength = "tested"
+run = ["python3", "scenario.py", "S3"]
+tags = ["scenario"]
+
+[[check]]
+id = "X14"
+covers = ["S4"]
+statement = "Scenario S4: 12,000.30 of income and no dependents gives exactly the response in the intent (1.5 cents of tax rounds up to 2), on two runs."
+strength = "tested"
+run = ["python3", "scenario.py", "S4"]
+tags = ["scenario"]

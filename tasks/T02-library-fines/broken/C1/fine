@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+"""Work out the overdue fines owed by one library account.
+
+Reads one JSON request on standard input and writes one JSON response on standard output.
+A request that cannot be priced is refused: nothing on standard output, a reason on
+standard error, exit status 2.
+"""
+
+import json
+import sys
+
+RATE = {"book": 25, "dvd": 100, "reference": 150}  # cents per charged day
+GRACE = {"book": 3, "dvd": 3, "reference": 0}  # late days that are forgiven
+ITEM_CAP = {"book": 800, "dvd": 2000, "reference": 1500}  # cents per item
+ACCOUNT_CAP = 2500  # cents per account
+FIELDS = ("id", "type", "due_day", "returned_day")
+
+# Day numbers of any length are JSON integers (C3), so lift the default digit limit.
+if hasattr(sys, "set_int_max_str_digits"):
+    sys.set_int_max_str_digits(0)
+
+
+class Refused(Exception):
+    pass
+
+
+def is_day(value):
+    return type(value) is int and value >= 0
+
+
+def parse(text):
+    try:
+        request = json.loads(text)
+    except (json.JSONDecodeError, RecursionError):
+        raise Refused("the request is not valid JSON")
+    if not isinstance(request, dict):
+        raise Refused("the request must be a JSON object")
+    items = request.get("items")
+    if not isinstance(items, list):
+        raise Refused("items must be a list")
+    seen = set()
+    for number, item in enumerate(items, start=1):
+        if not isinstance(item, dict):
+            raise Refused(f"item {number} is not an object")
+        for field in FIELDS:
+            if field not in item:
+                raise Refused(f"item {number} has no {field}")
+        if not isinstance(item["id"], str) or not item["id"]:
+            raise Refused(f"item {number}: id must be a non-empty string")
+        if item["id"] in seen:
+            raise Refused(f"item {number}: its id is already used by an earlier item")
+        seen.add(item["id"])
+        if not isinstance(item["type"], str) or item["type"] not in RATE:
+            raise Refused(f"item {number}: type must be book, dvd or reference")
+        for field in ("due_day", "returned_day"):
+            if not is_day(item[field]):
+                raise Refused(f"item {number}: {field} must be a whole number of 0 or more")
+    return items
+
+
+def fine_for(item):
+    days_late = max(0, item["returned_day"] - item["due_day"])
+    kind = item["type"]
+    charged = max(0, days_late - GRACE[kind])
+    return days_late, min(charged * RATE[kind], ITEM_CAP[kind])
+
+
+def main():
+    try:
+        text = sys.stdin.buffer.read().decode("utf-8")
+    except UnicodeDecodeError:
+        text = None
+    try:
+        if text is None:
+            raise Refused("the request is not UTF-8 text")
+        items = parse(text)
+    except Refused as reason:
+        print(json.dumps({"error": str(reason)}))
+        return 2
+    lines = []
+    for item in items:
+        days_late, fine_cents = fine_for(item)
+        lines.append({"id": item["id"], "days_late": days_late, "fine_cents": fine_cents})
+    total = min(sum(line["fine_cents"] for line in lines), ACCOUNT_CAP)
+    print(json.dumps({"items": lines, "total_cents": total}))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

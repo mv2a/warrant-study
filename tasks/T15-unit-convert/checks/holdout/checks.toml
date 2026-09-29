@@ -1,0 +1,73 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "Lengths convert with the exact definitions in G1: ten known conversions such as 1 mi = 1.609344 km and 1 km = 0.621371192 mi, plus two seeded random amounts, none exactly halfway and none longer than 14 significant digits, for every one of the 64 pairs of length units."
+strength = "tested"
+run = ["python3", "length.py"]
+tags = ["units"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Masses convert with the exact definitions in G2: nine known conversions such as 1 oz = 28.349523125 g and 1 st = 224 oz, plus two seeded random amounts, none exactly halfway and none longer than 14 significant digits, for every one of the 49 pairs of mass units."
+strength = "tested"
+run = ["python3", "mass.py"]
+tags = ["units"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "Volumes convert with the exact US definitions in G3: nine known conversions such as 1 gal = 3785.411784 ml and 1 floz = 29.5735295625 ml, plus two seeded random amounts, none exactly halfway and none longer than 14 significant digits, for every one of the 49 pairs of volume units."
+strength = "tested"
+run = ["python3", "volume.py"]
+tags = ["units"]
+
+[[check]]
+id = "H4"
+covers = ["C1"]
+statement = "Results are exact for long inputs and many places: nine known cases such as 123456789.123456789 ft to m at 12 places and a 20-digit number of miles in millimetres, 60 seeded random amounts of up to 33 digits at 6 to 12 places, and four seeded amounts that each cross Python's default 4300-digit limit on converting between text and int (a 4800-digit whole number, a 4450-digit fraction part, a 4298-digit amount whose result has 4303 integer digits, and 2600 digits on each side of the point), none exactly halfway."
+strength = "tested"
+run = ["python3", "exact.py"]
+tags = ["arithmetic"]
+
+[[check]]
+id = "H5"
+covers = ["C2"]
+statement = "Results are rounded half up and written with exactly the requested places, no point at 0 places, a single leading zero and no exponent: 19 known cases, including ties such as 0.75 in = 19.1 mm, plus 70 seeded exact halves and near-halves at 0 to 12 places."
+strength = "tested"
+run = ["python3", "rounding.py"]
+tags = ["arithmetic"]
+
+[[check]]
+id = "H6"
+covers = ["C3"]
+statement = "All 322 pairs of units of different kinds are refused, 30 unknown or wrongly cased unit symbols are refused in either position, and each of the 22 units converts to itself at 0, 1 and 4 places."
+strength = "tested"
+run = ["python3", "units.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "H7"
+covers = ["C4"]
+statement = "65 malformed requests are refused (non-objects, missing or extra fields, 25 badly written or mistyped values, mistyped units, and places that are out of range or not a JSON integer), while six well-formed edge requests such as value \"007.50\" and places 12 are converted."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "H8"
+covers = ["C5"]
+statement = "For one seeded request from every unit, the command exits 0 and writes one object with exactly the string fields value, unit (the to unit) and dimension (the right kind); a request with spaces and newlines before and after the object is read; six kinds of refused request (unknown unit, bad value, number value, 13 places, missing field, non-JSON) exit 2 with nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H9"
+covers = ["S1", "S2", "S3"]
+statement = "Each of the three scenarios, run twice, gives exactly the output object or the silent status-2 refusal that the intent states."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["scenarios"]

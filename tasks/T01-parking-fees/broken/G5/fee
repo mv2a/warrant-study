@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""fee: what one stay in the city parking garage costs, with its breakdown.
+
+Reads {"entry": int, "exit": int, "lost_ticket": bool} on standard input, where the times
+are minutes since Monday 00:00, and writes the fee in cents as one JSON object.
+"""
+
+import json
+import sys
+
+WEEK = 7 * 24 * 60          # minutes in a week
+DAY = 24 * 60               # one capped period
+HOUR = 60
+FREE_MINUTES = 15
+HOURLY_CENTS = 250
+DAILY_CAP_CENTS = 1600
+OVERNIGHT_AT = 2 * 60       # 02:00, as minutes after midnight
+OVERNIGHT_CENTS = 600
+LOST_TICKET_CENTS = 2500
+
+
+def refuse(reason):
+    print(f"fee: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def read_request():
+    try:
+        request = json.loads(sys.stdin.read())
+    except (ValueError, RecursionError):
+        refuse("the request is not valid JSON")
+    if not isinstance(request, dict):
+        refuse("the request must be a JSON object")
+    for name in ("entry", "exit"):
+        if name not in request:
+            refuse(f"the request has no {name}")
+        value = request[name]
+        if type(value) is not int:  # rejects true and false, which Python treats as ints
+            refuse(f"{name} must be a JSON integer")
+        if not 0 <= value < WEEK:
+            refuse(f"{name} must be between 0 and {WEEK - 1}")
+    if "lost_ticket" not in request:
+        refuse("the request has no lost_ticket")
+    if type(request["lost_ticket"]) is not bool:
+        refuse("lost_ticket must be true or false")
+    return request["entry"], request["exit"], request["lost_ticket"]
+
+
+def stay_minutes(entry, exit_):
+    """An exit earlier than the entry is in the following week."""
+    return exit_ - entry if exit_ >= entry else WEEK - entry + exit_
+
+
+def started_hours(minutes):
+    return -(-minutes // HOUR)
+
+
+def time_charge(minutes):
+    if minutes <= FREE_MINUTES:
+        return 0
+    periods, rest = divmod(minutes, DAY)
+    return periods * DAILY_CAP_CENTS + min(started_hours(rest) * HOURLY_CENTS, DAILY_CAP_CENTS)
+
+
+def nights(entry, minutes):
+    """How many 02:00 moments t satisfy entry <= t < entry + minutes."""
+    end = entry + minutes
+    first = entry - entry % DAY + OVERNIGHT_AT
+    if first < entry:
+        first += DAY
+    return 0 if first >= end else (end - 1 - first) // DAY + 1
+
+
+def main():
+    entry, exit_, lost_ticket = read_request()
+    minutes = stay_minutes(entry, exit_)
+    if minutes <= FREE_MINUTES:
+        print(json.dumps({"minutes": minutes, "time_cents": 0, "overnight_cents": 0,
+                          "lost_ticket_cents": 0, "total_cents": 0}))
+        return
+    time_cents = time_charge(minutes)
+    overnight_cents = 0 if minutes <= FREE_MINUTES else nights(entry, minutes) * OVERNIGHT_CENTS
+    lost_ticket_cents = LOST_TICKET_CENTS if lost_ticket else 0
+    print(json.dumps({
+        "minutes": minutes,
+        "time_cents": time_cents,
+        "overnight_cents": overnight_cents,
+        "lost_ticket_cents": lost_ticket_cents,
+        "total_cents": time_cents + overnight_cents + lost_ticket_cents,
+    }))
+
+
+if __name__ == "__main__":
+    main()

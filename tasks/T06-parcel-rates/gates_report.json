@@ -1,0 +1,97 @@
+{
+ "task": "T06-parcel-rates",
+ "reference": {
+  "V": {
+   "P1": true,
+   "P2": true,
+   "P3": true
+  },
+  "H": {
+   "H1": true,
+   "H2": true,
+   "H3": true,
+   "H4": true,
+   "H5": true,
+   "H6": true,
+   "H7": true,
+   "H8": true
+  },
+  "X": {
+   "X01": true,
+   "X02": true,
+   "X03": true,
+   "X04": true,
+   "X05": true,
+   "X06": true,
+   "X07": true,
+   "X08": true,
+   "X09": true,
+   "X10": true,
+   "X11": true,
+   "X12": true,
+   "X13": true,
+   "X14": true,
+   "X15": true,
+   "X16": true,
+   "X17": true,
+   "X18": true,
+   "X19": true,
+   "X20": true,
+   "X21": true
+  }
+ },
+ "broken": {
+  "G1": {
+   "caught_by_X": [
+    "X03",
+    "X14"
+   ],
+   "passes_V": true
+  },
+  "G2": {
+   "caught_by_X": [
+    "X04",
+    "X18"
+   ],
+   "passes_V": true
+  },
+  "G3": {
+   "caught_by_X": [
+    "X05",
+    "X19"
+   ],
+   "passes_V": true
+  },
+  "G4": {
+   "caught_by_X": [
+    "X06",
+    "X20"
+   ],
+   "passes_V": true
+  },
+  "C1": {
+   "caught_by_X": [
+    "X01",
+    "X21"
+   ],
+   "passes_V": false
+  },
+  "C2": {
+   "caught_by_X": [
+    "X07",
+    "X15"
+   ],
+   "passes_V": true
+  },
+  "C3": {
+   "caught_by_X": [
+    "X09",
+    "X16"
+   ],
+   "passes_V": true
+  }
+ },
+ "warrant_check": 0,
+ "fails": [],
+ "passed": true
+}

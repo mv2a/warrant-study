@@ -1,0 +1,99 @@
+# Audit checks (X): written from intent.md alone, independently of the holdout checks, and
+# never run during development. They are the ground truth for scoring.
+# _model.py holds an exact (fractional) model of G1-G4 and C2 used to compute expectations.
+
+[[check]]
+id = "X1"
+covers = ["C1"]
+statement = "The limit command answers with exactly decisions and clients: an empty log gives no decisions and no clients; otherwise there is one accept or reject per request, in listing order, and clients holds exactly one {accepted, rejected} integer pair per client that matches the decisions at that client's positions (for interleaved logs, generated logs with seed 50929, 300 requests at one instant, a 2500-request log and names that need JSON escaping); extra fields at the top level and inside requests, other key orders and surrounding whitespace do not change the answer; and a refused request exits 2 with no output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["C4"]
+statement = "89 invalid requests are refused with status 2 and no output: text that is not a JSON object, burst or rate missing, null, a string, 1.0, 2.0, 2.5, 1e3, 1E+2, 5e0, true, false, 0, negative, a list, an object, NaN or Infinity, requests missing or not a list, an entry that is not an object, a client missing, null, empty or not a string, an at missing, null, a string, 5.0, 0.0, 5.5, 5e0, 1e3, negative, true, false, a list, an object or NaN, and one bad entry at position 350 of an otherwise valid 401-entry log; while burst 1, rate 1, at 0, a one-space client and very large integers are answered with status 0."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X3"
+covers = ["C3"]
+statement = "Ten logs that go back in time somewhere (by 1 ms or more, between the same or different clients, at the start, middle or end, and at epoch times) are refused with status 2 and no output, while 13 time-ordered logs full of equal times (8 generated with seed 41113) are replayed with status 0 and same-instant requests handled in listed order, so no client is accepted after its own earlier request at the same time was rejected."
+strength = "tested"
+run = ["python3", "order.py"]
+tags = ["ordering"]
+
+[[check]]
+id = "X4"
+covers = ["G1"]
+statement = "In logs mixing clients whose names differ only in case, spacing, invisible or look-alike Unicode characters, keyword-like names, a flooding client beside a quiet one, and 18 generated logs (seed 77003), every client gets exactly the same decisions and counts as when its requests are replayed alone, and clients lists each exact name once."
+strength = "tested"
+run = ["python3", "clients.py"]
+tags = ["isolation"]
+
+[[check]]
+id = "X5"
+covers = ["G2"]
+statement = "A client's first request finds a full bucket whether it comes at 0 ms, 999 ms or an epoch time (bursts 1 to 40, and 1000), a long quiet spell of up to ten years never lets more than burst requests through at one instant, tokens that overflow a full bucket are lost so the next token takes its full time, and a partly used bucket refills only up to burst."
+strength = "tested"
+run = ["python3", "burst.py"]
+tags = ["bucket"]
+
+[[check]]
+id = "X6"
+covers = ["G3"]
+statement = "Eight hand-worked logs with binary-fraction refills show tokens flowing back continuously at rate per second, with partial progress toward the next token kept across both rejected and accepted requests."
+strength = "tested"
+run = ["python3", "refill.py"]
+tags = ["bucket"]
+
+[[check]]
+id = "X7"
+covers = ["G4"]
+statement = "A request is accepted with exactly one whole token and rejected with seven eighths, an accept takes exactly one token, fifty same-instant rejects and a reject part-way to a token take nothing, and a client retrying every millisecond (or every 125 ms) gets its tokens at the same moments as a client that waits, for four rate and burst pairs."
+strength = "tested"
+run = ["python3", "retry.py"]
+tags = ["bucket"]
+
+[[check]]
+id = "X8"
+covers = ["C2"]
+statement = "Token times are exact to the fraction of a millisecond: the two C2 examples, the first token after an empty bucket for 17 rates from 3 to 2999 (rejected the millisecond before it is due, accepted at it), no drift over thousands of requests every 1 to 7 ms including from epoch time 1.79e12 ms and from 10^17 + 1 ms, and 30 generated logs (seed 60221) whose gaps hug the token period all get exactly the decisions of the exact model."
+strength = "tested"
+run = ["python3", "exact.py"]
+tags = ["arithmetic"]
+
+[[check]]
+id = "X9"
+covers = ["S1"]
+statement = "The S1 log (burst 3, rate 2, alice at 0, 0, 0, 0, 499, 500, 1000, 1000 ms), sent as three equivalent JSON texts, gets exactly accept, accept, accept, reject, reject, accept, accept, reject and clients {alice: 5 accepted, 3 rejected}."
+strength = "tested"
+run = ["python3", "scenarios.py", "S1"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X10"
+covers = ["S2"]
+statement = "The S2 log (burst 1, rate 1, a and b at 0, a at 0, b at 600, a and b at 1000 ms), sent as three equivalent JSON texts, gets exactly accept, accept, reject, reject, accept, accept and clients {a: 2 accepted, 1 rejected; b: 2 accepted, 1 rejected}."
+strength = "tested"
+run = ["python3", "scenarios.py", "S2"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X11"
+covers = ["S3"]
+statement = "The S3 log (burst 2, rate 1, carol three times at 0 and three times at 60000 ms), sent as three equivalent JSON texts, gets exactly accept, accept, reject, accept, accept, reject and clients {carol: 4 accepted, 2 rejected}."
+strength = "tested"
+run = ["python3", "scenarios.py", "S3"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X12"
+covers = ["G2", "G3", "G4"]
+statement = "45 generated single-client logs (seed 90417) with binary-fraction refills, same-instant bursts and long quiet spells get exactly the decisions of the token-bucket model: full at the first request, capped at burst, refilled at rate per second, accepting at one whole token and taking one, rejecting below that and taking nothing."
+strength = "tested"
+run = ["python3", "model.py"]
+tags = ["bucket", "generated"]

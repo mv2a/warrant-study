@@ -1,0 +1,81 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "Required fields that are left out or null get missing and nothing else, optional fields that are left out or null get no error even when they carry other rules, false, 0, [] and the empty string count as present, and 160 generated rows (seed 1401) match."
+strength = "tested"
+run = ["python3", "missing.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Each of the four types accepts exactly the values G2 names across 24 JSON literals (including 4.0, -0.0, 1e3, 4.5, true, lists and objects), and 200 generated rows (seed 1402) get exactly the type errors they should."
+strength = "tested"
+run = ["python3", "types.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "min and max are inclusive for integer and number fields (at, just inside and just outside each bound, min equal to max, one-sided bounds, and whole-number bounds too large for a float to hold exactly, such as 2^55 + 1, 2^62 - 1, -2^53 and 10^20), allowed matches strings exactly (composed and decomposed accents do not match) and numbers by value, and 14 generated sets (seed 1403) agree."
+strength = "tested"
+run = ["python3", "range_allowed.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "In unique fields every later repeat gets duplicate and the first occurrence does not, 1 equals 1.0 and 0 equals -0.0, strings differ by case, spaces and composed versus decomposed accents, null or left-out values and wrong-typed values never count, fields that are not unique never report duplicates, and 300 generated rows (seed 1404) match."
+strength = "tested"
+run = ["python3", "unique.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H5"
+covers = ["G5"]
+statement = "A table of 250 rows with 6 bad fields each reports all 1500 errors, a lone error in the last of 600 rows is reported, fields the schema does not name are ignored, and 400 generated rows (seed 1405) report every error."
+strength = "tested"
+run = ["python3", "every_error.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H6"
+covers = ["C1"]
+statement = "The output has exactly valid and errors with correctly typed row, field and code, row positions start at 0, valid is true exactly when errors is empty (including for no rows), a re-ordered pretty-printed request works, standard output is one JSON object, and refusals exit 2 with empty standard output and a reason on standard error."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H7"
+covers = ["C2"]
+statement = "Each field of each row gets at most one error, the first in the order missing, type, range, allowed, duplicate, across 15 hand-picked rows and 5 generated sets of 80 rows (seed 1406)."
+strength = "tested"
+run = ["python3", "precedence.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H8"
+covers = ["C3"]
+statement = "Errors come out by row, then by the field's position in the schema, not alphabetically or by the key order in the row, including duplicates, across hand-picked rows and 12 generated schemas of 40 rows (seed 1407)."
+strength = "tested"
+run = ["python3", "order.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H9"
+covers = ["C4"]
+statement = "58 kinds of malformed request named in C4 are refused with status 2 and no output, including NaN, Infinity and -Infinity (which JSON does not have) as a min, an allowed entry and a row value, and 11 near misses (min equal to max, repeated allowed values, explicit false flags, bad values in rows, extra row fields and others) are validated instead."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H10"
+covers = ["S1", "S2", "S3"]
+statement = "The three ROSTER scenarios give exactly the stated output when sent as written in the intent, on one line, and with every key order reversed."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["scenarios"]

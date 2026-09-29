@@ -1,0 +1,122 @@
+# Audit checks (X): written from intent.md alone, independently of the visible and hidden
+# checks. They are the ground truth for scoring and never run during development.
+
+[[check]]
+id = "X1"
+covers = ["C3"]
+statement = "Fifteen valid requests, five of them also sent pretty-printed with the keys reordered for the same answer, exit 0 and write one JSON object holding exactly a numeric percent between 0 and 100 with at most one decimal place and one of the seven letters, and each of five invalid requests that the command does not grade exits 2 with nothing but whitespace on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["C3"]
+statement = "Adding any of nine sets of unknown top-level fields (including extra_credit, curve, weights, percent and letter) or any of four sets of unknown fields inside every homework object to three valid requests leaves the exit status and answer exactly as they were without them."
+strength = "tested"
+run = ["python3", "extra_fields.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X3"
+covers = ["G1"]
+statement = "With all quizzes equal and all homework on time, the percent is 15% quizzes, 25% homework, 25% midterm and 35% final, for each component alone at two values, for two pairs of components, for everything at 0 and at 100, for two mixes, and for 70 generated students."
+strength = "tested"
+run = ["python3", "weights.py"]
+tags = ["grades"]
+
+[[check]]
+id = "X4"
+covers = ["G2"]
+statement = "Exactly one lowest quiz is dropped when there are two or more, only one of several tied lowest scores is dropped, a single quiz is kept, and the rest are averaged exactly, in 19 described students and 80 generated ones."
+strength = "tested"
+run = ["python3", "quiz_drop.py"]
+tags = ["grades"]
+
+[[check]]
+id = "X5"
+covers = ["G3"]
+statement = "Homework keeps 100%, 90%, 80%, 70% and 60% of its own score at 0 to 4 days late and 0 at 5 to 10**12 days late, and the homework average is the plain mean of every penalised score with none dropped, in 23 described students and 80 generated ones."
+strength = "tested"
+run = ["python3", "late_homework.py"]
+tags = ["grades"]
+
+[[check]]
+id = "X6"
+covers = ["G4"]
+statement = "The letter is A, B+, B, C+, C, D or F for students exactly at 100.0, 0.0 and each side of every boundary (90.0 and 89.9, 86.0 and 85.9, 80.0 and 79.9, 76.0 and 75.9, 70.0 and 69.9, 60.0 and 59.9), and for 84 generated students, twelve in each band."
+strength = "tested"
+run = ["python3", "letter_bands.py"]
+tags = ["grades"]
+
+[[check]]
+id = "X7"
+covers = ["G4"]
+statement = "The letter follows the rounded percent: exact halves just under a boundary (89.95, 85.95, 79.95, 75.95, 69.95, 59.95) and 12 unrounded values above those halves get the higher letter, and 6 unrounded values below them keep the lower letter."
+strength = "tested"
+run = ["python3", "letter_rounded.py"]
+tags = ["grades"]
+
+[[check]]
+id = "X8"
+covers = ["C1"]
+statement = "The percent equals the exact course percentage rounded once to one decimal with halves up, for 9 exact halves from 0.05 to 99.95 (82.25 gives 82.3) and 49 students whose answer changes if any average, late score or weighted part is rounded early, the result is rounded twice, truncated, or rounded half-even, or the sum is taken in binary floating point."
+strength = "tested"
+run = ["python3", "rounding.py"]
+tags = ["grades"]
+
+[[check]]
+id = "X9"
+covers = ["C1"]
+statement = "For 160 generated students with one to nine quizzes and homework and every lateness, the percent is exactly the course percentage rounded once to one decimal with halves up."
+strength = "tested"
+run = ["python3", "rounding_generated.py"]
+tags = ["grades"]
+
+[[check]]
+id = "X10"
+covers = ["C2"]
+statement = "Forty-two malformed requests are refused with status 2 and no output: 9 kinds of text that is not JSON, 6 JSON values that are not objects, each missing field, empty or non-list quizzes and homework, and homework entries that are not objects or lack score or days_late."
+strength = "tested"
+run = ["python3", "invalid_shape.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X11"
+covers = ["C2"]
+statement = "Every quiz, homework, midterm and final score that is not a JSON integer from 0 to 100 (17 kinds, including -1, 101, 87.5, 90.0, \"90\" and true), every days_late that is not a JSON integer of 0 or more (13 kinds, including -1, 1.5, \"2\" and true), and NaN, Infinity, -Infinity and 7e1 are refused with status 2 and no output, even where the score would be dropped or zeroed."
+strength = "tested"
+run = ["python3", "invalid_values.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X12"
+covers = ["C2", "C3"]
+statement = "Requests at the edges of validity are graded, not refused: with scores of 0 and 100 in every position, days_late of 0, 4, 5, 1000 and 10**12, or forty quizzes with forty homework, each exits 0 with a JSON object on standard output."
+strength = "tested"
+run = ["python3", "valid_edges.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X13"
+covers = ["S1"]
+statement = "The S1 student exactly as stated (quizzes 70, 85, 90 and 40; homework 90 on time, 80 two days late and 100 on time; midterm 78; final 84) gets percent 82.3 and letter B."
+strength = "tested"
+run = ["python3", "scenario.py", "S1"]
+tags = ["grades"]
+
+[[check]]
+id = "X14"
+covers = ["S2"]
+statement = "The S2 student exactly as stated (quizzes 85 and 62; homework 88 on time; midterm 92; final 92) gets percent 90.0 and letter A."
+strength = "tested"
+run = ["python3", "scenario.py", "S2"]
+tags = ["grades"]
+
+[[check]]
+id = "X15"
+covers = ["S3"]
+statement = "The S3 student exactly as stated (a single quiz of 64; homework 100 five days late, 90 three days late and 75 on time; midterm 71; final 69) gets percent 63.0 and letter D."
+strength = "tested"
+run = ["python3", "scenario.py", "S3"]
+tags = ["grades"]

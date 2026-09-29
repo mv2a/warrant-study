@@ -1,0 +1,73 @@
+# Hidden checks: never shown to the builder. Used only by Warrant's gate in conditions B and C.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "For every check-in weekday and 22 stay lengths from 1 to 30 nights, at rates that make the surcharge exact, the room charge is the nightly rate for each night plus 25% on every Friday and Saturday night, with the weekdays wrapping round week after week."
+strength = "tested"
+run = ["python3", "weekend.py"]
+tags = ["money"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "For every stay length from 1 to 30 nights, from three check-in days each, the discount is nothing under 7 nights, 10% of the whole room charge from 7 to 13 nights, and 15% from 14 nights."
+strength = "tested"
+run = ["python3", "discount.py"]
+tags = ["money"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "For every stay length from 1 to 30 nights, the city tax is 275 cents for each of the first 10 nights and nothing after, and the total adds the full city tax to the discounted room charge."
+strength = "tested"
+run = ["python3", "city_tax.py"]
+tags = ["money"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "Across all seven check-in days and 1 to 8 nights, plus 30-night stays, exactly the stays that include a Saturday night and are shorter than 3 nights are refused, and every other stay is priced."
+strength = "tested"
+run = ["python3", "min_stay.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H5"
+covers = ["C1"]
+statement = "Valid requests exit 0 with exactly the four integer amount fields, extra request fields do not change the answer, and nine kinds of refused request exit with status 2, write nothing on standard output and explain themselves on standard error."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H6"
+covers = ["C2"]
+statement = "Weekend surcharges are rounded night by night to the nearest cent with halves up, across 40 rates including every remainder of 8; discounts on 40 long stays are rounded down; and on 40 more stays every amount is whole, non-negative cents with the total equal to room minus discount plus tax."
+strength = "tested"
+run = ["python3", "rounding.py"]
+tags = ["money"]
+
+[[check]]
+id = "H7"
+covers = ["C3"]
+statement = "Forty-four invalid requests are refused rather than priced, covering input that is not a JSON object or has something other than whitespace after it, each missing field, wrong weekday names, and night counts and rates that are out of range or not JSON integers (including true, 2.0 and strings); two requests containing bytes that are not UTF-8 are refused with exit status 2 both under the POSIX locale and with standard streams decoded strictly as UTF-8; and the valid edges of 1 night, 30 nights, a 1-cent rate, a $10,000,000.00 rate and trailing whitespace after the object are priced."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["validation"]
+
+[[check]]
+id = "H8"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The four scenarios in the intent produce exactly the stated fields and amounts, and the S3 stay is refused with exit status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]
+
+[[check]]
+id = "H9"
+covers = ["G1", "G2", "G3", "G4", "C2"]
+statement = "160 random stays over all check-in days, 1 to 30 nights and rates from 1 cent to $20,000.00 are priced field by field exactly as the whole intent says, or refused when they break the minimum-stay rule."
+strength = "tested"
+run = ["python3", "model.py"]
+tags = ["money"]

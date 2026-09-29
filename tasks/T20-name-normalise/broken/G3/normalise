@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+"""Normalise one person's name for the mailing list.
+
+Reads {"name": "..."} on standard input and writes {"display": "...", "key": "..."}.
+Exits 2, writing nothing, when the request is refused.
+"""
+
+import json
+import sys
+import unicodedata
+
+HONORIFICS = {"mr", "mrs", "ms", "miss", "mx", "dr", "prof", "rev", "sir", "dame"}
+PARTICLES = {"da", "de", "del", "della", "der", "di", "du", "la", "le", "van", "von"}
+PART_STARTERS = {"-", "'", "\u2019"}
+MAX_LENGTH = 100
+
+
+def refuse():
+    sys.exit(2)
+
+
+def is_honorific(word):
+    word = word.lower()
+    if word.endswith("."):
+        word = word[:-1]
+    return word in HONORIFICS
+
+
+def capitalise(word):
+    letters = []
+    previous = None
+    for char in word:
+        if previous is None or previous in PART_STARTERS:
+            letters.append(char.upper())
+        else:
+            letters.append(char.lower())
+        previous = char
+    return "".join(letters)
+
+
+def make_key(display):
+    decomposed = "".join(char.lower() for char in unicodedata.normalize("NFKD", display))
+    return "".join(char for char in decomposed if char.isalpha())
+
+
+def normalise(name):
+    words = name.split()
+    start = 0
+    while start < len(words) and is_honorific(words[start]):
+        start += 1
+    words = words[start:]
+    if not any(char.isalpha() for word in words for char in word):
+        return None
+    last = len(words) - 1
+    shaped = []
+    for index, word in enumerate(words):
+        if 0 < index < last and word.lower() in PARTICLES:
+            shaped.append(word.lower())
+        else:
+            shaped.append(capitalise(word))
+    display = " ".join(shaped)
+    return {"display": display, "key": make_key(display)}
+
+
+def main():
+    try:
+        request = json.loads(sys.stdin.buffer.read())
+    except ValueError:
+        refuse()
+    if not isinstance(request, dict):
+        refuse()
+    name = request.get("name")
+    if not isinstance(name, str) or len(name) > MAX_LENGTH:
+        refuse()
+    result = normalise(name)
+    if result is None:
+        refuse()
+    sys.stdout.write(json.dumps(result) + "\n")
+
+
+if __name__ == "__main__":
+    main()

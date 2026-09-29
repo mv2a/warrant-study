@@ -1,0 +1,65 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "With packs of one, the units wanted equal daily demand times lead time plus safety stock, minus stock on hand and on order, and zero when stock reaches or passes the target: 14 boundary products (on order only, exactly at target, one unit either side, zero lead time, zero demand, zero safety stock, large numbers) and 60 generated ones."
+strength = "tested"
+run = ["python3", "target.py"]
+tags = ["quantity"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "The units wanted are the units needed rounded up to the next multiple of the pack size, with exact multiples left alone and nothing wanted when nothing is needed: 17 simple needs and 90 generated products, 60 of them at or one unit from a multiple of the pack size."
+strength = "tested"
+run = ["python3", "packs.py"]
+tags = ["quantity"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "With products listed from most to least urgent, each gets the most whole packs, up to what it wants, that the money still left pays for, leftovers go on to later products after a cut, and the total never exceeds the budget: 10 designed requests and 60 generated ones."
+strength = "tested"
+run = ["python3", "budget.py"]
+tags = ["budget"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "Smaller priority numbers are funded first wherever they are listed, priority numbers need not be consecutive, and products with the same priority are funded in request order rather than by sku: 8 designed requests and 50 generated ones with many ties."
+strength = "tested"
+run = ["python3", "priority.py"]
+tags = ["budget"]
+
+[[check]]
+id = "H5"
+covers = ["C1"]
+statement = "Valid requests exit 0 with one JSON object holding exactly orders, total_cost_cents and budget_left_cents, each order holding exactly a string sku and integer wanted, quantity and cost_cents; unnamed fields and multi-line input are accepted; five kinds of refusal exit 2 with nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H6"
+covers = ["C2"]
+statement = "Every product is listed exactly once in request order, including those ordering nothing; each quantity is whole packs between 0 and wanted; cost is quantity times unit cost; the totals add up; and wanted does not change with the budget: 3 designed requests and 50 generated ones."
+strength = "tested"
+run = ["python3", "listing.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H7"
+covers = ["C3"]
+statement = "Fifty kinds of invalid request are refused with status 2 and no plan (bad JSON, wrong shapes, missing fields, decimals, text, null and true/false where integers belong, negative values, zero pack size, unit cost or priority, bad or repeated skus), and 8 valid edge cases are planned."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H8"
+covers = ["S1", "S2", "S3"]
+statement = "The three scenarios in the intent get exactly the stated responses, whether the request is sent compact or pretty-printed with its keys sorted."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["scenarios"]

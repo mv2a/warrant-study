@@ -1,0 +1,73 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "With everyone required, a single person's meeting blocks the group wherever that person is listed, in groups of 2, 3, 4, 5, 7 and 10 people, and groups of 1 to 12 people each busy for half of a different hour leave only the gaps free; a meeting held by 1 to all of a group of 3, 5 or 8 leaves its time free exactly when at least quorum others are free, for every quorum; people with empty calendars count toward the quorum; seven hand-worked quorum cases such as a staircase of overlapping meetings give the stated slots; and 70 generated groups of 3 to 9 people with varied quorums match a minute-by-minute count."
+strength = "tested"
+run = ["python3", "people.py"]
+tags = ["slots"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "For min_length values of 1, 2, 15, 30, 45, 60, 90 and 120, free stretches one minute short are left out and stretches of exactly min_length or one minute more are returned, at the start, middle and end of the working hours; a fully free day is returned at exactly its length and not one minute more; stretches shaped by a quorum of 1 of 2 people follow the same threshold; no long enough stretch gives an empty list; and 60 generated requests match a minute-by-minute count."
+strength = "tested"
+run = ["python3", "length.py"]
+tags = ["slots"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "Long free stretches come back whole rather than in pieces, including stretches during which the people who are free change under a quorum below the whole group; slots are in time order whether the stretches grow or shrink in length; and in 80 generated requests with varied quorums the slots are strictly increasing, never touch, and are exactly the whole free stretches."
+strength = "tested"
+run = ["python3", "whole.py"]
+tags = ["slots"]
+
+[[check]]
+id = "H4"
+covers = ["C1"]
+statement = "A slot starts at the minute a meeting ends; touching meetings of one person, of two people and in a chain leave no gap when everyone is required; a person is free again at the minute their meeting ends when a quorum is counted, so touching meetings of two people with quorum 1 leave the day whole; a one-minute gap is a one-minute slot; slot length is end minus start; minutes 0 and 1440 work as boundaries; and 60 generated requests full of touching meetings match a minute-by-minute count."
+strength = "tested"
+run = ["python3", "touching.py"]
+tags = ["slots"]
+
+[[check]]
+id = "H5"
+covers = ["C2"]
+statement = "Nested meetings, within one person and across people, repeated meetings, meetings listed latest first and overlapping chains count as the time they cover together; under a quorum below the whole group one person's overlapping, nested or repeated meetings count as one busy person while the same meeting for two people counts as two; and 45 generated requests with varied quorums give the same answer after each person's intervals are split into overlapping pieces, repeated and shuffled and the people reordered."
+strength = "tested"
+run = ["python3", "overlap.py"]
+tags = ["slots"]
+
+[[check]]
+id = "H6"
+covers = ["C3"]
+statement = "Meetings running past the start or end of the working hours block the part inside them, meetings entirely outside change nothing, free time is cut at the working-hours edges, four other sets of working hours behave the same way, clipped meetings still count toward the busy people under a quorum, and in 60 generated requests with meetings across both edges every slot lies inside the working hours."
+strength = "tested"
+run = ["python3", "workday.py"]
+tags = ["slots"]
+
+[[check]]
+id = "H7"
+covers = ["C4"]
+statement = "53 kinds of invalid request are refused with status 2 and no output, including non-JSON input, missing fields, malformed, reversed, empty, out-of-range, fractional, decimal-point, text and true/false workdays, lengths, quorums and intervals, a quorum of zero or larger than the group, and an empty busy list; eight valid edge cases such as a midnight-to-midnight day and a quorum of the whole group are answered."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H8"
+covers = ["C5"]
+statement = "28 valid requests exit 0 with an object whose only field is slots, a list of [start, end] whole-number pairs; extra fields, field order and pretty-printed input do not change the answer; and five refused requests exit 2 with nothing on standard output and a reason on standard error."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H9"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The example requests in the intent, S1 to S4 including S4 with quorum 4, sent as written there, get exactly the answers the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["slots"]

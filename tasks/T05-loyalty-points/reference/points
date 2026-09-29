@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+"""Loyalty points for one paid order: one JSON object in, one JSON object out."""
+
+import json
+import sys
+
+TIER_PERCENT = {"standard": 100, "silver": 125, "gold": 150}
+EXCLUDED_CATEGORY = "gift_card"
+CATEGORY_POINTS_PER_DOLLAR = 2
+BONUS_CAP = 500
+
+
+def refuse(reason):
+    print(f"invalid request: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def whole_number(value, minimum):
+    # bool is a subclass of int in Python, so compare types exactly.
+    return type(value) is int and value >= minimum
+
+
+def read_request():
+    try:
+        request = json.loads(sys.stdin.read())
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        refuse("not valid JSON")
+    if not isinstance(request, dict):
+        refuse("expected a JSON object")
+
+    tier = request.get("tier")
+    if not isinstance(tier, str) or tier not in TIER_PERCENT:
+        refuse("tier must be standard, silver or gold")
+
+    items = request.get("items")
+    if not isinstance(items, list):
+        refuse("items must be a list")
+    for number, item in enumerate(items, start=1):
+        if not isinstance(item, dict):
+            refuse(f"item {number} must be an object")
+        category = item.get("category")
+        if not isinstance(category, str) or not category:
+            refuse(f"item {number}: category must be a non-empty string")
+        if not whole_number(item.get("price_cents"), 0):
+            refuse(f"item {number}: price_cents must be a whole number of cents, zero or more")
+        if not whole_number(item.get("quantity"), 1):
+            refuse(f"item {number}: quantity must be a whole number, one or more")
+
+    bonus_categories = request.get("bonus_categories", [])
+    if not isinstance(bonus_categories, list) or not all(isinstance(c, str) for c in bonus_categories):
+        refuse("bonus_categories must be a list of strings")
+    return tier, items, set(bonus_categories)
+
+
+def main():
+    tier, items, promoted = read_request()
+    eligible = [item for item in items if item["category"] != EXCLUDED_CATEGORY]
+
+    eligible_cents = sum(item["price_cents"] * item["quantity"] for item in eligible)
+    base = eligible_cents // 100
+
+    tier_bonus = base * TIER_PERCENT[tier] // 100 - base
+
+    promoted_cents = sum(
+        item["price_cents"] * item["quantity"] for item in eligible if item["category"] in promoted
+    )
+    category_bonus = CATEGORY_POINTS_PER_DOLLAR * (promoted_cents // 100)
+
+    bonus = min(BONUS_CAP, tier_bonus + category_bonus)
+    json.dump(
+        {
+            "eligible_cents": eligible_cents,
+            "base_points": base,
+            "bonus_points": bonus,
+            "total_points": base + bonus,
+        },
+        sys.stdout,
+    )
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()

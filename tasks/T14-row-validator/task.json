@@ -1,0 +1,2 @@
+{"id": "T14", "slug": "row-validator", "language": "python", "command": "validate",
+ "promises": ["G1", "G2", "G3", "G4", "G5", "C1", "C2", "C3", "C4", "S1", "S2", "S3"]}

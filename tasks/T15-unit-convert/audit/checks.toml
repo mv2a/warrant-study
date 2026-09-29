@@ -1,0 +1,86 @@
+# Audit checks (X): the ground truth for scoring. Written from intent.md alone, independently
+# of the visible and hidden checks; never run during development.
+
+[[check]]
+id = "X1"
+covers = ["G1"]
+statement = "Lengths convert with G1's exact definitions: 30 conversions worked out by hand (such as 1 mi = 1609.344 m and 1 km = 0.621371192237 mi at 12 places) and two conversions for each of the 64 ordered pairs of length units, at 0 to 12 places."
+strength = "tested"
+run = ["python3", "lengths.py"]
+
+[[check]]
+id = "X2"
+covers = ["G2"]
+statement = "Masses convert with G2's exact definitions: 21 conversions worked out by hand (such as 1 oz = 28.349523125 g and 1 kg = 2.204622621849 lb at 12 places) and two conversions for each of the 49 ordered pairs of mass units, at 0 to 12 places."
+strength = "tested"
+run = ["python3", "masses.py"]
+
+[[check]]
+id = "X3"
+covers = ["G3"]
+statement = "Volumes convert with G3's exact US definitions: 23 conversions worked out by hand (such as 1 floz = 29.5735295625 ml and 1 l = 0.264172052358 gal at 12 places) and two conversions for each of the 49 ordered pairs of volume units, at 0 to 12 places."
+strength = "tested"
+run = ["python3", "volumes.py"]
+
+[[check]]
+id = "X4"
+covers = ["C1"]
+statement = "Results equal the exact product rounded once at the end for 20 cases chosen to defeat floating point, 28-digit decimals and rounding along the way, 169 random amounts of up to 30 integer and 25 fractional digits at every places value (seed 15150929), and 130 amounts a hair below or above an exactly halfway result (seed 60417151)."
+strength = "tested"
+run = ["python3", "exact.py"]
+
+[[check]]
+id = "X5"
+covers = ["C2"]
+statement = "Results round to the nearest step with exact halves rounded up and are written with exactly `places` ASCII digits after a point, no point at 0 places, and a single leading zero at most, over 52 hand-worked cases (including C2's two examples), 104 generated exactly-halfway results (seed 91520177) and a sweep of every places value from 0 to 12."
+strength = "tested"
+run = ["python3", "rounding.py"]
+
+[[check]]
+id = "X6"
+covers = ["C3"]
+statement = "Every unit converts to itself unchanged and to every unit of its own kind, while 93 unknown or wrongly cased symbols (such as KG, lbs, gallon, L, fl oz and an empty string) in either the from or the to position, and all 322 ordered pairs of units of two different kinds, are refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "units.py"]
+
+[[check]]
+id = "X7"
+covers = ["C4"]
+statement = "120 malformed requests are refused with status 2 and no output (input that is not one JSON object, missing, extra or miscased fields, 54 values that are not plain ASCII-digit decimals, non-string units, and places that are not a JSON integer from 0 to 12), while 11 allowed forms such as \"0\", \"007.50\" and places 0 and 12 are converted correctly."
+strength = "tested"
+run = ["python3", "malformed.py"]
+
+[[check]]
+id = "X8"
+covers = ["C5"]
+statement = "Reading raw standard output, a success exits 0 with one JSON object holding exactly the string fields value, unit (the to unit) and dimension for all 22 units as targets and for 5 differently written but equivalent JSON requests, and 10 refusals exit 2 with nothing at all on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+
+[[check]]
+id = "X9"
+covers = ["S1"]
+statement = "The S1 request, sent in three equivalent JSON forms, exits 0 with exactly {\"value\": \"3.658\", \"unit\": \"m\", \"dimension\": \"length\"}."
+strength = "tested"
+run = ["python3", "scenarios.py", "S1"]
+
+[[check]]
+id = "X10"
+covers = ["S2"]
+statement = "The S2 request, sent in three equivalent JSON forms, exits 0 with exactly {\"value\": \"1.1340\", \"unit\": \"kg\", \"dimension\": \"mass\"}."
+strength = "tested"
+run = ["python3", "scenarios.py", "S2"]
+
+[[check]]
+id = "X11"
+covers = ["S3"]
+statement = "The S3 request (3 kg to l at 2 places), sent in three equivalent JSON forms, exits 2 and writes nothing on standard output."
+strength = "tested"
+run = ["python3", "scenarios.py", "S3"]
+
+[[check]]
+id = "X12"
+covers = ["C1"]
+statement = "Seven amounts of 120 to 4521 characters, two of them with more integer digits than Python's default 4300-digit limit for text-to-int conversion, convert exactly (seed 84126037)."
+strength = "tested"
+run = ["python3", "long_amounts.py"]

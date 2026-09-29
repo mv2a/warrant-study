@@ -1,0 +1,89 @@
+{
+ "task": "T01-parking-fees",
+ "reference": {
+  "V": {
+   "P1": true,
+   "P2": true,
+   "P3": true
+  },
+  "H": {
+   "H1": true,
+   "H2": true,
+   "H3": true,
+   "H4": true,
+   "H5": true,
+   "H6": true,
+   "H7": true,
+   "H8": true,
+   "H9": true,
+   "H10": true
+  },
+  "X": {
+   "X-G1": true,
+   "X-G2": true,
+   "X-G3": true,
+   "X-G4": true,
+   "X-G5": true,
+   "X-C1": true,
+   "X-C2": true,
+   "X-C3": true,
+   "X-S1": true,
+   "X-S2": true,
+   "X-S3": true,
+   "X-S4": true
+  }
+ },
+ "broken": {
+  "G1": {
+   "caught_by_X": [
+    "X-G1"
+   ],
+   "passes_V": true
+  },
+  "G2": {
+   "caught_by_X": [
+    "X-G2"
+   ],
+   "passes_V": true
+  },
+  "G3": {
+   "caught_by_X": [
+    "X-G3"
+   ],
+   "passes_V": true
+  },
+  "G4": {
+   "caught_by_X": [
+    "X-G4"
+   ],
+   "passes_V": true
+  },
+  "G5": {
+   "caught_by_X": [
+    "X-G5"
+   ],
+   "passes_V": false
+  },
+  "C1": {
+   "caught_by_X": [
+    "X-C1"
+   ],
+   "passes_V": false
+  },
+  "C2": {
+   "caught_by_X": [
+    "X-C2"
+   ],
+   "passes_V": false
+  },
+  "C3": {
+   "caught_by_X": [
+    "X-C3"
+   ],
+   "passes_V": true
+  }
+ },
+ "warrant_check": 0,
+ "fails": [],
+ "passed": true
+}

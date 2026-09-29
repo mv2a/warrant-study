@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+"""Work out a branch's next invoice number: one JSON object in, one JSON object out."""
+
+import json
+import re
+import sys
+
+PREFIXES = {"lisbon": "LIS", "porto": "OPO", "faro": "FAO", "braga": "BRG"}
+FIRST_YEAR, LAST_YEAR = 2000, 9999
+DIGITS = 5
+LAST_SEQUENCE = 10**DIGITS - 1
+# [0-9] rather than \d, which also matches non-ASCII digits; fullmatch, because $ lets a
+# trailing newline through.
+NUMBER = re.compile(r"([A-Z]{3})-([0-9]{4})-([0-9]{5})")
+
+
+def refuse(reason):
+    print(f"refused: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def main():
+    # Read bytes and decode them strictly, so invalid UTF-8 is refused whatever the locale
+    # (in the C locale, text-mode stdin would let it through as surrogate escapes).
+    try:
+        text = sys.stdin.buffer.read().decode("utf-8")
+    except UnicodeDecodeError as error:
+        refuse(f"standard input is not valid UTF-8 ({error})")
+    try:
+        request = json.loads(text)
+    except json.JSONDecodeError as error:
+        refuse(f"not valid JSON ({error})")
+    if not isinstance(request, dict):
+        refuse("expected a JSON object")
+    for field in ("branch", "year", "previous"):
+        if field not in request:
+            refuse(f"missing field {field}")
+
+    branch, year, previous = request["branch"], request["year"], request["previous"]
+    if not isinstance(branch, str) or branch not in PREFIXES:
+        refuse(f"unknown branch {branch!r}")
+    # bool is a subclass of int in Python, so compare the type exactly.
+    try:
+        year = int(year)
+    except (TypeError, ValueError):
+        refuse("year must be a whole number")
+    if not FIRST_YEAR <= year <= LAST_YEAR:
+        refuse(f"year must be a whole number from {FIRST_YEAR} to {LAST_YEAR}")
+    if previous is not None and not isinstance(previous, str):
+        refuse("previous must be text or null")
+
+    prefix = PREFIXES[branch]
+    if previous is None:
+        sequence = 1
+    else:
+        match = NUMBER.fullmatch(previous)
+        if not match:
+            refuse(f"malformed previous number {previous!r}")
+        previous_prefix, previous_year, previous_sequence = match.group(1), int(match.group(2)), int(match.group(3))
+        if previous_prefix != prefix:
+            refuse(f"{previous!r} is not a number of branch {branch}")
+        if not FIRST_YEAR <= previous_year <= LAST_YEAR or previous_sequence == 0:
+            refuse(f"malformed previous number {previous!r}")
+        if previous_year > year:
+            refuse(f"previous number {previous!r} is from a later year than {year}")
+        if previous_year < year:
+            sequence = 1
+        elif previous_sequence == LAST_SEQUENCE:
+            refuse(f"branch {branch} has used every number for {year}")
+        else:
+            sequence = previous_sequence + 1
+
+    json.dump({"number": f"{prefix}-{year:04d}-{sequence:0{DIGITS}d}", "sequence": sequence}, sys.stdout)
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()

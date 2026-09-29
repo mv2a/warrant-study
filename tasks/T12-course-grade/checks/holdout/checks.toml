@@ -1,0 +1,74 @@
+# Hidden checks: never shown to the builder. Each one compares the command with the
+# exact rules in intent.md (see _oracle.py); every random stream has a fixed seed.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "The course percentage weighs quizzes 15%, homework 25%, midterm 25% and final 35%: each component alone at 100, all at 0 and all at 100, pairs that tell the weights apart, and 60 seeded students with equal quiz scores and on-time homework."
+strength = "tested"
+run = ["python3", "weights.py"]
+tags = ["grades"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Exactly one lowest quiz is dropped when there are two or more, only one copy when several tie for lowest, and a single quiz is kept: 15 hand-picked quiz lists and 70 seeded lists with frequent ties."
+strength = "tested"
+run = ["python3", "quizzes.py"]
+tags = ["grades"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "Homework 1 to 4 days late keeps 90%, 80%, 70% or 60% of its score, homework 5 or more days late scores 0, on-time homework keeps its score, and no homework is dropped from the average: 7 scores at 10 lateness values, the intent's 85-becomes-68 example, and 60 seeded students."
+strength = "tested"
+run = ["python3", "late.py"]
+tags = ["grades"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "The letter follows the rounded percentage: at each of the six boundaries, a percentage exactly on it, an exact half below it and a third of a tenth below it get the higher letter, and three values that round to one tenth below it get the lower letter; plus 100.0, 0.0 and 80 seeded students."
+strength = "tested"
+run = ["python3", "letters.py"]
+tags = ["grades"]
+
+[[check]]
+id = "H5"
+covers = ["C1"]
+statement = "The percentage is computed exactly and rounded once to one decimal with exact halves up: the intent's 82.25 and 89.95 examples, 40 seeded exact halves, 25 students where rounding the averages first would change the result, 25 where floating point with Python's round() would, and 40 more."
+strength = "tested"
+run = ["python3", "rounding.py"]
+tags = ["grades", "rounding"]
+
+[[check]]
+id = "H6"
+covers = ["C2"]
+statement = "37 kinds of invalid request are refused with status 2 and no output (non-JSON, non-objects, missing fields, empty or non-list lists, scores that are negative, above 100, fractional, 90.0, text, true, false or null, malformed homework entries, and days_late that is negative, fractional, text, true or null), while 4 valid edge cases are graded."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H7"
+covers = ["C3"]
+statement = "Valid requests exit 0 with an object holding exactly percent (a number from 0 to 100 with at most one decimal) and letter (one of the seven), extra fields at the top level or in homework entries do not change the answer, a pretty-printed request is accepted, and refusals exit 2 with no output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H8"
+covers = ["S1", "S2", "S3"]
+statement = "The three students in the intent's scenarios get exactly the percent and letter the intent states."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["grades"]
+
+[[check]]
+id = "H9"
+covers = ["G1", "G2", "G3", "G4", "C1"]
+statement = "200 seeded random students, with up to 10 quizzes and 8 homework entries, get exactly the percent and letter that the intent's rules give."
+strength = "tested"
+run = ["python3", "random_full.py"]
+tags = ["grades"]

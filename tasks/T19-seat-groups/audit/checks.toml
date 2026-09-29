@@ -1,0 +1,142 @@
+# Audit checks (X): the ground truth for scoring. Written from intent.md alone, independently
+# of checks/holdout, reference/ and broken/. Never run during development.
+# Hand-written cases were worked out by hand from the intent; generated cases use fixed
+# seeds (43019, 50287, 60613, 71129, 83357, 94421, 31337) and a small model of the intent
+# in _audit.py. Calls run in parallel (12 at a time) to keep each check well under the
+# harness's 120-second limit.
+
+[[check]]
+id = "X1"
+covers = ["C1"]
+statement = "For 57 hand-written and generated requests the seats command exits 0 and answers with exactly seated, refused and free, each seated entry holding exactly id and seats and each refused entry exactly id and reason, every group answered once and in booking order within each list, seat names written like B7 in seating order and free a whole number; it also ignores unnamed fields, treats a missing may_split as false, returns ids exactly as sent, and refuses five malformed requests with exit status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["S1"]
+statement = "The S1 request, sent both as compact JSON and reformatted with its keys in reverse order, gets exit status 0 and exactly the response S1 gives."
+strength = "tested"
+run = ["python3", "scenarios.py", "S1"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X3"
+covers = ["S2"]
+statement = "The S2 request, sent both as compact JSON and reformatted with its keys in reverse order, gets exit status 0 and exactly the response S2 gives."
+strength = "tested"
+run = ["python3", "scenarios.py", "S2"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X4"
+covers = ["S3"]
+statement = "The S3 request, sent both as compact JSON and reformatted with its keys in reverse order, gets exit status 0 and exactly the response S3 gives."
+strength = "tested"
+run = ["python3", "scenarios.py", "S3"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X5"
+covers = ["G1"]
+statement = "Nine hand-worked requests get the booking-order outcomes the intent implies (seated with the right number of seats, or refused: an early small group beats a later large one, refused groups take no seats, an early split group is served before a later group), and every proper prefix of each request gives the same answers, seat for seat, to the groups it keeps."
+strength = "tested"
+run = ["python3", "order.py"]
+tags = ["order"]
+
+[[check]]
+id = "X6"
+covers = ["G1"]
+statement = "For 80 generated requests (seed 94421), the answers to the first k groups are the same when the later groups are left out, and removing a refused group changes no other group's answer."
+strength = "tested"
+run = ["python3", "generated.py", "G1"]
+tags = ["order", "generated"]
+
+[[check]]
+id = "X7"
+covers = ["G2"]
+statement = "Thirteen hand-worked requests, including the intent's free-seats 1, 2, 5, 6, 7, 8 example, rows longer than 9 seats, row Z and groups that may split but can sit together: judged from the seats left by the command's own earlier answers, every group that can sit together gets the frontmost row's lowest-numbered free block of its size."
+strength = "tested"
+run = ["python3", "together.py"]
+tags = ["together"]
+
+[[check]]
+id = "X8"
+covers = ["G2"]
+statement = "For 150 generated requests (seed 60613), every group that can sit together, judged from the seats left by the command's own earlier answers, gets exactly the frontmost row's lowest-numbered free block of its size."
+strength = "tested"
+run = ["python3", "generated.py", "G2"]
+tags = ["together", "generated"]
+
+[[check]]
+id = "X9"
+covers = ["G3"]
+statement = "Ten hand-worked requests: judged from the seats left by the command's own earlier answers, a group is split only when it has may_split true, cannot sit together and enough seats are free, and then gets the first free seats in seating order; a group without may_split true is never given seats that are not together."
+strength = "tested"
+run = ["python3", "split.py"]
+tags = ["split"]
+
+[[check]]
+id = "X10"
+covers = ["G3"]
+statement = "For 150 generated requests (seed 71129), judged from the seats left by the command's own earlier answers, every group that must be split gets exactly the first free seats in seating order, no group that can sit together is split, and no group without may_split true is given seats that are not together."
+strength = "tested"
+run = ["python3", "generated.py", "G3"]
+tags = ["split", "generated"]
+
+[[check]]
+id = "X11"
+covers = ["G4"]
+statement = "Eight hand-worked requests, including sizes 1301 and 10**9 and a group one seat short: judged from the seats left by the command's own earlier answers, every group that can neither sit together nor be split is refused whole, with not_enough_seats exactly when fewer seats are free than its size and not_together otherwise."
+strength = "tested"
+run = ["python3", "refusal.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X12"
+covers = ["G4"]
+statement = "For 150 generated requests (seed 83357), every group that can neither sit together nor be split is refused whole with the reason the intent gives, judged from the seats left by the command's own earlier answers."
+strength = "tested"
+run = ["python3", "generated.py", "G4"]
+tags = ["refusal", "generated"]
+
+[[check]]
+id = "X13"
+covers = ["C2"]
+statement = "For six requests, one of them a full 26 by 50 theatre with 320 groups (seed 31337), every sold seat exists, is not blocked and is sold once, each seated group has exactly size seats and free counts the seats neither blocked nor sold; four more requests in which no seat can be sold get exactly the expected free."
+strength = "tested"
+run = ["python3", "oversell.py"]
+tags = ["oversell"]
+
+[[check]]
+id = "X14"
+covers = ["C2"]
+statement = "For 150 generated requests (seed 50287), every sold seat exists, is not blocked and is sold once, each seated group has exactly size seats and free counts the seats neither blocked nor sold."
+strength = "tested"
+run = ["python3", "generated.py", "C2"]
+tags = ["oversell", "generated"]
+
+[[check]]
+id = "X15"
+covers = ["C3"]
+statement = "119 malformed requests, each breaking one rule of C3 (input not a JSON object; bad rows, groups, id, size or may_split, including true, 2.0, 1e1 and 1 where whole numbers or booleans are required; bad or repeated blocked seat names such as a1, A01, A 1, A6 in a row of 5 and A followed by a non-ASCII digit), get exit status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "malformed.py"]
+tags = ["invalid"]
+
+[[check]]
+id = "X16"
+covers = ["C3", "C1"]
+statement = "Twenty-nine valid requests at the edges of the rules (1 and 50 seats, 26 rows, blocked Z50, an id of one space, ids differing only by case, sizes up to 10**30, unnamed fields holding 3.0 or 1e1, unusual whitespace and key order) get exit status 0 and an answer for every group."
+strength = "tested"
+run = ["python3", "accepted.py"]
+tags = ["invalid", "interface"]
+
+[[check]]
+id = "X17"
+covers = ["C3"]
+statement = "Three requests that are not JSON because they contain the bare words NaN, Infinity or -Infinity, each in a field that would otherwise be ignored, get exit status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "strict_json.py"]
+tags = ["invalid"]

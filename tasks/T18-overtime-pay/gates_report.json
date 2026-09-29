@@ -1,0 +1,109 @@
+{
+ "task": "T18-overtime-pay",
+ "reference": {
+  "V": {
+   "P1": true,
+   "P2": true,
+   "P3": true
+  },
+  "H": {
+   "H1": true,
+   "H2": true,
+   "H3": true,
+   "H4": true,
+   "H5": true,
+   "H6": true,
+   "H7": true
+  },
+  "X": {
+   "X1": true,
+   "X2": true,
+   "X3": true,
+   "X4": true,
+   "X5": true,
+   "X6": true,
+   "X7": true,
+   "X8": true,
+   "X9": true,
+   "X10": true,
+   "X11": true,
+   "X12": true,
+   "X13": true
+  }
+ },
+ "broken": {
+  "G1": {
+   "caught_by_X": [
+    "X3",
+    "X7"
+   ],
+   "passes_V": true
+  },
+  "G2": {
+   "caught_by_X": [
+    "X4",
+    "X6",
+    "X7"
+   ],
+   "passes_V": true
+  },
+  "G3": {
+   "caught_by_X": [
+    "X5",
+    "X7"
+   ],
+   "passes_V": true
+  },
+  "C1": {
+   "caught_by_X": [
+    "X8"
+   ],
+   "passes_V": true
+  },
+  "C2": {
+   "caught_by_X": [
+    "X1"
+   ],
+   "passes_V": false
+  },
+  "C3": {
+   "caught_by_X": [
+    "X2"
+   ],
+   "passes_V": true
+  },
+  "S1": {
+   "caught_by_X": [
+    "X9"
+   ],
+   "passes_V": false
+  },
+  "S2": {
+   "caught_by_X": [
+    "X10"
+   ],
+   "passes_V": false
+  },
+  "S3": {
+   "caught_by_X": [
+    "X11"
+   ],
+   "passes_V": false
+  },
+  "S4": {
+   "caught_by_X": [
+    "X12"
+   ],
+   "passes_V": false
+  },
+  "S5": {
+   "caught_by_X": [
+    "X13"
+   ],
+   "passes_V": false
+  }
+ },
+ "warrant_check": 0,
+ "fails": [],
+ "passed": true
+}

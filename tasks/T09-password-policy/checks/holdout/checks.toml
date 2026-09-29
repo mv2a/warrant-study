@@ -1,0 +1,81 @@
+# Hidden checks: never shown to the builder. Every generated case uses a fixed seed.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "too_short appears exactly for passwords under 12 code points and too_long exactly for passwords over 64, at the boundaries 11, 12, 64 and 65 in ASCII, accented, CJK and emoji text, for a combining accent, and for 80 generated passwords of 0 to 90 characters."
+strength = "tested"
+run = ["python3", "length.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "classes appears exactly when fewer than three of lowercase, uppercase, digit and symbol are present, for every combination of classes, for the empty password, for spaces, tabs, emoji and non-ASCII letters and digits counted as symbols, for combining accents, precomposed letters and fullwidth forms judged as given without Unicode normalization, and for 70 generated passwords."
+strength = "tested"
+run = ["python3", "classes.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "username appears exactly when the password contains four consecutive username characters ignoring ASCII case, including the first, middle and last window, four-character and 32-character usernames, usernames holding dots, underscores, hyphens and digits, never for usernames under four characters or three-character overlaps, with text compared as given, without Unicode normalization or non-ASCII case mapping (combining and precomposed accents, fullwidth letters, the Kelvin sign, the long s), and for 70 generated requests."
+strength = "tested"
+run = ["python3", "username.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "repeat appears exactly when one character occurs three or more times in a row, at the start, middle or end, for letters, digits, symbols, spaces, tabs, accented letters and emoji, never for doubles, separated characters or runs that differ only in case, with combining accents, precomposed letters and fullwidth forms judged as given without Unicode normalization, and for 70 generated passwords."
+strength = "tested"
+run = ["python3", "repeat.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H5"
+covers = ["G5"]
+statement = "banned appears exactly when the password contains a banned entry ignoring ASCII case only, including the whole password, a later or twentieth entry, entries with spaces, accents and emoji, entries longer than the password, non-ASCII letters, combining and precomposed accents, fullwidth letters and the Kelvin sign that must match exactly without Unicode normalization, and 70 generated requests."
+strength = "tested"
+run = ["python3", "banned.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H6"
+covers = ["C1"]
+statement = "Fifty-two valid requests, passing or failing the policy, exit 0 with one JSON object holding exactly ok as true or false and violations as a list of strings, and seven kinds of refused request exit 2 with nothing at all on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H7"
+covers = ["C2"]
+statement = "Seven constructed requests get exactly the expected sorted, duplicate-free list with the matching ok, even when several banned entries or username windows match, and for 90 generated requests the list holds only the six codes, once each, in ascending order, never both length codes, with ok true exactly when it is empty."
+strength = "tested"
+run = ["python3", "output.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H8"
+covers = ["C3"]
+statement = "Forty-five invalid requests (not JSON, text before or after the object, not an object, missing or extra fields, wrong types, bad usernames, bad banned lists) are refused with status 2 and no output, and twelve valid edge cases such as a 32-character username, 20 banned entries and an empty password are answered."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["validation"]
+
+[[check]]
+id = "H9"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The four scenario requests in the intent get exactly the stated answers with status 0, and the S4 request is refused with status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["rules"]
+
+[[check]]
+id = "H10"
+covers = ["G1", "G2", "G3", "G4", "G5", "C2"]
+statement = "One hundred and twenty generated requests get exactly the ok flag and violations list that an independent model of the five rules gives."
+strength = "tested"
+run = ["python3", "model.py"]
+tags = ["rules"]

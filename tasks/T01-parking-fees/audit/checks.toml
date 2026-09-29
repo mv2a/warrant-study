@@ -1,0 +1,101 @@
+# Audit checks (X): the ground truth for scoring. Written from intent.md alone, independently
+# of the visible and holdout checks, the reference and the broken implementations.
+# Each check covers exactly one promise and is built so that a fault in another promise
+# does not make it fail, because scoring marks every promise a failing check covers as broken.
+# Never run during development.
+
+[[check]]
+id = "X-G1"
+covers = ["G1"]
+statement = "Every stay length from 17 to 360 minutes at a seeded random start, plus stays that cross clock hours or midnight, gets a time_cents of 250 per started hour counted from the minute of entry."
+strength = "tested"
+run = ["python3", "hourly.py"]
+tags = ["money"]
+
+[[check]]
+id = "X-G2"
+covers = ["G2"]
+statement = "Stays of 1 to 15 minutes at 11 places in the week, including stays that contain a 02:00, have time_cents 0 and overnight_cents 0, a 16-minute stay has a positive time charge equal to that of a 17-, 20- or 29-minute stay from the same start, and a stay of 60k+1 to 60k+15 minutes costs the same as one of 60k+16 to 60k+29 minutes from the same start, so the 15 free minutes are not deducted."
+strength = "tested"
+run = ["python3", "free_minutes.py"]
+tags = ["money", "boundary"]
+
+[[check]]
+id = "X-G3"
+covers = ["G3"]
+statement = "Inside one week, a stay of 421 to 1439 minutes, including across midnight, has time_cents 1600, a stay of 361 to 420 minutes costs the command's charge for the stay one hour shorter plus one more hour, capped at 1600, and a stay of k full 24-hour periods from entry plus r minutes costs k times 1600 plus the command's own charge for the r-minute leftover stay, or one started hour for 1 to 29 leftover minutes."
+strength = "tested"
+run = ["python3", "daily_cap.py"]
+tags = ["money", "boundary"]
+
+[[check]]
+id = "X-G4"
+covers = ["G4"]
+statement = "Stays inside one week get overnight_cents of 600 for each 02:00 with entry at or before it and exit after it (none for stays of 14 minutes or less), at exact 02:00 boundaries on every day and in 200 seeded random stays, and in pairs of equal 4-to-6-hour and 20-to-22-hour stays within one day, the one containing 02:00 has the same time charge and exactly 600 more in total, so the fee is not limited by the daily cap."
+strength = "tested"
+run = ["python3", "overnight.py"]
+tags = ["money", "boundary"]
+
+[[check]]
+id = "X-G5"
+covers = ["G5"]
+statement = "For up to 152 stays (at least 60 answered), including free, capped, overnight and next-week stays, a lost ticket gives lost_ticket_cents 2500 against 0 without, leaves minutes, time_cents and overnight_cents unchanged and raises total_cents by exactly 2500."
+strength = "tested"
+run = ["python3", "lost_ticket.py"]
+tags = ["money"]
+
+[[check]]
+id = "X-C1"
+covers = ["C1"]
+statement = "Valid requests with the exit later than the entry exit with status 0 and write one JSON object with exactly the five integer fields, exit minus entry as minutes and a total equal to the three charges, rewritten forms of a request get the same answer, and refused requests exit with status 2, write nothing on standard output and write a message on standard error."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X-C2"
+covers = ["C2"]
+statement = "A stay with exit equal to entry is zero minutes with no charges, and a stay with exit before entry lasts 10080 minus entry plus exit minutes, gets the same answer as the same stay moved back by whole days to fit inside one week, and when too long to move has an overnight fee equal to that of a same-length stay inside one week with the same number of 02:00 moments, or to the fees of its two parts either side of the week's end."
+strength = "tested"
+run = ["python3", "week_wrap.py"]
+tags = ["boundary"]
+
+[[check]]
+id = "X-C3"
+covers = ["C3"]
+statement = "Input that is not one JSON object, a missing field, an entry or exit that is not a JSON integer or lies outside 0 to 10079, and a lost_ticket that is not true or false are each refused with status 2 (or the command's own refusal status for a missing lost_ticket) and nothing on standard output, while a request with an entry or exit written -0 or with fields other than the three gets exactly the answer of the same request with 0 or without those fields."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X-S1"
+covers = ["S1"]
+statement = "The request of scenario S1, sent exactly as the intent writes it, exits with status 0 and gets the intent's value for S1 in each of the five output fields."
+strength = "tested"
+run = ["python3", "scenario.py", "S1"]
+tags = ["money"]
+
+[[check]]
+id = "X-S2"
+covers = ["S2"]
+statement = "The request of scenario S2, sent exactly as the intent writes it, exits with status 0 and gets the intent's value for S2 in each of the five output fields."
+strength = "tested"
+run = ["python3", "scenario.py", "S2"]
+tags = ["money"]
+
+[[check]]
+id = "X-S3"
+covers = ["S3"]
+statement = "The request of scenario S3, sent exactly as the intent writes it, exits with status 0 and gets the intent's value for S3 in each of the five output fields."
+strength = "tested"
+run = ["python3", "scenario.py", "S3"]
+tags = ["money"]
+
+[[check]]
+id = "X-S4"
+covers = ["S4"]
+statement = "The request of scenario S4, sent exactly as the intent writes it, exits with status 0 and gets the intent's value for S4 in each of the five output fields."
+strength = "tested"
+run = ["python3", "scenario.py", "S4"]
+tags = ["money"]

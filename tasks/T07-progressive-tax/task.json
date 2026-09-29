@@ -1,0 +1,2 @@
+{"id": "T07", "slug": "progressive-tax", "language": "python", "command": "tax",
+ "promises": ["G1", "G2", "G3", "C1", "C2", "C3", "C4", "S1", "S2", "S3", "S4"]}

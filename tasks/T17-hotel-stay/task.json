@@ -1,0 +1,2 @@
+{"id": "T17", "slug": "hotel-stay", "language": "python",
+ "command": "stay", "promises": ["G1", "G2", "G3", "G4", "C1", "C2", "C3", "S1", "S2", "S3", "S4"]}

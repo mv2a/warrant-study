@@ -1,0 +1,65 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "For 84 incomes from 0 to 10,000,000,000.00, including taxable incomes on each side of 10,000.00, 40,000.00 and 100,000.00, the tax before credit is the marginal band tax (5%, 15%, 25%, 38%) of the reported taxable income, to within the cent either side, whatever the number of dependents."
+strength = "tested"
+run = ["python3", "bands.py"]
+tags = ["money"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "For 89 incomes from 0 to 10,000,000,000.00, the allowance is 12,000.00 up to 80,000.00, shrinks by one fifth of the income above 80,000.00 (a fractional cent may go either way here), and is zero, never negative, from 140,000.00 up."
+strength = "tested"
+run = ["python3", "allowance.py"]
+tags = ["money"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "For 80 filers with 0 to 20 dependents, the credit used is the smaller of 450.00 per dependent and the tax before credit, and the tax owed is the tax before credit less the full credit but never below zero, including a credit exactly equal to the tax."
+strength = "tested"
+run = ["python3", "credit.py"]
+tags = ["money"]
+
+[[check]]
+id = "H4"
+covers = ["C1"]
+statement = "The tax before credit is the exact band tax rounded to the nearest cent with an exact half cent rounded up, for 118 taxable incomes in all four bands (93 of them exact halves, 49 with an even cent below; a figure more than a cent off is left to H1, and at least 80 must be judged), and the allowance reduction is rounded up to a whole cent for 49 incomes between 80,000.00 and 140,000.00."
+strength = "tested"
+run = ["python3", "rounding.py"]
+tags = ["money"]
+
+[[check]]
+id = "H5"
+covers = ["C2"]
+statement = "For 80 filers, including incomes at, below and just above the allowance, income_cents repeats the request, taxable_cents is income minus allowance but never below zero, and tax_cents is tax before credit minus credit."
+strength = "tested"
+run = ["python3", "figures.py"]
+tags = ["money"]
+
+[[check]]
+id = "H6"
+covers = ["C3"]
+statement = "30 invalid requests (not JSON, not an object, an object followed by a second object or by text, missing fields, negative, fractional, 3000000.0, exponent, text, true, false, null and list values, and dependents below 0 or above 20) are refused with status 2 and not taxed, while zero income, 20 dependents, a very large income, an extra field and whitespace around the object are taxed."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["input"]
+
+[[check]]
+id = "H7"
+covers = ["C4"]
+statement = "32 valid requests exit with status 0 and print one object with exactly the six integer fields, extra request fields and pretty-printed JSON do not change the response, and 6 refused requests exit with status 2 and print nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H8"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "Each of the four scenarios in the intent, sent both compact and pretty-printed with the fields reversed, gets exactly the response the intent states."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]

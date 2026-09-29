@@ -1,0 +1,99 @@
+# Audit checks (X): the ground truth for scoring, written from intent.md alone,
+# independently of the holdout checks. Never run during development.
+# _audit.py holds a fare model written from the intent and the shared helpers.
+
+[[check]]
+id = "X1"
+covers = ["G1"]
+statement = "An adult (ages 16 to 64) is charged 270 cents plus 95 cents per zone boundary for all 36 ordered pairs of zones, in both directions, and each paid trip of a multi-trip adult day under the cap is priced the same way."
+strength = "tested"
+run = ["python3", "adult_fares.py"]
+tags = ["money"]
+
+[[check]]
+id = "X2"
+covers = ["G2"]
+statement = "A trip boarding 0 to 90 minutes after the trip that opened the current window is free whatever its zones, a trip at 91 minutes or later pays and opens a new window, and transfers never extend a window, across 15 hand-built days and 60 generated days (seed 40417) that stay under the cap."
+strength = "tested"
+run = ["python3", "transfers.py"]
+tags = ["money"]
+
+[[check]]
+id = "X3"
+covers = ["G3"]
+statement = "Ages 0, 1 and 4 ride free, ages 5 to 15 pay 50% of the adult fare, 16 to 64 the adult fare and 65 to 120 40% of it (rounded down to 5 cents), for 14 ages at and around each band edge and every distance from 0 to 5 boundaries."
+strength = "tested"
+run = ["python3", "ages.py"]
+tags = ["money"]
+
+[[check]]
+id = "X4"
+covers = ["G4"]
+statement = "The day's charges never exceed 1100 cents for adults, 550 for children and 440 for seniors: the trip crossing the cap pays only the remainder, every later trip is free, free transfers use none of the cap, and infants are never charged, across 16 hand-built days and 66 generated days (seed 730291)."
+strength = "tested"
+run = ["python3", "daily_cap.py"]
+tags = ["money"]
+
+[[check]]
+id = "X5"
+covers = ["C1"]
+statement = "Child and senior fares are whole cents rounded down to a multiple of 5 cents for every distance in both directions (half of 365 is 180, 40% of 745 is 295), rounding is done per trip rather than on the day's total, and every amount in five busy days is a non-negative multiple of 5 cents."
+strength = "tested"
+run = ["python3", "rounding.py"]
+tags = ["money"]
+
+[[check]]
+id = "X6"
+covers = ["C2"]
+statement = "About 150 invalid requests exit with status 2 and write nothing: non-JSON or non-object text, an object followed by a second object or other text, missing age or trips, ages -1 and 121, trips not a list, trips not objects or missing a field, minutes -1 and 1440, zones 0 and 7, non-integers (12.0, 12.5, 3e1, \"12\", true, false, null, lists, objects) in every numeric field, out-of-order trips, and 40 seeded single-fault mutations (seed 604113)."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X7"
+covers = ["C2"]
+statement = "Valid edge requests are priced rather than refused: empty trips lists cost nothing at ages 0, 13, 36 and 120, ages 0 and 120, minutes 0 and 1439 and zones 1 and 6 are accepted, and trips boarding in the same minute are in order."
+strength = "tested"
+run = ["python3", "accepted_edges.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X8"
+covers = ["C3"]
+statement = "Replies hold exactly fares_cents (one JSON integer per trip, in the order given) and total_cents (their sum) with status 0; unknown request and trip fields are ignored; key order and whitespace in the request do not matter; refusals exit 2 with nothing on standard output; and a repeated request gets the same reply."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X9"
+covers = ["S1"]
+statement = "The S1 day (age 40; 2 to 5 at 450, 5 to 6 at 490, 6 to 6 at 600) is charged 555, 0 and 270 cents, total 825, and its first one and two trips alone are charged 555 and 555, 0, and the full day with its JSON fields in another order is charged the same."
+strength = "tested"
+run = ["python3", "scenario.py", "S1"]
+tags = ["money"]
+
+[[check]]
+id = "X10"
+covers = ["S2"]
+statement = "The S2 day (age 11; 1 to 3 at 480, 3 to 3 at 1000) is charged 230 and 135 cents, total 365, each of its trips alone is charged the same amount, and the day with its JSON fields in another order is charged the same."
+strength = "tested"
+run = ["python3", "scenario.py", "S2"]
+tags = ["money"]
+
+[[check]]
+id = "X11"
+covers = ["S3"]
+statement = "The S3 day (age 30; 1 to 6 at 420, 6 to 4 at 480, 4 to 6 at 720, 6 to 6 at 1080) is charged 745, 0, 355 and 0 cents, total 1100, its first three trips are charged 745, 0, 355, its third trip alone costs 460, and the day with its JSON fields in another order is charged the same."
+strength = "tested"
+run = ["python3", "scenario.py", "S3"]
+tags = ["money"]
+
+[[check]]
+id = "X12"
+covers = ["G1", "G2", "G3", "G4", "C1"]
+statement = "220 generated days (seeds 318877 and 2046061) of 0 to 15 trips, with ages weighted to the band edges and boarding gaps around 90 minutes, are charged exactly what a model of G1 to G4 and C1 written from intent.md gives."
+strength = "tested"
+run = ["python3", "generated_days.py"]
+tags = ["money"]

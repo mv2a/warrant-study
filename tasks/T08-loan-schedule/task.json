@@ -1,0 +1,2 @@
+{"id": "T08", "slug": "loan-schedule", "language": "python", "command": "schedule",
+ "promises": ["G1", "G2", "G3", "G4", "C1", "C2", "C3", "S1", "S2", "S3"]}

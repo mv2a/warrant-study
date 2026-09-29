@@ -1,0 +1,73 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "Leading, trailing and inner whitespace is tidied to single spaces (display compared without regard to letter case) for 12 fixed names and 150 generated ones, using spaces, tabs, line feeds, carriage returns, no-break spaces and an em space, and the key ignores it all."
+strength = "tested"
+run = ["python3", "whitespace.py"]
+tags = ["names"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Comparing display names without regard to letter case, all ten honorifics are removed from the start in lower, upper and title case with and without a full stop, runs of two to four are all removed in 50 generated names, the same words later in the name are kept, lookalikes such as Dr.., Drs, Doctor and Mr-Anna are kept, and honorifics never reach the key."
+strength = "tested"
+run = ["python3", "honorifics.py"]
+tags = ["names"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "Words are capitalised part by part after hyphens, both apostrophes and full stops but after nothing else, for 26 fixed names (including O'Neil, J.R.R., Mcdonald, 3rd and accented letters) and 150 generated names in random case."
+strength = "tested"
+run = ["python3", "capitals.py"]
+tags = ["names"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "Each of the eleven particles, in three casings, is lower case in the middle and capitalised as the first, last or only word; first and last are counted after honorifics are removed; hyphenated parts and lookalikes are not particles; 120 generated names mix particles and words."
+strength = "tested"
+run = ["python3", "particles.py"]
+tags = ["names"]
+
+[[check]]
+id = "H5"
+covers = ["G5"]
+statement = "Keys drop accents, digits and punctuation but keep letters such as ø, ł, æ, ß and Cyrillic and Chinese letters, apply NFKD to ligatures and full-width letters, and are shared by 6 spellings of one name and by 180 generated spelling variants of 60 names."
+strength = "tested"
+run = ["python3", "key.py"]
+tags = ["names"]
+
+[[check]]
+id = "H6"
+covers = ["G5"]
+statement = "For 150 messy names mixing honorifics, particles, hyphens, apostrophes, full stops, case and whitespace, normalising the display name again gives the same key and the same display name."
+strength = "tested"
+run = ["python3", "stability.py"]
+tags = ["names"]
+
+[[check]]
+id = "H7"
+covers = ["C1"]
+statement = "Valid requests, including ones with extra fields, spread over several lines or using JSON escapes, and 20 generated ones, exit 0 with exactly the string fields display and key; a refused request exits 2 with nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H8"
+covers = ["C2"]
+statement = "Seventeen malformed requests, seventeen names with no letters left after honorifics, and five names over 100 characters are refused with status 2 and no output, while names of exactly 100 characters (padded or accented) and single letters after an honorific are accepted."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H9"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The five scenario requests give exactly the display names and keys in the intent, and the two S4 sign-ups share one key."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["names"]

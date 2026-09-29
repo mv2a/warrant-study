@@ -1,0 +1,65 @@
+# Hidden checks: never shown to the builder. Used only by Warrant's gate in conditions B and C.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "Billable weight is the greater of actual weight and volume divided by 5 rounded up to a whole gram, for 10 hand-picked parcels at the rounding and tie edges and 120 generated ones, 40 of them light enough for the dimensional weight to win."
+strength = "tested"
+run = ["python3", "billable.py"]
+tags = ["weight"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Up to 10,000 g, the base price is the table price of the lightest bracket holding the billable weight, at 16 weights on and around every bracket edge in all four zones, at 9 bracket edges reached by dimensional weight, and for 50 generated parcels whose billable weight needs no rounding."
+strength = "tested"
+run = ["python3", "brackets.py"]
+tags = ["money"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "Over 10,000 g, the base price is the zone's 10,000 g price plus its per-kilogram rate for every started kilogram, at 15 weights from 10,001 g to 30,000 g in all four zones, at 5 weights reached by dimensional weight, and for 50 generated parcels whose billable weight needs no rounding."
+strength = "tested"
+run = ["python3", "heavy.py"]
+tags = ["money"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "The surcharge is 1500 cents exactly when the longest side is over 100 cm or length plus girth is over 220 cm, and the total is the base plus the surcharge, for 12 shapes on both sides of each threshold given in every order of their sides, and for 60 generated parcels."
+strength = "tested"
+run = ["python3", "oversize.py"]
+tags = ["money"]
+
+[[check]]
+id = "H5"
+covers = ["C1"]
+statement = "40 generated requests exit 0 with exactly the four integer response fields and total equal to base plus surcharge, 5 requests with extra fields are priced exactly as without them, and 6 refused requests exit 2 and write nothing on standard output."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H6"
+covers = ["C2"]
+statement = "Parcels exactly at the 30,000 g, 150 cm and 300 cm limits are priced, parcels just over any of them are refused with status 2 (including light parcels whose dimensional weight is over 30,000 g), in every order of their sides, and 80 generated parcels on both sides of the limits are priced or refused accordingly."
+strength = "tested"
+run = ["python3", "limits.py"]
+tags = ["limits"]
+
+[[check]]
+id = "H7"
+covers = ["C3"]
+statement = "55 invalid requests are refused with status 2: text that is not JSON, JSON that is not an object, each missing field, nine bad zones, zero, negative, fractional, text, true/false and null weights and sides, and a whole zone, weight or side written with a decimal point or an exponent (2.0, 1200.0, 1.2e3)."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["validation"]
+
+[[check]]
+id = "H8"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The four example parcels in the intent get exactly the responses the intent gives, twice each, and the fourth is refused with status 2."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]

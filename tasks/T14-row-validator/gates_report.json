@@ -1,0 +1,106 @@
+{
+ "task": "T14-row-validator",
+ "reference": {
+  "V": {
+   "P1": true,
+   "P2": true
+  },
+  "H": {
+   "H1": true,
+   "H2": true,
+   "H3": true,
+   "H4": true,
+   "H5": true,
+   "H6": true,
+   "H7": true,
+   "H8": true,
+   "H9": true,
+   "H10": true
+  },
+  "X": {
+   "X1": true,
+   "X2": true,
+   "X3": true,
+   "X4": true,
+   "X5": true,
+   "X6": true,
+   "X7": true,
+   "X8": true,
+   "X9": true,
+   "X10": true,
+   "X11": true,
+   "X12": true,
+   "X13": true,
+   "X14": true,
+   "X15": true,
+   "X16": true
+  }
+ },
+ "broken": {
+  "G1": {
+   "caught_by_X": [
+    "X2",
+    "X15"
+   ],
+   "passes_V": false
+  },
+  "G2": {
+   "caught_by_X": [
+    "X3",
+    "X15"
+   ],
+   "passes_V": true
+  },
+  "G3": {
+   "caught_by_X": [
+    "X4",
+    "X15"
+   ],
+   "passes_V": true
+  },
+  "G4": {
+   "caught_by_X": [
+    "X6",
+    "X15"
+   ],
+   "passes_V": false
+  },
+  "G5": {
+   "caught_by_X": [
+    "X7",
+    "X15"
+   ],
+   "passes_V": false
+  },
+  "C1": {
+   "caught_by_X": [
+    "X1"
+   ],
+   "passes_V": false
+  },
+  "C2": {
+   "caught_by_X": [
+    "X8",
+    "X15"
+   ],
+   "passes_V": true
+  },
+  "C3": {
+   "caught_by_X": [
+    "X9",
+    "X15"
+   ],
+   "passes_V": false
+  },
+  "C4": {
+   "caught_by_X": [
+    "X10",
+    "X16"
+   ],
+   "passes_V": true
+  }
+ },
+ "warrant_check": 0,
+ "fails": [],
+ "passed": true
+}

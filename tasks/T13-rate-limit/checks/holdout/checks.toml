@@ -1,0 +1,97 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["C1"]
+statement = "Across 30 generated logs the output has exactly decisions and clients, one accept or reject per request in order, and one correct per-client count for exactly the clients in the log; an empty log gives empty results; extra fields are ignored; refusals exit 2 with nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H2"
+covers = ["G1"]
+statement = "In 40 generated multi-client logs, including names that differ only in case or spaces, every client's decisions are the same as when its requests are replayed alone, and names are never merged."
+strength = "tested"
+run = ["python3", "clients.py"]
+tags = ["limiter"]
+
+[[check]]
+id = "H3"
+covers = ["G2"]
+statement = "A bucket is full before a client's first request at 0 ms, 1 ms, 250 ms or a day in, for bursts of 1 to 100; after long quiet periods at most burst requests are accepted at one instant; and tokens that overflow a full bucket are lost."
+strength = "tested"
+run = ["python3", "burst.py"]
+tags = ["limiter"]
+
+[[check]]
+id = "H4"
+covers = ["G3"]
+statement = "After a client empties its bucket, tokens come back at rate per second with partial progress kept across probing requests, for 11 rates from 1 to 7000 per second and 60 generated single-client logs."
+strength = "tested"
+run = ["python3", "refill.py"]
+tags = ["limiter"]
+
+[[check]]
+id = "H5"
+covers = ["G4"]
+statement = "A client that retries every millisecond gets its tokens at exactly the same times as one that waits, a request one millisecond before a token is due is rejected, and 50 generated retry-heavy single-client logs match the exact decisions."
+strength = "tested"
+run = ["python3", "consume.py"]
+tags = ["limiter"]
+
+[[check]]
+id = "H6"
+covers = ["C2"]
+statement = "Token counts are exact: the intent's rate-3 and rate-10 examples, tokens due on an exact millisecond for 14 rates, long runs of small steps at 17 awkward rates, and 80 generated single-client logs all match exact fractional arithmetic."
+strength = "tested"
+run = ["python3", "exact.py"]
+tags = ["limiter"]
+
+[[check]]
+id = "H7"
+covers = ["C3"]
+statement = "A log that goes back in time is refused, whether the earlier timestamp belongs to the same or another client and wherever it sits in 25 logs, while 20 generated logs in time order are replayed and equal timestamps are handled in the order listed."
+strength = "tested"
+run = ["python3", "order.py"]
+tags = ["validation"]
+
+[[check]]
+id = "H8"
+covers = ["C4"]
+statement = "Thirty-seven kinds of invalid request are refused with status 2 and no output, covering every field, booleans, decimal and exponent numbers, wrong types, empty and missing fields and a bad request late in the log, while three requests with valid edge values are replayed."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["validation"]
+
+[[check]]
+id = "H9"
+covers = ["S1"]
+statement = "Scenario S1 gives exactly the decisions and counts in the intent, also when shifted later in time or when the client has another name."
+strength = "tested"
+run = ["python3", "scenarios.py", "S1"]
+tags = ["scenarios"]
+
+[[check]]
+id = "H10"
+covers = ["S2"]
+statement = "Scenario S2 gives exactly the decisions and counts in the intent, also when shifted later in time or when the clients have other names."
+strength = "tested"
+run = ["python3", "scenarios.py", "S2"]
+tags = ["scenarios"]
+
+[[check]]
+id = "H11"
+covers = ["S3"]
+statement = "Scenario S3 gives exactly the decisions and counts in the intent, also when shifted later in time or when the client has another name."
+strength = "tested"
+run = ["python3", "scenarios.py", "S3"]
+tags = ["scenarios"]
+
+[[check]]
+id = "H12"
+covers = ["G1", "G2", "G3", "G4", "C2"]
+statement = "One hundred and twenty generated logs with up to five clients, bursts of 1 to 6 and rates of 1 to 5000 get exactly the decisions of an exact token-bucket model."
+strength = "tested"
+run = ["python3", "model.py"]
+tags = ["limiter"]

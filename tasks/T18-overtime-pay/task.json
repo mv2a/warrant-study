@@ -1,0 +1,2 @@
+{"id": "T18", "slug": "overtime-pay", "language": "python", "command": "pay",
+ "promises": ["G1", "G2", "G3", "C1", "C2", "C3", "S1", "S2", "S3", "S4", "S5"]}

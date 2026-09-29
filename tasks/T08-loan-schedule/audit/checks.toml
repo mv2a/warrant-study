@@ -1,0 +1,82 @@
+# Audit checks (X): the ground truth for scoring, written from intent.md alone.
+# Never shown to the builder and never run during development.
+
+[[check]]
+id = "X1"
+covers = ["C1"]
+statement = "Twenty-eight valid loans each exit 0 with one object holding exactly payment_cents, total_interest_cents and rows, every row holding exactly whole-number month, payment_cents, interest_cents, principal_cents and balance_cents with months numbered 1, 2, 3, ...; one loan written four ways (key order, spacing, newlines) gets the same schedule; one loan sent five times with fields beyond the three (text, true, null, a fraction, a nested object holding months, and fields named payment_cents, total_interest_cents and rows) gets exactly the schedule it gets without them; and three refused requests exit 2 with an empty standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["G1"]
+statement = "For 96 loans at rates above zero, the regular payment equals the exact level payment P*i/(1-(1+i)^-n) rounded up to a whole cent, including 18 loans whose exact level payment is already whole (no cent added), 21 whose exact level payment lies within a millionth of a cent of a whole cent, the range edges, and 45 loans generated with seed 31337."
+strength = "tested"
+run = ["python3", "payment.py"]
+tags = ["money"]
+
+[[check]]
+id = "X3"
+covers = ["G2"]
+statement = "In every row of 68 schedules, the interest is that month's starting balance (the amount borrowed in month 1, the previous row's balance after) times i rounded to the nearest cent with exact half cents rounded up, the principal is the payment minus that interest, and the balance after is the starting balance minus that principal; the loans include 24 chosen to hit exact half cents and 36 generated with seed 5150."
+strength = "tested"
+run = ["python3", "interest.py"]
+tags = ["money"]
+
+[[check]]
+id = "X4"
+covers = ["G3"]
+statement = "For 74 loans, measured against each response's own regular payment and interest, the schedule has at most n rows, ends in the first month whose starting balance plus interest is at most the regular payment (or in month n), its last payment is that starting balance plus interest and leaves 0, and every earlier month pays exactly the regular payment and leaves a balance above 0; the loans include early finishes, last payments above, equal to and below the regular payment, balloon loans whose payment only covers interest, and 40 generated with seed 2718."
+strength = "tested"
+run = ["python3", "ending.py"]
+tags = ["money"]
+
+[[check]]
+id = "X5"
+covers = ["G4"]
+statement = "Fifty interest-free loans (rate 0), from 1 cent to 1000000000 cents over 1 to 480 months including 30 generated with seed 6060, are scheduled with a regular payment of the amount borrowed divided by the months rounded up to a whole cent and 0 interest in every row."
+strength = "tested"
+run = ["python3", "zero_rate.py"]
+tags = ["money"]
+
+[[check]]
+id = "X6"
+covers = ["C2"]
+statement = "For 60 loans, including 48 generated with seed 777, total_interest_cents equals the sum of the rows' interest, the rows' principal adds up to exactly the amount borrowed, and the rows' payments add up to the amount borrowed plus the total interest."
+strength = "tested"
+run = ["python3", "totals.py"]
+tags = ["money"]
+
+[[check]]
+id = "X7"
+covers = ["C3"]
+statement = "Sixty-three invalid requests exit 2 with nothing on standard output: text that is not JSON, JSON that is not an object, each missing field, each field written as true, false, null, a string, a fraction, a whole value with .0, an exponent, a list, an object or NaN, and each field just past and far past its allowed range; and eight requests with fields exactly at the range edges are scheduled with status 0."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X8"
+covers = ["S1"]
+statement = "Borrowing 1000000 cents at 600 basis points for 12 months, sent with the fields reordered over several lines, gives a regular payment of 86067, month 1 interest 5000, principal 81067 and balance 918933, a 12th and last payment of 86059 leaving 0, and total interest 32796."
+strength = "tested"
+run = ["python3", "s1.py"]
+tags = ["money"]
+
+[[check]]
+id = "X9"
+covers = ["S2"]
+statement = "Borrowing 100000 cents at 0 basis points for 7 months, sent compactly with the fields reordered, gives a regular payment of 14286, payments of 14286 in months 1 to 6 with no interest, a 7th and last payment of 14284 leaving 0, and total interest 0."
+strength = "tested"
+run = ["python3", "s2.py"]
+tags = ["money"]
+
+[[check]]
+id = "X10"
+covers = ["S3"]
+statement = "Borrowing 700000 cents at 500 basis points for 24 months, sent with extra spacing and the fields reordered, gives a regular payment of 30710, month 1 interest 2917 and principal 27793, and a 24th and last payment of 30714, more than the regular payment, with 127 interest, leaving 0, and total interest 37044."
+strength = "tested"
+run = ["python3", "s3.py"]
+tags = ["money"]

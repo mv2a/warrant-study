@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""Rate a parcel: one JSON request on standard input, one JSON response on standard output."""
+
+import json
+import sys
+
+ZONES = (1, 2, 3, 4)
+# Base prices in cents: (bracket limit in grams, prices for zones 1 to 4).
+BRACKETS = (
+    (500, (450, 520, 610, 780)),
+    (1000, (540, 630, 740, 950)),
+    (2000, (690, 810, 960, 1240)),
+    (5000, (920, 1090, 1310, 1700)),
+    (10000, (1350, 1600, 1930, 2520)),
+)
+EXTRA_KG_CENTS = (85, 105, 130, 175)  # per started kilogram above the last bracket
+DIMENSIONAL_DIVISOR = 5  # cubic centimetres per gram of dimensional weight
+OVERSIZE_SIDE_CM = 100
+OVERSIZE_LENGTH_GIRTH_CM = 220
+OVERSIZE_CENTS = 1500
+MAX_BILLABLE_G = 30000
+MAX_SIDE_CM = 150
+MAX_LENGTH_GIRTH_CM = 300
+MEASURES = ("weight_g", "length_cm", "width_cm", "height_cm")
+
+
+def refuse(reason):
+    print(f"refused: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def read_request():
+    try:
+        request = json.loads(sys.stdin.read())
+    except (ValueError, RecursionError):  # includes bad JSON, bad UTF-8 and absurdly long or deep input
+        refuse("the request is not valid JSON")
+    if not isinstance(request, dict):
+        refuse("the request must be a JSON object")
+    zone = request.get("zone")
+    # bool is a subclass of int in Python, so compare types exactly.
+    if type(zone) is not int or zone not in ZONES:
+        refuse("zone must be 1, 2, 3 or 4")
+    for field in MEASURES:
+        value = request.get(field)
+        if type(value) is not int or value <= 0:
+            refuse(f"{field} must be a whole number greater than zero")
+    return zone, [request[field] for field in MEASURES]
+
+
+def base_price(zone, billable_g):
+    column = ZONES.index(zone)
+    for limit_g, prices in BRACKETS:
+        if billable_g < limit_g:
+            return prices[column]
+    last_limit_g, last_prices = BRACKETS[-1]
+    extra_kg = -(-(billable_g - last_limit_g) // 1000)  # every started kilogram
+    return last_prices[column] + extra_kg * EXTRA_KG_CENTS[column]
+
+
+def main():
+    zone, (weight_g, length_cm, width_cm, height_cm) = read_request()
+    longest, middle, shortest = sorted((length_cm, width_cm, height_cm), reverse=True)
+    length_plus_girth = longest + 2 * (middle + shortest)
+    volume_cm3 = length_cm * width_cm * height_cm
+    dimensional_g = -(-volume_cm3 // DIMENSIONAL_DIVISOR)  # rounded up to a whole gram
+    billable_g = max(weight_g, dimensional_g)
+
+    if billable_g > MAX_BILLABLE_G:
+        refuse(f"billable weight {billable_g} g is over {MAX_BILLABLE_G} g")
+    if longest > MAX_SIDE_CM:
+        refuse(f"longest side {longest} cm is over {MAX_SIDE_CM} cm")
+    if length_plus_girth > MAX_LENGTH_GIRTH_CM:
+        refuse(f"length plus girth {length_plus_girth} cm is over {MAX_LENGTH_GIRTH_CM} cm")
+
+    base = base_price(zone, billable_g)
+    oversize = longest > OVERSIZE_SIDE_CM or length_plus_girth > OVERSIZE_LENGTH_GIRTH_CM
+    surcharge = OVERSIZE_CENTS if oversize else 0
+    json.dump(
+        {
+            "billable_g": billable_g,
+            "base_cents": base,
+            "surcharge_cents": surcharge,
+            "total_cents": base + surcharge,
+        },
+        sys.stdout,
+    )
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()

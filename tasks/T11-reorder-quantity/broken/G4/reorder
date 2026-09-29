@@ -1,0 +1,108 @@
+#!/usr/bin/env python3
+"""Plan the evening's reorder: one JSON request on stdin, one JSON plan on stdout."""
+
+import json
+import sys
+
+# Field name -> the smallest value it may take.
+FIELDS = {
+    "on_hand": 0,
+    "on_order": 0,
+    "daily_demand": 0,
+    "lead_time_days": 0,
+    "safety_stock": 0,
+    "pack_size": 1,
+    "unit_cost_cents": 1,
+    "priority": 1,
+}
+
+
+class Refused(Exception):
+    pass
+
+
+def integer(value, name, minimum):
+    # bool is a subclass of int in Python, so compare types exactly.
+    if type(value) is not int or value < minimum:
+        raise Refused(f"{name} must be an integer of at least {minimum}")
+    return value
+
+
+def parse(text):
+    try:
+        request = json.loads(text)
+    except (ValueError, RecursionError) as error:
+        raise Refused(f"not valid JSON ({error})") from None
+    if not isinstance(request, dict):
+        raise Refused("expected a JSON object")
+    if "budget_cents" not in request or "products" not in request:
+        raise Refused("budget_cents and products are required")
+    budget = integer(request["budget_cents"], "budget_cents", 0)
+    products = request["products"]
+    if not isinstance(products, list):
+        raise Refused("products must be a list")
+    seen = set()
+    parsed = []
+    for number, product in enumerate(products, start=1):
+        if not isinstance(product, dict):
+            raise Refused(f"product {number} must be an object")
+        sku = product.get("sku")
+        if not isinstance(sku, str) or not sku:
+            raise Refused(f"product {number}: sku must be a non-empty string")
+        if sku in seen:
+            raise Refused(f"product {number}: sku {sku!r} appears more than once")
+        seen.add(sku)
+        item = {"sku": sku}
+        for name, minimum in FIELDS.items():
+            if name not in product:
+                raise Refused(f"product {sku}: {name} is missing")
+            item[name] = integer(product[name], f"product {sku}: {name}", minimum)
+        parsed.append(item)
+    return budget, parsed
+
+
+def plan(budget, products):
+    wanted_packs = []
+    for p in products:
+        target = p["daily_demand"] * p["lead_time_days"] + p["safety_stock"]
+        needed = max(0, target - p["on_hand"] - p["on_order"])
+        wanted_packs.append(-(-needed // p["pack_size"]))  # round up to whole packs
+
+    # Fund in priority order; ties are broken by sku so the order is deterministic.
+    funding_order = sorted(range(len(products)), key=lambda i: (products[i]["priority"], products[i]["sku"]))
+    bought_packs = [0] * len(products)
+    left = budget
+    for i in funding_order:
+        pack_cost = products[i]["pack_size"] * products[i]["unit_cost_cents"]
+        bought_packs[i] = min(wanted_packs[i], left // pack_cost)
+        left -= bought_packs[i] * pack_cost
+
+    orders = []
+    for p, wanted, bought in zip(products, wanted_packs, bought_packs):
+        quantity = bought * p["pack_size"]
+        orders.append({
+            "sku": p["sku"],
+            "wanted": wanted * p["pack_size"],
+            "quantity": quantity,
+            "cost_cents": quantity * p["unit_cost_cents"],
+        })
+    total = sum(order["cost_cents"] for order in orders)
+    return {"orders": orders, "total_cost_cents": total, "budget_left_cents": budget - total}
+
+
+def main():
+    try:
+        try:
+            text = sys.stdin.read()
+        except UnicodeDecodeError:
+            raise Refused("input is not text") from None
+        budget, products = parse(text)
+    except Refused as reason:
+        print(f"invalid request: {reason}", file=sys.stderr)
+        sys.exit(2)
+    json.dump(plan(budget, products), sys.stdout)
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()

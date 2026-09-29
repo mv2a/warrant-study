@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+"""Norvale income tax: one JSON request on standard input, one JSON response on standard output."""
+
+import json
+import sys
+from fractions import Fraction
+
+STANDARD_ALLOWANCE = 12_000_00
+PHASE_OUT_START = 80_000_00  # the allowance shrinks by one fifth of the income above this
+PHASE_OUT_DIVISOR = 5
+BANDS = ((10_000_00, 5), (40_000_00, 15), (100_000_00, 25))  # (upper limit in cents, rate in percent)
+TOP_RATE = 38  # percent, on the part of taxable income above the last limit
+CREDIT_PER_DEPENDENT = 450_00
+MAX_DEPENDENTS = 20
+
+
+def refuse(reason):
+    print(f"invalid request: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def is_integer(value):
+    # bool is a subclass of int in Python, so compare types exactly.
+    return type(value) is int
+
+
+def allowance_for(income):
+    excess = max(0, income - PHASE_OUT_START)
+    reduction = -(-excess // PHASE_OUT_DIVISOR)  # one fifth, rounded up to a whole cent
+    return max(0, STANDARD_ALLOWANCE - reduction)
+
+
+def tax_before_credit(taxable):
+    # Work in cents times percent (hundredths of a cent) so the sum is exact.
+    total = 0
+    lower = 0
+    for upper, rate in BANDS:
+        if taxable > lower:
+            total += (min(taxable, upper) - lower) * rate
+        lower = upper
+    if taxable > lower:
+        total += (taxable - lower) * TOP_RATE
+    return round(Fraction(total, 100))  # nearest cent
+
+
+def main():
+    try:
+        request = json.loads(sys.stdin.read())
+    except (ValueError, RecursionError):
+        refuse("not valid JSON")
+    if not isinstance(request, dict):
+        refuse("expected a JSON object")
+    for field in ("income_cents", "dependents"):
+        if field not in request:
+            refuse(f"{field} is missing")
+    income, dependents = request["income_cents"], request["dependents"]
+    if not is_integer(income) or income < 0:
+        refuse("income_cents must be a whole number of cents, zero or more")
+    if not is_integer(dependents) or not 0 <= dependents <= MAX_DEPENDENTS:
+        refuse(f"dependents must be a whole number from 0 to {MAX_DEPENDENTS}")
+
+    allowance = allowance_for(income)
+    taxable = max(0, income - allowance)
+    before = tax_before_credit(taxable)
+    credit = min(CREDIT_PER_DEPENDENT * dependents, before)
+    response = {
+        "income_cents": income,
+        "allowance_cents": allowance,
+        "taxable_cents": taxable,
+        "tax_before_credit_cents": before,
+        "credit_cents": credit,
+        "tax_cents": before - credit,
+    }
+    sys.stdout.write(json.dumps(response) + "\n")
+
+
+if __name__ == "__main__":
+    main()

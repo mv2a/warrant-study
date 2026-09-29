@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""policy: check a password against the organisation's password policy.
+
+Reads one JSON request on standard input and writes the sorted list of broken rules.
+A malformed request is refused with exit status 2 and no output.
+"""
+
+import json
+import sys
+
+FIELDS = {"password", "username", "banned"}
+LOWER = frozenset("abcdefghijklmnopqrstuvwxyz")
+UPPER = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+DIGITS = frozenset("0123456789")
+USERNAME_CHARS = LOWER | UPPER | DIGITS | frozenset("._-")
+ASCII_FOLD = str.maketrans("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")
+
+MIN_LENGTH, MAX_LENGTH = 12, 64
+MIN_CLASSES = 3
+WINDOW = 4
+MAX_USERNAME = 32
+MAX_BANNED = 20
+
+
+def refuse():
+    sys.exit(2)
+
+
+def read_request():
+    try:
+        request = json.loads(sys.stdin.buffer.read().decode("utf-8"))
+    except (UnicodeDecodeError, ValueError, RecursionError):
+        refuse()
+    if not isinstance(request, dict) or not FIELDS <= set(request):
+        refuse()
+    password, username, banned = request["password"], request["username"], request["banned"]
+    if not isinstance(password, str):
+        refuse()
+    if not isinstance(username, str) or not 1 <= len(username) <= MAX_USERNAME:
+        refuse()
+    if not set(username) <= USERNAME_CHARS:
+        refuse()
+    if not isinstance(banned, list) or len(banned) > MAX_BANNED:
+        refuse()
+    if not all(isinstance(entry, str) and entry for entry in banned):
+        refuse()
+    return password, username, banned
+
+
+def class_count(password):
+    chars = set(password)
+    return sum((
+        bool(chars & LOWER),
+        bool(chars & UPPER),
+        bool(chars & DIGITS),
+        bool(chars - LOWER - UPPER - DIGITS),
+    ))
+
+
+def has_repeat(password):
+    return any(password[i] == password[i + 1] == password[i + 2] for i in range(len(password) - 2))
+
+
+def violations(password, username, banned):
+    found = set()
+    if len(password) < MIN_LENGTH:
+        found.add("too_short")
+    if len(password) > MAX_LENGTH:
+        found.add("too_long")
+    if class_count(password) < MIN_CLASSES:
+        found.add("classes")
+    folded = password.translate(ASCII_FOLD)
+    name = username.translate(ASCII_FOLD)
+    if any(name[i:i + WINDOW] in folded for i in range(len(name) - WINDOW + 1)):
+        found.add("username")
+    if has_repeat(password):
+        found.add("repeat")
+    if any(entry.translate(ASCII_FOLD) in folded for entry in banned):
+        found.add("banned")
+    return sorted(found)
+
+
+def main():
+    password, username, banned = read_request()
+    broken = violations(password, username, banned)
+    sys.stdout.write(json.dumps({"ok": not broken, "violations": broken}) + "\n")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

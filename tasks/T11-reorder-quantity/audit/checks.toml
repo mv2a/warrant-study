@@ -1,0 +1,178 @@
+# Audit checks (X): the ground truth for scoring. Written from intent.md alone, independently of
+# the holdout checks, the reference and the broken implementations. Never run during development.
+
+[[check]]
+id = "X1"
+covers = ["C1"]
+statement = "Three valid requests exit 0 with one object holding exactly orders (a list), total_cost_cents and budget_left_cents (integers), each order holding exactly sku (one of the request's strings) and the integers wanted, quantity and cost_cents, and three plainly invalid requests (not JSON, no products, a JSON list) exit 2 with nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["C1"]
+statement = "Extra fields at the top level and in every product, including ones holding negative, fractional, null or empty values, are ignored, and pretty-printed, reordered or tab-indented input gets the same plan as the plain request."
+strength = "tested"
+run = ["python3", "ignored_fields.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X3"
+covers = ["G1"]
+statement = "For 16 products in packs of one, wanted equals daily demand times lead time plus safety stock minus on hand minus on order, and 0 when that is zero or less: needs landing exactly on the target, one unit above and below it, stock on order alone, zero demand, zero lead time and zero safety stock."
+strength = "tested"
+run = ["python3", "target.py"]
+tags = ["arithmetic"]
+
+[[check]]
+id = "X4"
+covers = ["G1"]
+statement = "150 generated products in packs of one (seed 61903), about two fifths of them built with stock exactly on or one or two units either side of the target, get wanted equal to their units needed."
+strength = "tested"
+run = ["python3", "target_generated.py"]
+tags = ["arithmetic", "generated"]
+
+[[check]]
+id = "X5"
+covers = ["G2"]
+statement = "Units needed are rounded up to the next whole pack and exact multiples are not rounded further: 0 and negative needs want 0, packs of 12 give 1, 11 and 12 -> 12, 13 -> 24, 24 -> 24, 25 -> 36, packs larger than the need give one pack, and needs next to 10^12 round exactly."
+strength = "tested"
+run = ["python3", "packs.py"]
+tags = ["rounding"]
+
+[[check]]
+id = "X6"
+covers = ["G2"]
+statement = "160 generated products (seed 44117), many with a need exactly on, one above or one below a multiple of the pack size, get wanted equal to their need rounded up to a whole number of packs."
+strength = "tested"
+run = ["python3", "packs_generated.py"]
+tags = ["rounding", "generated"]
+
+[[check]]
+id = "X7"
+covers = ["G3"]
+statement = "A single product gets the largest number of whole packs, up to the packs it wants, that the budget pays for in full: nothing one cent below a pack, one pack at exactly its price, never loose units, never more than it wants, and nothing when it needs nothing."
+strength = "tested"
+run = ["python3", "budget.py"]
+tags = ["money"]
+
+[[check]]
+id = "X8"
+covers = ["G3"]
+statement = "In 14 requests of products sharing one priority (so funded in request order), the money left passes on after a product is cut short or cannot afford a single pack, a product that wants nothing costs nothing, a budget of exactly the full cost buys everything and one cent less loses only the last pack."
+strength = "tested"
+run = ["python3", "budget_carry.py"]
+tags = ["money"]
+
+[[check]]
+id = "X9"
+covers = ["G3"]
+statement = "60 generated requests of 2 to 8 products sharing one priority (seed 80537), each needing whole packs or nothing, with budgets of 0, the exact full cost, one cent less, more, and random amounts, get exactly the quantities of pack-by-pack greedy funding, never costing more than the budget."
+strength = "tested"
+run = ["python3", "budget_generated.py"]
+tags = ["money", "generated"]
+
+[[check]]
+id = "X10"
+covers = ["G4"]
+statement = "With budgets paying exactly for the first k products in funding order, for every k, exactly those are funded: priorities listed in reverse, non-consecutive (3, 7, 40, 250), compared as numbers (2, 9, 10, 11, 100), large (5 to 1000001), and urgent products that are the dearest or the cheapest."
+strength = "tested"
+run = ["python3", "priority.py"]
+tags = ["priority"]
+
+[[check]]
+id = "X11"
+covers = ["G4"]
+statement = "With budgets paying exactly for the first k products in funding order, for every k, tied products are funded in request order, not by sku, price or pack size: two, three and six tied products, ties interleaved with other priorities, and tied products where the first listed is dearer, cheaper or smaller."
+strength = "tested"
+run = ["python3", "ties.py"]
+tags = ["priority"]
+
+[[check]]
+id = "X12"
+covers = ["G4"]
+statement = "45 generated requests of 3 to 9 products (seed 23459) with shuffled, tied and widely spaced priorities and varied pack prices, each at budgets paying for none, some and all of them, fund exactly the first products in order of priority then request position."
+strength = "tested"
+run = ["python3", "priority_generated.py"]
+tags = ["priority", "generated"]
+
+[[check]]
+id = "X13"
+covers = ["C2"]
+statement = "Five requests, each at its own budget, 0 and 10^15, list every sku exactly once in request order (even with priorities reversed or nothing ordered), with cost_cents equal to quantity times unit cost, the costs adding up to total_cost_cents, budget_left_cents equal to the budget minus the total, and wanted the same at every budget."
+strength = "tested"
+run = ["python3", "listing.py"]
+tags = ["arithmetic"]
+
+[[check]]
+id = "X14"
+covers = ["C2"]
+statement = "40 generated requests of 1 to 10 products (seed 50929), each at its own budget and at 0, list every sku once in request order with cost_cents, total_cost_cents and budget_left_cents following their definitions and wanted not depending on the budget."
+strength = "tested"
+run = ["python3", "listing_generated.py"]
+tags = ["arithmetic", "generated"]
+
+[[check]]
+id = "X15"
+covers = ["C3"]
+statement = "Nine kinds of text that is not JSON, seven JSON values that are not objects, five requests missing budget_cents or products, six non-list products values, six non-object products, and a product missing each of its nine fields are refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "refuse_shape.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X16"
+covers = ["C3"]
+statement = "The budget and each of the eight product integers given as a fraction, a whole-valued fraction such as 8.0, text, null, true, false, a list or an object, and the budget or pack size as NaN or Infinity, are refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "refuse_types.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X17"
+covers = ["C3"]
+statement = "A budget, on hand, on order, daily demand, lead time or safety stock of -1 or less, and a pack size, unit cost or priority of 0 or less, are refused with status 2 and no output, including on a product that needs nothing."
+strength = "tested"
+run = ["python3", "refuse_ranges.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X18"
+covers = ["C3"]
+statement = "A sku that is a number, fraction, null, true, false, list, object or the empty string, and a sku repeating an earlier one (adjacent, further back, three times, or on products that need nothing) are refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "refuse_sku.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X19"
+covers = ["C3"]
+statement = "Requests on the valid side of each refusal rule are planned with status 0: an empty product list (with no orders), a budget and each count of 0, a pack size, unit cost and priority of 1, large whole numbers, and distinct skus such as \"7\", \"0042\", \"ab-1\" beside \"AB-1\", and ones with spaces or accents."
+strength = "tested"
+run = ["python3", "accept_edges.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X20"
+covers = ["S1"]
+statement = "The S1 request (BOLT-M6), sent compact, indented with CRLF line ends, with shuffled keys and with sorted keys, gets exactly the response S1 gives."
+strength = "tested"
+run = ["python3", "scenario.py", "S1"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X21"
+covers = ["S2"]
+statement = "The S2 request (OF-220, GK-110, HS-300 with a budget of 3500), sent compact, indented with CRLF line ends, with shuffled keys and with sorted keys, gets exactly the response S2 gives."
+strength = "tested"
+run = ["python3", "scenario.py", "S2"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X22"
+covers = ["S3"]
+statement = "The S3 request (WS-40, WS-41 with a budget of 0), sent compact, indented with CRLF line ends, with shuffled keys and with sorted keys, gets exactly the response S3 gives."
+strength = "tested"
+run = ["python3", "scenario.py", "S3"]
+tags = ["scenarios"]

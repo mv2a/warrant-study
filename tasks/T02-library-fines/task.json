@@ -1,0 +1,2 @@
+{"id": "T02", "slug": "library-fines", "language": "python", "command": "fine",
+ "promises": ["G1", "G2", "G3", "G4", "C1", "C2", "C3", "S1", "S2", "S3"]}

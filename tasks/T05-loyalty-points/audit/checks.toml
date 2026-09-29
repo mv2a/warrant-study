@@ -1,0 +1,82 @@
+# Audit checks (X): the ground truth for scoring, written from intent.md alone and never
+# run during development.
+
+[[check]]
+id = "X1"
+covers = ["C3"]
+statement = "Fourteen valid requests at the edges of the stated types (no items, a price of 0, a single-space or non-ASCII category, an empty bonus list or one holding an empty string, a $9.9 billion order, extra fields in the request and items, pretty-printed input) exit 0 with exactly the four integer fields and the worked-out values, and leaving bonus_categories out means none."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["C3", "C4"]
+statement = "107 invalid requests covering every defect C4 lists (non-object input, bad or missing tier, bad or missing items, non-object items, missing fields, bad categories, negative, fractional, text or true/false prices and quantities, whole-number prices and quantities written with a decimal point or an exponent (1675.0, 0.0, 3.0, 1.0, 25e2, 1E0, 2500.00), bonus_categories that is not a list of strings), placed in the first, middle, last or gift-card item, all exit with status 2 and print nothing."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X3"
+covers = ["G1"]
+statement = "Base points are the whole dollars of eligible spend, floored once on the order total: 99 cents earns 0, $1.00 earns 1, two $0.60 items earn 1, five $19.99 items earn 99, $0.34 x 3 earns 1, gift cards are left out of the sum, and 29 orders in all get exactly the expected eligible_cents and base_points in every tier."
+strength = "tested"
+run = ["python3", "base.py"]
+tags = ["points"]
+
+[[check]]
+id = "X4"
+covers = ["G2"]
+statement = "The tier bonus is floor(base x 1.25) - base for silver, floor(base x 1.5) - base for gold and 0 for standard, computed on whole base points not cents, for every base from 0 to 32 and 18 hand-worked cases (silver base 7 gets 1), and the multiplier is never applied to the category bonus."
+strength = "tested"
+run = ["python3", "tier.py"]
+tags = ["points"]
+
+[[check]]
+id = "X5"
+covers = ["G3"]
+statement = "The category bonus is 2 points per whole dollar of promoted spend, summed over all listed categories and floored once before doubling ($10.99 earns 20, two $0.60 items earn 2, $0.50 in each of two promoted categories earns 2), matched exactly including case and spaces, counting an item once when its category is listed repeatedly, across 36 orders."
+strength = "tested"
+run = ["python3", "category.py"]
+tags = ["points"]
+
+[[check]]
+id = "X6"
+covers = ["C1"]
+statement = "Items in category exactly \"gift_card\" add nothing to eligible_cents, base, tier or category points, even when gift_card is promoted: gift-card-only orders earn 0 in every tier, gift-card cents never complete a dollar, and look-alike categories such as Gift_Card, \"gift card\" and gift_card with a leading or trailing space are ordinary items, across 21 orders."
+strength = "tested"
+run = ["python3", "giftcards.py"]
+tags = ["points"]
+
+[[check]]
+id = "X7"
+covers = ["C2"]
+statement = "Tier bonus plus category bonus is capped at 500 per order, on both sides of the boundary for the category bonus alone (498, 500, 502), the gold and silver tier bonus alone (499, 500, 501) and the two combined (500 exactly, 501 and 510 capped), while base points are never capped (up to 10,000,000), across 28 orders."
+strength = "tested"
+run = ["python3", "cap.py"]
+tags = ["points"]
+
+[[check]]
+id = "X8"
+covers = ["S1", "S2", "S3"]
+statement = "The three example requests in the intent, sent as written and again reordered and pretty-printed, get exactly the responses the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["points"]
+
+[[check]]
+id = "X9"
+covers = ["G1", "G2", "G3", "C1", "C2", "C3"]
+statement = "170 valid orders generated with seed 4417093 (0 to 6 items, prices from 0 to $4,000, gift cards, look-alike and case-variant categories, repeated or empty promotions, extra fields) each get exactly the eligible_cents, base_points, bonus_points and total_points the intent gives."
+strength = "tested"
+run = ["python3", "generated.py"]
+tags = ["points"]
+
+[[check]]
+id = "X10"
+covers = ["C3", "C4"]
+statement = "90 valid orders generated with seed 90210577, each given exactly one defect that C4 lists (whole-number prices and quantities written as decimals among them) at a random place, all exit with status 2 and print nothing."
+strength = "tested"
+run = ["python3", "generated_invalid.py"]
+tags = ["validation"]

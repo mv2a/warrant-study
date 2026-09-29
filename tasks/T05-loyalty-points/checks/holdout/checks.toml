@@ -1,0 +1,65 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "eligible_cents is the sum of price times quantity and base_points drops the fraction of a dollar once on that total, not per item: 16 boundary orders (such as $0.99, $1.00, two items at $0.60, 100 items at $0.01) and 60 generated orders with seed 505101."
+strength = "tested"
+run = ["python3", "base.py"]
+tags = ["points"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "The tier bonus is the base points times 1, 1.25 or 1.5 rounded down, minus the base points, for every base from 0 to 25 and 30 larger bases (seed 505202), and a promoted line in whole dollars is added to it unmultiplied in 24 silver and gold orders."
+strength = "tested"
+run = ["python3", "tier.py"]
+tags = ["points"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "The category bonus is 2 points per whole dollar of the combined spend on listed categories, dropping the fraction once before doubling ($10.50 earns 20, two $0.60 items earn 2), counting a category listed twice once and matching case and whitespace exactly (a listed ' garden', an item 'garden ' and a tab-suffixed category), in 18 fixed and 50 generated standard orders (seed 505303) and 4 silver and gold orders where it is not multiplied."
+strength = "tested"
+run = ["python3", "category.py"]
+tags = ["points"]
+
+[[check]]
+id = "H4"
+covers = ["C1"]
+statement = "Orders of only gift cards earn all zeros in every tier even when gift_card is promoted, adding 1 to 3 gift cards to 40 generated orders (seed 505404) leaves the response unchanged, two mixed orders earn exactly their non-gift-card points, and 4 look-alikes with extra spaces, a tab, a newline or other case are scored as ordinary promoted items."
+strength = "tested"
+run = ["python3", "giftcards.py"]
+tags = ["points"]
+
+[[check]]
+id = "H5"
+covers = ["C2"]
+statement = "Bonus points are the tier bonus plus the category bonus capped at 500 (at 498, 500, 502 and far above, from the tier alone, the category alone and both together) while base points stay uncapped and the total is base plus bonus, in 16 fixed and 40 generated orders (seed 505505)."
+strength = "tested"
+run = ["python3", "cap.py"]
+tags = ["points"]
+
+[[check]]
+id = "H6"
+covers = ["C3"]
+statement = "50 generated valid requests (seed 505606) exit 0 with exactly the four non-negative integer fields and total equal to base plus bonus, empty orders earn all zeros, an omitted or empty bonus_categories means none, extra request and item fields are ignored, and 3 refusals exit 2 with nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H7"
+covers = ["C4"]
+statement = "41 kinds of invalid request are refused with status 2 and no output, including non-JSON and non-object input, missing, unknown, capitalised and non-string tiers, items that are not a list of objects, missing item fields, empty or non-string categories, negative, fractional, text, true/false and null prices, quantities of 0, below 0, fractional, text or true, a whole-number price or quantity written with a decimal point (1250.0, 2.0) or an exponent (1e3), and bonus_categories that is not a list of strings."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H8"
+covers = ["S1", "S2", "S3"]
+statement = "The three scenario requests get exactly the responses the intent gives, both as written and with their fields and items in reverse order."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["points"]

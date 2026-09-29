@@ -1,0 +1,65 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "Groups are handled in booking order: in six hand-made cases and 40 generated ones (seed 190101), a later group never changes an earlier group's result, the first k groups alone get exactly the matching results, and removing a refused group changes nothing else."
+strength = "tested"
+run = ["python3", "order.py"]
+tags = ["allocation"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Whenever a group can sit together it gets the frontmost row with a long enough block of free seats and the lowest-numbered such block, in twelve hand-made cases and every such group in 60 generated requests (seed 190202)."
+strength = "tested"
+run = ["python3", "together.py"]
+tags = ["allocation"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "Only groups with may_split true are ever split, never when they could sit together, and a split group takes the first free seats in seating order, in eight hand-made cases and 60 generated requests (seed 190303) with at least 20 splits."
+strength = "tested"
+run = ["python3", "split.py"]
+tags = ["allocation"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "Groups that cannot be seated are refused whole with not_enough_seats when fewer seats are free than members and not_together otherwise, every group appears exactly once, and no group that could be seated is refused, in ten hand-made cases and 60 generated requests (seed 190404)."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["refusals"]
+
+[[check]]
+id = "H5"
+covers = ["C1"]
+statement = "Responses to 31 valid requests (30 generated with seed 190505) have exactly seated, refused and free in the documented shapes, in booking order with seats in seating order; unknown fields are ignored, may_split defaults to false, a request with no groups or with every group refused still exits 0 with the full shape, and four refused requests exit 2 with no output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H6"
+covers = ["C2"]
+statement = "In 86 requests (80 generated with seed 190606), every sold seat exists, is not blocked and is sold once, each seated group gets exactly its size in seats, and free equals the seats neither blocked nor sold."
+strength = "tested"
+run = ["python3", "integrity.py"]
+tags = ["integrity"]
+
+[[check]]
+id = "H7"
+covers = ["C3"]
+statement = "51 malformed requests covering every rule in C3, three of them holding NaN, Infinity or -Infinity in a field that would otherwise be ignored, are refused with status 2 and no output, and eight valid requests at the limits (26 rows of 50 seats, one seat, no groups, unusual ids, a huge group) are handled with status 0."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["validation"]
+
+[[check]]
+id = "H8"
+covers = ["S1", "S2", "S3"]
+statement = "The three example requests in the intent, sent as written and again with reversed keys and indentation, get exit status 0 and exactly the documented responses."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["scenarios"]

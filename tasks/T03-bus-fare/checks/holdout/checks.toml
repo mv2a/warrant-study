@@ -1,0 +1,72 @@
+# Hidden checks: never shown to the builder. Used only by Warrant's gate.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "Adults are charged 270 cents plus 95 cents per zone boundary crossed: all 36 ordered zone pairs, 24 more generated trips, and 18 out-and-back days in both directions, with a fixed seed."
+strength = "tested"
+run = ["python3", "zones.py"]
+tags = ["money"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Trips boarding at most 90 minutes after the trip that opened the window are free and later ones pay, with transfers never extending the window: 16 hand-written days (89, 90 and 91 minutes, the same minute, chains, the ends of the day, any zones, child and senior riders) and 40 generated adult days with a fixed seed."
+strength = "tested"
+run = ["python3", "transfers.py"]
+tags = ["money"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "Every age from 0 to 120 pays the right share of a 650-cent adult trip (nothing under 5, half from 5 to 15, all from 16 to 64, 40% from 65), ages near each boundary are checked on two more trips, and riders under 5 pay nothing for five long trips."
+strength = "tested"
+run = ["python3", "ages.py"]
+tags = ["money"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "Each rider class stops paying at its own daily cap (1100 adult, 550 child, 440 senior), with the trip that reaches the cap paying only what is left and later trips free: 12 hand-written days and 60 generated days with a fixed seed."
+strength = "tested"
+run = ["python3", "cap.py"]
+tags = ["money"]
+
+[[check]]
+id = "H5"
+covers = ["C1"]
+statement = "Child and senior fares for every zone span are whole cents rounded down to a multiple of 5 (for example 180 for a child on a 365-cent trip and 105 for a senior on a 270-cent trip), 48 trips with a fixed seed."
+strength = "tested"
+run = ["python3", "rounding.py"]
+tags = ["money"]
+
+[[check]]
+id = "H6"
+covers = ["C2"]
+statement = "43 kinds of invalid request are refused with status 2 and no output (not JSON or not an object, missing fields, out-of-range or non-integer age, minute and zones including 30.0, text, true and null, and trips out of boarding order), while 8 valid edge cases are priced and an empty trips list costs nothing."
+strength = "tested"
+run = ["python3", "invalid.py"]
+
+[[check]]
+id = "H7"
+covers = ["C3"]
+statement = "For 40 generated requests the output is one object with exactly fares_cents (one whole number per trip, in trip order) and total_cents (their sum), unchanged when the request is pretty-printed or carries extra fields; refusals exit 2 with nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H8"
+covers = ["S1", "S2", "S3"]
+statement = "The three example days in the intent are charged exactly the per-trip fares and totals the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]
+
+[[check]]
+id = "H9"
+covers = ["G1", "G2", "G3", "G4", "C1"]
+statement = "150 generated days with a fixed seed, over all ages, zones and boarding gaps, get exactly the fares and total that the zone, transfer, age, cap and rounding rules give together."
+strength = "tested"
+run = ["python3", "whole_days.py"]
+tags = ["money"]

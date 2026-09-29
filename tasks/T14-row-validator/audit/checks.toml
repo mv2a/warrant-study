@@ -1,0 +1,130 @@
+# Audit checks (X): the ground truth for scoring. Written from intent.md alone, independently of the
+# holdout checks; never run during development.
+
+[[check]]
+id = "X1"
+covers = ["C1"]
+statement = "Across 25 seeded generated requests and 5 fixed ones, validate exits 0 and writes one JSON object with exactly valid and errors, each error has exactly an integer row inside the table, a field named in the schema and one of the five codes, valid is true exactly when errors is empty, required and unique count as false when left out, and 4 malformed requests exit 2 with nothing on standard output and a reason on standard error."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["G1"]
+statement = "Required fields that are left out or null get exactly one missing error each, required fields holding empty text, 0, 0.0, -0.0 or false get none, required fields holding an empty list or object get a type error rather than missing, keys that differ from the name by case or a space do not count, and optional fields left out or null get no error even when they carry min, max, allowed or unique, over a 13-row, a 45-row and a 5-row table."
+strength = "tested"
+run = ["python3", "missing.py"]
+tags = ["missing"]
+
+[[check]]
+id = "X3"
+covers = ["G2"]
+statement = "Each of the four types accepts and rejects exactly the right JSON values, 75 in all written as raw JSON: strings take only text, booleans only true and false, numbers any number but never true or false, and integers take 4, 4.0, 4.00, -0.0, 1e2, 1.5E1 and 1e300 but reject 4.5, 25e-1, 1e-1, true, text, lists and objects; and in 5 more rows a wrong type in a required field is a type error, not missing."
+strength = "tested"
+run = ["python3", "kinds.py"]
+tags = ["types"]
+
+[[check]]
+id = "X4"
+covers = ["G3"]
+statement = "Range errors follow inclusive min and max exactly for 68 values over 10 rules: both bounds are allowed, anything past either is not, including 16.0 and 15.0 against min 16, fractional bounds on integer fields, min equal to max, negative bounds, -0.0 against min 0, integers just past plus or minus 2^63, and no range error when a field has no bounds."
+strength = "tested"
+run = ["python3", "bounds.py"]
+tags = ["range"]
+
+[[check]]
+id = "X5"
+covers = ["G3"]
+statement = "Allowed lists match strings exactly (case, leading, trailing and doubled spaces, a tab, and composed versus decomposed accents all count) and numbers by value (2 equals 2.0, 100 equals 1e2 and 1E+2, 0 equals -0.0 and -0), and boolean lists accept only their listed values, over 64 values against 8 lists."
+strength = "tested"
+run = ["python3", "allowed.py"]
+tags = ["allowed"]
+
+[[check]]
+id = "X6"
+covers = ["G4"]
+statement = "In unique fields a value equal to one in an earlier row gets a duplicate error and the first occurrence none, with equality as in G3 (case and spaces matter, 5 equals 5.0, 0 equals -0.0, 2.5 equals 25e-1); an earlier true never makes a later 1 a duplicate nor an earlier 1 a later true, earlier wrong-typed values never count, left-out and null values are never duplicates, uniqueness is per field, fields not marked unique never get duplicates, and duplicates are found far down a 34-row table and beside other errors."
+strength = "tested"
+run = ["python3", "duplicate.py"]
+tags = ["duplicate"]
+
+[[check]]
+id = "X7"
+covers = ["G5"]
+statement = "Every problem is reported: a table where all 6 fields of 5 rows are wrong gets all 30 errors, fields the schema does not name are ignored whatever they hold, and a seeded 300-row table with problems scattered across every field gets every one of its errors."
+strength = "tested"
+run = ["python3", "every_error.py"]
+tags = ["completeness"]
+
+[[check]]
+id = "X8"
+covers = ["C2"]
+statement = "Each field of each row gets at most one error, the first that applies in the order missing, type, range, allowed, duplicate: a required null with bounds is only missing, a wrong type is never also out of range, an out-of-range value that is not allowed or repeats an earlier one is only a range error, and a value that is not allowed and repeats is only an allowed error, over 6 single-field tables of 59 rows and a 4-field table where each field has a different winner."
+strength = "tested"
+run = ["python3", "precedence.py"]
+tags = ["precedence"]
+
+[[check]]
+id = "X9"
+covers = ["C3"]
+statement = "Errors are listed by row position as a number, lowest first, and within a row in schema order rather than alphabetical or row-key order, with missing and duplicate errors in their own place rather than in a later pass, over 3 fixed tables (one of 101 rows) and 40 seeded generated tables with shuffled row keys."
+strength = "tested"
+run = ["python3", "order.py"]
+tags = ["order"]
+
+[[check]]
+id = "X10"
+covers = ["C4"]
+statement = "112 malformed requests covering every kind listed in C4 are refused with status 2, nothing on standard output and a reason on standard error: text that is not one JSON object (including NaN, Infinity, a comment and a trailing comma), a missing, misspelled or extra top-level key, a schema that is not a non-empty list of rules, a missing, empty, non-text or repeated name, a missing or unknown type, an unknown rule key, a non-boolean required or unique, a non-number min or max, min or max on a string or boolean field, min above max, an allowed that is not a non-empty list of values of the field's type, and rows that are not a list of objects."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X11"
+covers = ["C4"]
+statement = "26 requests just inside the rules are validated with status 0 and the right errors rather than refused: no rows, min equal to max, fractional bounds on integers, integer allowed lists holding 2.0, repeated allowed entries, required and unique written as false, names differing only in case, a one-space name, rows holding nested lists, objects, huge numbers, unknown keys and control characters, and requests with unusual key order, whitespace or raw non-ASCII text."
+strength = "tested"
+run = ["python3", "accepted.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X12"
+covers = ["S1"]
+statement = "Scenario S1, sent with the keys of every rule and row reordered, gives exactly {\"valid\": true, \"errors\": []} with status 0."
+strength = "tested"
+run = ["python3", "scenario.py", "S1"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X13"
+covers = ["S2"]
+statement = "Scenario S2, sent with the keys of every rule and row reordered, gives exactly the seven errors the intent lists, in that order, with valid false and status 0."
+strength = "tested"
+run = ["python3", "scenario.py", "S2"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X14"
+covers = ["S3"]
+statement = "Scenario S3, sent with the keys of every rule and row reordered, gives exactly the two duplicate errors in row 2 and the range error in row 3 the intent lists, in that order, with valid false and status 0."
+strength = "tested"
+run = ["python3", "scenario.py", "S3"]
+tags = ["scenarios"]
+
+[[check]]
+id = "X15"
+covers = ["G1", "G2", "G3", "G4", "G5", "C2", "C3"]
+statement = "180 seeded random schemas and tables (seeds 5210914, 8830266 and 9417003) built from near-colliding values give exactly the errors, in exactly the order, that an independent model of G1 to G5, C2 and C3 predicts."
+strength = "tested"
+run = ["python3", "generated.py"]
+tags = ["generated"]
+
+[[check]]
+id = "X16"
+covers = ["C4"]
+statement = "110 seeded random well-formed requests (seed 2718281), each broken in one way that C4 names, are all refused with status 2, nothing on standard output and a reason on standard error, while a sample of the same requests unbroken is accepted."
+strength = "tested"
+run = ["python3", "generated_refusals.py"]
+tags = ["generated", "refusal"]

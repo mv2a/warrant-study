@@ -1,0 +1,25 @@
+# Visible checks: the builder may read and run these. They are deliberately incomplete.
+
+[[check]]
+id = "P1"
+covers = ["C2", "C3"]
+statement = "The pay command follows the interface: two valid weeks get exit status 0 and exactly the seven integer fields with the minutes adding up, and a six-day list, a negative day and a zero rate are refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3", "S4", "S5"]
+statement = "The five example weeks in the intent get exactly the responses the intent gives, field for field."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]
+
+[[check]]
+id = "P3"
+covers = ["G1"]
+statement = "Three short weeks of days no longer than 11 hours split into regular and overtime minutes at the 8-hour mark."
+strength = "tested"
+run = ["python3", "daily.py"]
+tags = ["time"]

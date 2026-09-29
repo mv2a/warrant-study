@@ -1,0 +1,162 @@
+# Audit checks (X): written from intent.md alone, independently of the holdout checks.
+# Ground truth for scoring; never run during development.
+
+[[check]]
+id = "X1"
+covers = ["C1"]
+statement = "Seven accepted requests (extra fields, including ones called display and key; whitespace around the JSON; unescaped UTF-8; quotes and a backslash in the name) exit 0 with exactly two string fields display and key holding the right key and the right display name ignoring case, and five requests that must be refused (not JSON, no name, a list name, 101 characters, only an honorific) exit 2 with nothing on standard output whenever they are not normalised."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["C2"]
+statement = "Thirty-four malformed requests are refused with exit status 2: eleven texts that are not JSON (including empty input, a trailing comma and two objects), eight JSON values that are not objects, six objects without a field spelled exactly name, and nine non-string names (numbers, null, true, false, lists and an object)."
+strength = "tested"
+run = ["python3", "malformed.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X3"
+covers = ["C2"]
+statement = "Names of exactly 100 code points are accepted and names of 101 or more are refused, counting leading, trailing and inner whitespace, honorifics, characters outside the Basic Multilingual Plane and combining accents as sent, plus ten generated names of 97 to 104 code points with a fixed seed."
+strength = "tested"
+run = ["python3", "length.py"]
+tags = ["refusal", "boundary"]
+
+[[check]]
+id = "X4"
+covers = ["C2"]
+statement = "Thirty-four names with no letter left after tidying whitespace and removing leading honorifics (empty, only whitespace, only honorifics, honorifics before digits, punctuation, symbols, a zero width space or a lone accent, six of them generated with a fixed seed) are refused with exit status 2, and ten names that keep a letter, such as Mr. 42 b, Mr. 42nd, Dr. é and -a-, are accepted."
+strength = "tested"
+run = ["python3", "noletters.py"]
+tags = ["refusal", "boundary"]
+
+[[check]]
+id = "X5"
+covers = ["G1"]
+statement = "Each of the 25 characters with the Unicode White_Space property is dropped at both ends of a name and turns an inner run into one space, a zero width space and a word joiner do not split a word, and fifteen generated names with random whitespace runs (fixed seed) come out as their words joined by single spaces, comparing words without regard to case."
+strength = "tested"
+run = ["python3", "whitespace.py"]
+tags = ["whitespace"]
+
+[[check]]
+id = "X6"
+covers = ["G2"]
+statement = "Each of the ten honorifics is removed from the start of a name in four spellings (lower case, upper case with a full stop, capitalised with a full stop, mixed case), comparing the remaining words without regard to case."
+strength = "tested"
+run = ["python3", "honorific_forms.py"]
+tags = ["honorifics"]
+
+[[check]]
+id = "X7"
+covers = ["G2"]
+statement = "Runs of two to four leading honorifics are all removed, removal stops at the first word that is not an honorific, eighteen near misses such as Dr.., Drs, Doctor, D.r., Dr, and Dr.selin are kept as words, and honorifics after the first word are kept, comparing words without regard to case."
+strength = "tested"
+run = ["python3", "honorific_bounds.py"]
+tags = ["honorifics"]
+
+[[check]]
+id = "X8"
+covers = ["G3"]
+statement = "Thirty-nine hand-worked names without honorifics or particles get exactly the capitalisation G3 describes, including capitals after - ' ’ and . only (not after an opening bracket, a left quotation mark, an en dash, an underscore, a slash, a digit or a middle dot), lower case after digits, and letters from the Latin, Cyrillic, Greek and CJK scripts."
+strength = "tested"
+run = ["python3", "capitals_fixed.py"]
+tags = ["capitals"]
+
+[[check]]
+id = "X9"
+covers = ["G3"]
+statement = "Forty-five generated names (fixed seed) of random-case words mixing Latin, Cyrillic and CJK letters, digits, hyphens, apostrophes, full stops and other punctuation, with no honorific or particle and single spaces, get exactly the display name G3 describes."
+strength = "tested"
+run = ["python3", "capitals_generated.py"]
+tags = ["capitals"]
+
+[[check]]
+id = "X10"
+covers = ["G4"]
+statement = "Each of the eleven particles, sent in upper, capitalised or mixed case, is written in lower case between two other words, and, sent in lower case, is capitalised as the first or the last word; runs of particles such as amara DE LA cruz, de la and de la van follow the same rule."
+strength = "tested"
+run = ["python3", "particles_fixed.py"]
+tags = ["particles"]
+
+[[check]]
+id = "X11"
+covers = ["G4"]
+statement = "Parts of hyphenated words are capitalised, fourteen words that only resemble particles (such as dos, den, vander, dela, vanessa and van.) are capitalised, and first and last word are counted on the words themselves, ignoring leading and trailing spaces and including words without letters."
+strength = "tested"
+run = ["python3", "particles_edges.py"]
+tags = ["particles"]
+
+[[check]]
+id = "X12"
+covers = ["G4"]
+statement = "In eight names that start with honorifics, first and last word for particles are counted after the honorifics are removed, so Dr. van berg gives Van Berg and Mr. amara di gives Amara Di."
+strength = "tested"
+run = ["python3", "particles_honorifics.py"]
+tags = ["particles", "honorifics"]
+
+[[check]]
+id = "X13"
+covers = ["G4"]
+statement = "Forty-five generated names (fixed seed) of two to six single-spaced words, mixing particles (random case inside the name, lower case at either end) with capitalised ordinary words, get exactly the display name G4 describes."
+strength = "tested"
+run = ["python3", "particles_generated.py"]
+tags = ["particles"]
+
+[[check]]
+id = "X14"
+covers = ["G5"]
+statement = "Twenty-eight hand-worked names get exactly the key G5 describes: accents split off by NFKD are dropped, letters that do not decompose (such as ø, ł, æ, ð, þ and ß) and letters of other scripts are kept, compatibility forms such as fullwidth letters and ligatures are expanded, and digits, spaces and punctuation are dropped."
+strength = "tested"
+run = ["python3", "key_fixed.py"]
+tags = ["key"]
+
+[[check]]
+id = "X15"
+covers = ["G5"]
+statement = "Names that differ only in whitespace, case, leading honorifics, accents, hyphens, apostrophes or full stops get the same key, for four hand-written groups and eight generated groups of three spellings (fixed seed)."
+strength = "tested"
+run = ["python3", "key_groups.py"]
+tags = ["key"]
+
+[[check]]
+id = "X16"
+covers = ["G5"]
+statement = "For twenty generated single-spaced names without honorifics (fixed seed), mixing accents, letters that do not decompose, particles and hyphenated or apostrophe-joined words, the key is the one G5 describes and normalising the returned display name again gives the same key."
+strength = "tested"
+run = ["python3", "key_idempotent.py"]
+tags = ["key"]
+
+[[check]]
+id = "X17"
+covers = ["S1"]
+statement = "The S1 request, sent as the JSON text the intent shows, gives exactly display Anna-Maria O'Neil and key annamariaoneil."
+strength = "tested"
+run = ["python3", "scenarios.py", "S1"]
+tags = ["scenario"]
+
+[[check]]
+id = "X18"
+covers = ["S2"]
+statement = "The S2 request gives exactly display Ludwig van Beethoven and key ludwigvanbeethoven."
+strength = "tested"
+run = ["python3", "scenarios.py", "S2"]
+tags = ["scenario"]
+
+[[check]]
+id = "X19"
+covers = ["S3"]
+statement = "The S3 request gives exactly display Van der Berg and key vanderberg."
+strength = "tested"
+run = ["python3", "scenarios.py", "S3"]
+tags = ["scenario"]
+
+[[check]]
+id = "X20"
+covers = ["S4"]
+statement = "The two S4 requests give exactly José García with key josegarcia and Jose Garcia with key josegarcia, the same key for both."
+strength = "tested"
+run = ["python3", "scenarios.py", "S4"]
+tags = ["scenario"]

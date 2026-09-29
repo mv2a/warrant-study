@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""Amortise a fixed-rate loan: one JSON request in, one JSON schedule out."""
+
+import json
+import sys
+
+MAX_PRINCIPAL_CENTS = 1_000_000_000
+MAX_RATE_BP = 5000
+MAX_MONTHS = 480
+BP_PER_MONTH = 120_000  # basis points per year x 12 months: the monthly rate is bp / 120000
+
+
+def refuse(reason):
+    print(f"invalid request: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def whole(request, field, low, high):
+    value = request.get(field)
+    # bool is a subclass of int in Python, so compare types exactly.
+    if type(value) is not int or not low <= value <= high:
+        refuse(f"{field} must be a whole number from {low} to {high}")
+    return value
+
+
+def regular_payment(principal, rate_bp, months):
+    """The level payment P*i / (1 - (1+i)^-n), computed exactly and rounded up to the cent."""
+    if rate_bp == 0:
+        return -(-principal // months)
+    grown = (BP_PER_MONTH + rate_bp) ** months
+    base = BP_PER_MONTH ** months
+    numerator = principal * rate_bp * grown
+    denominator = BP_PER_MONTH * (grown - base)
+    return -(-numerator // denominator)
+
+
+def interest_on(balance, rate_bp):
+    """balance * rate_bp / 120000, rounded to the nearest cent with halves rounded up."""
+    return (2 * balance * rate_bp + BP_PER_MONTH) // (2 * BP_PER_MONTH)
+
+
+def build(principal, rate_bp, months):
+    payment = regular_payment(principal, rate_bp, months)
+    rows, balance = [], principal
+    for month in range(1, months + 1):
+        interest = interest_on(balance, rate_bp)
+        if month == months:
+            rows.append(
+                {
+                    "month": month,
+                    "payment_cents": balance + interest,
+                    "interest_cents": interest,
+                    "principal_cents": balance,
+                    "balance_cents": 0,
+                }
+            )
+            break
+        paid_down = payment - interest
+        balance -= paid_down
+        rows.append(
+            {
+                "month": month,
+                "payment_cents": payment,
+                "interest_cents": interest,
+                "principal_cents": paid_down,
+                "balance_cents": balance,
+            }
+        )
+    return {
+        "payment_cents": payment,
+        "total_interest_cents": sum(row["interest_cents"] for row in rows),
+        "rows": rows,
+    }
+
+
+def main():
+    try:
+        request = json.loads(sys.stdin.read())
+    except (ValueError, RecursionError):
+        # ValueError covers malformed JSON, undecodable input and integer literals too long for
+        # Python to convert (all far outside the allowed ranges); RecursionError covers deeply
+        # nested arrays or objects, which are not a request object either.
+        refuse("not a JSON object with whole-number fields")
+    if not isinstance(request, dict):
+        refuse("expected a JSON object")
+    principal = whole(request, "principal_cents", 1, MAX_PRINCIPAL_CENTS)
+    rate_bp = whole(request, "annual_rate_bp", 0, MAX_RATE_BP)
+    months = whole(request, "months", 1, MAX_MONTHS)
+    json.dump(build(principal, rate_bp, months), sys.stdout)
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()

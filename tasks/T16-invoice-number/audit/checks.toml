@@ -1,0 +1,130 @@
+# Audit checks (X): written independently from intent.md alone, the ground truth for scoring.
+# Never run during development. Seeds and inputs differ from the visible checks.
+
+[[check]]
+id = "X1"
+covers = ["C5"]
+statement = "Six valid requests exit with status 0 and write one JSON object with exactly a text number and a whole-number sequence, and thirteen refusals of every kind exit with status 2 and write nothing at all on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X2"
+covers = ["C5"]
+statement = "Four valid requests get the same answer when their JSON is reordered, re-spaced, pretty-printed, written with CRLF or unicode escapes, or carries extra fields, including fields named number, sequence, Branch and branch with a trailing space."
+strength = "tested"
+run = ["python3", "encodings.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X3"
+covers = ["G1"]
+statement = "Thirty-two successful requests, eight per branch across new, continued and restarted sequences, get numbers that start with LIS- for lisbon, OPO- for porto, FAO- for faro and BRG- for braga."
+strength = "tested"
+run = ["python3", "prefixes.py"]
+tags = ["numbering"]
+
+[[check]]
+id = "X4"
+covers = ["G2"]
+statement = "For 24 fixed cases at every digit-width boundary (1, 9, 99, 999, 9999, 99998) and the years 2000 and 9999, and 160 generated cases with seed 162917, a previous number from the request's year makes both the sequence and the number's final part exactly one more."
+strength = "tested"
+run = ["python3", "continuation.py"]
+tags = ["numbering"]
+
+[[check]]
+id = "X5"
+covers = ["G3"]
+statement = "For 16 fixed and 120 generated cases with seed 165881, a null previous or a previous number from any earlier year, from one to 7999 years earlier and including earlier sequences of 99999, gives sequence 1."
+strength = "tested"
+run = ["python3", "restart.py"]
+tags = ["numbering"]
+
+[[check]]
+id = "X6"
+covers = ["C1"]
+statement = "For 13 fixed and 100 generated cases with seed 164402, the number is exactly PREFIX-YYYY-NNNNN with the request's year and the sequence zero-padded to five digits at every width, and the sequence field is the same value as a JSON whole number."
+strength = "tested"
+run = ["python3", "format.py"]
+tags = ["format"]
+
+[[check]]
+id = "X7"
+covers = ["C2"]
+statement = "Every malformed previous number the intent lists for lisbon, and about seventy malformed spellings per branch for all four branches (other prefixes, wrong case, look-alike letters, bad or extra separators, wrong digit counts, bad years, 00000, leading or trailing characters), are refused with status 2 whether dated in the request's year or a year earlier."
+strength = "tested"
+run = ["python3", "malformed.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X8"
+covers = ["C2"]
+statement = "Previous numbers whose year or sequence uses non-ASCII Unicode digits, superscripts, or forms a lenient integer parser accepts (underscores, signs, inner whitespace, a trailing newline) are refused with status 2 for all four branches."
+strength = "tested"
+run = ["python3", "digits.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X9"
+covers = ["C2"]
+statement = "260 previous numbers generated with seed 167730 by randomly damaging well-formed numbers, and no longer well-formed by the intent's definition, are refused with status 2."
+strength = "tested"
+run = ["python3", "mutations.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X10"
+covers = ["C3"]
+statement = "Well-formed previous numbers from a later year than the request (fixed cases and 90 generated with seed 163091), and sequence 99999 from the request's own year for all four branches and the years 2000 and 9999, are refused with status 2."
+strength = "tested"
+run = ["python3", "bounds.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X11"
+covers = ["C4"]
+statement = "Text that is not JSON, JSON that is not an object, requests missing branch, year or previous, branches other than exactly lisbon, porto, faro or braga, years that are not JSON whole numbers from 2000 to 9999 (text, floats such as 2026.0, booleans, out of range), and previous values that are neither text nor null are all refused with status 2."
+strength = "tested"
+run = ["python3", "invalid_requests.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X12"
+covers = ["C4"]
+statement = "Standard input that is not valid UTF-8 text, with stray bytes around the object or invalid bytes inside the branch, year or previous number, is refused with status 2 rather than crashing, both when standard input is decoded strictly (a UTF-8 locale) and with surrogate escapes (the C locale), each pinned with PYTHONIOENCODING so the verdict does not depend on the machine."
+strength = "tested"
+run = ["python3", "undecodable.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X13"
+covers = ["S1"]
+statement = "The S1 request gets exactly {\"number\": \"LIS-2026-00042\", \"sequence\": 42} with status 0."
+strength = "tested"
+run = ["python3", "scenarios.py", "S1"]
+tags = ["scenario"]
+
+[[check]]
+id = "X14"
+covers = ["S2"]
+statement = "The S2 request gets exactly {\"number\": \"OPO-2027-00001\", \"sequence\": 1} with status 0."
+strength = "tested"
+run = ["python3", "scenarios.py", "S2"]
+tags = ["scenario"]
+
+[[check]]
+id = "X15"
+covers = ["S3"]
+statement = "The S3 request gets exactly {\"number\": \"FAO-2026-00001\", \"sequence\": 1} with status 0."
+strength = "tested"
+run = ["python3", "scenarios.py", "S3"]
+tags = ["scenario"]
+
+[[check]]
+id = "X16"
+covers = ["S4"]
+statement = "The S4 request, braga with the Lisbon number LIS-2026-00041, is refused with status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "scenarios.py", "S4"]
+tags = ["scenario"]

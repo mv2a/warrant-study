@@ -1,0 +1,65 @@
+# Hidden checks: never shown to the builder. Used only by Warrant's gate.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "Every charged-day count from 1 up to the one that reaches each type's cap is fined at 25 cents a day for a book, 100 for a DVD and 150 for a reference item (62 single-item requests), and 25 mixed requests of 2 to 6 items fine each item at its own type's rate."
+strength = "tested"
+run = ["python3", "rates.py"]
+tags = ["money"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Books and DVDs 0 to 3 days late owe nothing and are charged only for the days after the third up to 10 days late; reference items 0 to 10 days late are charged for every late day; 30 more generated items are checked the same way, with due days from 0 to 99,999."
+strength = "tested"
+run = ["python3", "grace.py"]
+tags = ["money"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "For each type, fines one charged day below the cap, at it, one and two days above it, at twice the charged days that reach it, at 365 and at 1,000,000 charged days, plus 12 generated overdue items per type, never exceed 800, 2000 and 1500 cents for books, DVDs and reference items, and equal the cap once it is reached."
+strength = "tested"
+run = ["python3", "caps.py"]
+tags = ["money"]
+
+[[check]]
+id = "H4"
+covers = ["G4"]
+statement = "For 8 hand-picked accounts (sums of 4000, 2500, 2525, 2475, 3000, 5800, 1500 and 0 cents) and 60 generated accounts of 1 to 8 items, total_cents is the sum of the item fines capped at 2500, and every item's fine_cents is its own capped fine, not reduced by the account cap."
+strength = "tested"
+run = ["python3", "account.py"]
+tags = ["money"]
+
+[[check]]
+id = "H5"
+covers = ["C2"]
+statement = "For 89 items of all three types, including day 0, on-time, one-day-early, one-day-late and 999,999-day gaps and 80 generated pairs, days_late is returned_day minus due_day but never below zero, and items returned on or before their due day owe 0."
+strength = "tested"
+run = ["python3", "lateness.py"]
+tags = ["days"]
+
+[[check]]
+id = "H6"
+covers = ["C1"]
+statement = "Eight generated requests with unusual ids, an empty list, day 0, an early return and day numbers near a billion all succeed with an object holding exactly items and total_cents, one entry per request item in the request's order with exactly id, days_late and fine_cents as integers; the empty list gets {\"items\": [], \"total_cents\": 0}; unknown fields at both levels leave the response unchanged; and six refused requests, two of them holding a 450-character id or type, exit with status 2, nothing on standard output and a reason of 1 to 200 characters (surrounding whitespace aside) without the word Traceback on standard error."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H7"
+covers = ["C3"]
+statement = "Thirty-four invalid requests are refused with status 2 and no fines: text that isn't JSON, empty input, JSON that isn't an object, missing or non-list items, items that aren't objects or lack a field, empty, numeric, null or repeated ids, types other than exactly book, dvd or reference, and day numbers that are negative, fractional, 3.0, text, true, false, null or a list."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H8"
+covers = ["S1", "S2", "S3"]
+statement = "The three example requests in the intent, each sent twice, get exactly the responses the intent gives, with status 0."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]

@@ -1,0 +1,117 @@
+# Audit checks (X): written from intent.md alone, independently of the public and holdout
+# checks, and never run during development. They are the ground truth for scoring.
+
+[[check]]
+id = "X1"
+covers = ["G1"]
+statement = "For 28 hand-worked bills (tips of exactly half a cent such as 0.5, 2.5 and 122.5 cents rounding up, 0.49 down, 0.51 up, tips of 0% and 100%) plus 45 generated bills (seed 5528193) and 25 generated half-cent-tip bills (seed 5528194), subtotal_cents is the sum of the prices, tip_cents is tip_percent percent of it rounded to the nearest cent with a half cent up, and total_cents is their sum."
+strength = "tested"
+run = ["python3", "totals.py"]
+tags = ["money", "rounding"]
+
+[[check]]
+id = "X2"
+covers = ["G2"]
+statement = "At a 0% tip with an evenly split pool, in 7 hand-worked and 40 generated bills (seed 7310041), each own-payer pays exactly the sum of their own items and nothing of anyone else's; and in 2 hand-worked and 20 generated tipped bills with odd cents elsewhere (seed 7310042), an own-payer who ordered nothing pays 0."
+strength = "tested"
+run = ["python3", "own.py"]
+tags = ["money"]
+
+[[check]]
+id = "X3"
+covers = ["G3"]
+statement = "At a 0% tip, in 6 hand-worked and 40 generated bills (seed 4417093), every sharer pays the pool of all sharers' items (and no one else's) divided by the number of sharers, exactly when it divides evenly and otherwise rounded down or one cent more, whatever that sharer ordered, even nothing; in 40 tipped bills (seed 4417094) the sharers' shares are never more than one cent apart."
+strength = "tested"
+run = ["python3", "pooled.py"]
+tags = ["money"]
+
+[[check]]
+id = "X4"
+covers = ["G4"]
+statement = "In 9 hand-worked and 20 generated bills whose fair amounts are whole cents (seed 8820611), including rounded-tip bills where the rate is total / subtotal rather than 1 + tip_percent / 100, each share is exactly the diner's part times the total divided by the subtotal; in 6 rounded-tip bills where tipping at the unrounded rate is a cent off and 50 generated bills (seed 8820612), each share is that exact fair amount, using the command's own total_cents, rounded down or one cent more."
+strength = "tested"
+run = ["python3", "tiprate.py"]
+tags = ["money"]
+
+[[check]]
+id = "X5"
+covers = ["C1"]
+statement = "For 7 hand-built bills (including a table of 40 diners with 160 items, non-Latin and space-padded names, and a zero-part own-payer listed after three sharers of 66 2/3 cents) and 120 generated bills (seed 6153307), every diner gets exactly one share, every share is an integer of zero or more, and the shares add up to total_cents."
+strength = "tested"
+run = ["python3", "whole.py"]
+tags = ["money"]
+
+[[check]]
+id = "X6"
+covers = ["C2"]
+statement = "For 9 hand-worked bills (ties broken by listing order rather than name or orderer, larger fractional parts first, whole fair amounts never taking a cent, n - 1 cents left over), 6 bills whose tied fractional parts a float calculation misorders, and 100 generated bills (seed 6061301), the shares equal the fair amounts rounded down with the missing cents given one each by largest exact fractional part and then earlier listing, using the command's own total_cents."
+strength = "tested"
+run = ["python3", "leftover.py"]
+tags = ["money", "rounding"]
+
+[[check]]
+id = "X7"
+covers = ["C3"]
+statement = "115 invalid requests, each one change away from a valid request, are refused with status 2 and no output: text that is not JSON or not an object, a missing or non-list or empty diners or items, a missing tip_percent, a diner or item that is not an object (true and false included for both), a missing, empty or non-string name, any pays other than exactly own or share, a repeated name, a price that is missing, below 1, fractional, written with a decimal point, a string, true or false, an item for an unlisted diner or for a listed name differing only in case or a leading or trailing space, and a tip_percent outside 0 to 100, with a decimal point, a string, true or false."
+strength = "tested"
+run = ["python3", "refusals.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X8"
+covers = ["C3"]
+statement = "Fifteen valid requests at the edge of validity are split rather than refused: tips of exactly 0 and 100, a single 1-cent item, names differing only by case, trailing space or Unicode form, a one-space name, non-Latin names, names equal to response field names, items listed before their diner, diners who ordered nothing, a 10**15-cent price and a table of 30 diners and 90 items."
+strength = "tested"
+run = ["python3", "accepted.py"]
+tags = ["validation"]
+
+[[check]]
+id = "X9"
+covers = ["C4"]
+statement = "Four valid requests exit 0 with one JSON object of exactly subtotal_cents, tip_cents, total_cents (integers) and shares (each diner's name to integer cents), and give the same response when pretty-printed with CRLF line ends and sent as raw UTF-8 bytes whatever the locale, and when extra fields are added at every level; four refused requests exit 2 with a completely empty standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+# S1 to S3 list their diners in alphabetical order, so X10 to X12 cannot tell a tie
+# broken by listing order (C2) from one broken by name. X6 tests that rule with diners
+# listed out of alphabetical order.
+[[check]]
+id = "X10"
+covers = ["S1"]
+statement = "The S1 request, sent as written in the intent and pretty-printed with keys reversed, gets exactly the S1 response."
+strength = "tested"
+run = ["python3", "scenario.py", "S1"]
+tags = ["money"]
+
+[[check]]
+id = "X11"
+covers = ["S2"]
+statement = "The S2 request, sent as written in the intent and pretty-printed with keys reversed, gets exactly the S2 response."
+strength = "tested"
+run = ["python3", "scenario.py", "S2"]
+tags = ["money"]
+
+[[check]]
+id = "X12"
+covers = ["S3"]
+statement = "The S3 request, sent as written in the intent and pretty-printed with keys reversed, gets exactly the S3 response."
+strength = "tested"
+run = ["python3", "scenario.py", "S3"]
+tags = ["money"]
+
+[[check]]
+id = "X13"
+covers = ["G1"]
+statement = "For 12 bills with prices from about 10**10 to 10**20 cents, including three whose tip a float calculation gets a cent wrong, subtotal_cents, tip_cents and total_cents are exact."
+strength = "tested"
+run = ["python3", "large.py", "totals"]
+tags = ["money", "large"]
+
+[[check]]
+id = "X14"
+covers = ["G4", "C2"]
+statement = "For the same 12 very large bills, including four whose shares a float calculation hands out wrongly, the shares equal the exact fair amounts rounded down with the leftover cents given by the C2 rule, using the command's own total_cents."
+strength = "tested"
+run = ["python3", "large.py", "shares"]
+tags = ["money", "large"]

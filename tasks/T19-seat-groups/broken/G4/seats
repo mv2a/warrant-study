@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""Seat booking groups in a small theatre: one JSON request in, one JSON response out."""
+
+import json
+import re
+import sys
+
+MAX_ROWS = 26
+MAX_SEATS_PER_ROW = 50
+SEAT_NAME = re.compile(r"([A-Z])([1-9][0-9]*)")
+
+
+def refuse(reason):
+    print(f"invalid request: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def is_whole(value):
+    # bool is a subclass of int in Python, so compare types exactly.
+    return type(value) is int
+
+
+def seat_name(row, index):
+    return f"{chr(ord('A') + row)}{index + 1}"
+
+
+def parse_seat(name, rows):
+    """Return (row, index) for a seat name of this theatre, or None."""
+    if type(name) is not str:
+        return None
+    match = SEAT_NAME.fullmatch(name)
+    if not match:
+        return None
+    row = ord(match.group(1)) - ord("A")
+    number = int(match.group(2))
+    if row >= len(rows) or number > rows[row]:
+        return None
+    return row, number - 1
+
+
+def reject_constant(word):
+    # Python's json module accepts NaN, Infinity and -Infinity by default, but they are
+    # not JSON (RFC 8259), so a request holding them is not JSON and is refused.
+    raise ValueError(f"{word} is not JSON")
+
+
+def read_request():
+    if hasattr(sys, "set_int_max_str_digits"):
+        sys.set_int_max_str_digits(0)  # a group size with thousands of digits is still a whole number
+    try:
+        text = sys.stdin.buffer.read().decode("utf-8")
+        request = json.loads(text, parse_constant=reject_constant)
+    except ValueError:  # JSONDecodeError and UnicodeDecodeError are both ValueErrors
+        refuse("not valid JSON")
+    if not isinstance(request, dict):
+        refuse("expected a JSON object")
+
+    rows = request.get("rows")
+    if not isinstance(rows, list) or not 1 <= len(rows) <= MAX_ROWS:
+        refuse(f"rows must be a list of 1 to {MAX_ROWS} rows")
+    for count in rows:
+        if not is_whole(count) or not 1 <= count <= MAX_SEATS_PER_ROW:
+            refuse(f"each row must hold a whole number of seats from 1 to {MAX_SEATS_PER_ROW}")
+
+    groups = request.get("groups")
+    if not isinstance(groups, list):
+        refuse("groups must be a list")
+    seen = set()
+    parsed = []
+    for group in groups:
+        if not isinstance(group, dict):
+            refuse("each group must be an object")
+        group_id = group.get("id")
+        if type(group_id) is not str or group_id == "":
+            refuse("each group needs a non-empty text id")
+        if group_id in seen:
+            refuse(f"group id {group_id!r} is used twice")
+        seen.add(group_id)
+        size = group.get("size")
+        if not is_whole(size) or size < 1:
+            refuse("each group size must be a whole number of at least 1")
+        may_split = group.get("may_split", False)
+        if "may_split" in group and type(may_split) is not bool:
+            refuse("may_split must be true or false")
+        parsed.append((group_id, size, may_split))
+
+    blocked = []
+    if "blocked" in request:
+        names = request["blocked"]
+        if not isinstance(names, list):
+            refuse("blocked must be a list of seat names")
+        for name in names:
+            seat = parse_seat(name, rows)
+            if seat is None:
+                refuse(f"blocked holds {name!r}, which is not a seat of this theatre")
+            if seat in blocked:
+                refuse(f"blocked names {name} twice")
+            blocked.append(seat)
+    return rows, parsed, blocked
+
+
+def together_block(free, size):
+    """Frontmost row with `size` adjacent free seats, lowest-numbered block in it."""
+    for row, seats in enumerate(free):
+        run = 0
+        for index, is_free in enumerate(seats):
+            run = run + 1 if is_free else 0
+            if run == size:
+                return [(row, start) for start in range(index - size + 1, index + 1)]
+    return None
+
+
+def first_free(free, size):
+    """The first `size` free seats in seating order: row A first, lowest number first."""
+    picked = []
+    for row, seats in enumerate(free):
+        for index, is_free in enumerate(seats):
+            if is_free:
+                picked.append((row, index))
+                if len(picked) == size:
+                    return picked
+    return picked
+
+
+def main():
+    rows, groups, blocked = read_request()
+    free = [[True] * count for count in rows]
+    for row, index in blocked:
+        free[row][index] = False
+    available = sum(count for count in rows) - len(blocked)
+
+    seated, refused = [], []
+    for group_id, size, may_split in groups:
+        chosen = together_block(free, size)
+        if chosen is None and not may_split:
+            refused.append({"id": group_id, "reason": "not_together"})
+            continue
+        if chosen is None:
+            if available < size:
+                refused.append({"id": group_id, "reason": "not_enough_seats"})
+                continue
+            chosen = first_free(free, size)
+        for row, index in chosen:
+            free[row][index] = False
+        available -= size
+        seated.append({"id": group_id, "seats": [seat_name(row, index) for row, index in chosen]})
+
+    json.dump({"seated": seated, "refused": refused, "free": available}, sys.stdout)
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()

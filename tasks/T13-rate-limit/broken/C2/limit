@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+"""limit: replay a request log through per-client token buckets.
+
+Reads one JSON object on standard input, writes one JSON object on standard output.
+Token counts are kept as numbers of tokens: over d milliseconds a bucket gains d * rate / 1000.
+"""
+
+import json
+import sys
+
+UNIT = 1000  # thousandths of a token in one token
+
+
+def refuse(reason):
+    print(f"limit: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def whole(value):
+    """True for a JSON integer; false for booleans and for numbers with a point or exponent."""
+    return type(value) is int
+
+
+def parse(raw):
+    try:
+        request = json.loads(raw)
+    except (ValueError, RecursionError):
+        refuse("the input is not JSON")
+    if not isinstance(request, dict):
+        refuse("the input must be a JSON object")
+    for name in ("burst", "rate"):
+        if name not in request:
+            refuse(f"{name} is missing")
+        if not whole(request[name]) or request[name] < 1:
+            refuse(f"{name} must be an integer of at least 1")
+    log = request.get("requests")
+    if not isinstance(log, list):
+        refuse("requests must be a list")
+    entries = []
+    previous = None
+    for number, entry in enumerate(log, start=1):
+        if not isinstance(entry, dict):
+            refuse(f"request {number} is not an object")
+        client, at = entry.get("client"), entry.get("at")
+        if not isinstance(client, str) or not client:
+            refuse(f"request {number} needs a non-empty string client")
+        if not whole(at) or at < 0:
+            refuse(f"request {number} needs an integer at of 0 or more")
+        if previous is not None and at < previous:
+            refuse(f"request {number} goes back in time ({at} after {previous})")
+        previous = at
+        entries.append((client, at))
+    return request["burst"], request["rate"], entries
+
+
+def replay(burst, rate, entries):
+    buckets = {}  # client -> (tokens left, time of its previous request)
+    decisions = []
+    clients = {}
+    for client, at in entries:
+        if client in buckets:
+            held, previous = buckets[client]
+            held = min(burst, held + (at - previous) * rate / UNIT)
+        else:
+            held = burst
+        if held >= 1:
+            held -= 1
+            decision = "accept"
+        else:
+            decision = "reject"
+        buckets[client] = (held, at)
+        decisions.append(decision)
+        counts = clients.setdefault(client, {"accepted": 0, "rejected": 0})
+        counts["accepted" if decision == "accept" else "rejected"] += 1
+    return {"decisions": decisions, "clients": clients}
+
+
+def main():
+    burst, rate, entries = parse(sys.stdin.buffer.read())
+    json.dump(replay(burst, rate, entries), sys.stdout)
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,73 @@
+# Hidden checks: never shown to the builder.
+
+[[check]]
+id = "H1"
+covers = ["G1"]
+statement = "Every branch uses its own prefix (lisbon LIS, porto OPO, faro FAO, braga BRG) for a first number, a continued number and the first number of the following year, across 120 requests with years from 2000 to 9999 generated with seed 1601."
+strength = "tested"
+run = ["python3", "prefixes.py"]
+tags = ["numbering"]
+
+[[check]]
+id = "H2"
+covers = ["G2"]
+statement = "Within the same year the sequence goes up by exactly one, including after 9, 10, 40, 99, 100, 999, 1000, 9999, 10000, 12340, 90000 and 99998, and for 150 more requests generated with seed 1602."
+strength = "tested"
+run = ["python3", "continuation.py"]
+tags = ["numbering"]
+
+[[check]]
+id = "H3"
+covers = ["G3"]
+statement = "The sequence is 1 with no previous number in years 2000, 2001, 2026, 5000 and 9999, and after a previous number from 1, 2, 3, 10, 100 or 7999 years earlier, including one that ended at 99999, for every branch plus 60 requests generated with seed 1603."
+strength = "tested"
+run = ["python3", "reset.py"]
+tags = ["numbering"]
+
+[[check]]
+id = "H4"
+covers = ["C1"]
+statement = "Across 200 valid requests generated with seed 1604, sequence is a whole number and the number is exactly the branch prefix, a hyphen, the four-digit request year, a hyphen and that sequence zero-padded to five ASCII digits."
+strength = "tested"
+run = ["python3", "format.py"]
+tags = ["format"]
+
+[[check]]
+id = "H5"
+covers = ["C2"]
+statement = "Over 60 malformed previous numbers are refused with status 2 and no output: every other branch's number, wrong digit counts, lowercase prefixes, years before 2000, sequence 00000, spaces, tabs and a trailing newline, other separators, signs and underscores, letters, non-ASCII digits, and look-alike prefix letters and dashes (fullwidth, Greek, Unicode hyphens and dashes), while six well-formed numbers are still accepted."
+strength = "tested"
+run = ["python3", "malformed.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "H6"
+covers = ["C3"]
+statement = "A previous number from a later year is refused for every branch and 40 more year pairs generated with seed 1606, and sequence 99999 in the request's year is refused, while 99998 in that year and 99999 in an earlier year are accepted."
+strength = "tested"
+run = ["python3", "order.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "H7"
+covers = ["C4"]
+statement = "Over 40 invalid requests are refused with status 2 and no output: non-JSON text, non-object JSON, each missing field, wrongly cased, abbreviated, padded, unknown and non-text branches, years given as text, fractions, true, false or null or outside 2000 to 9999, and previous numbers given as numbers, true, false, lists or objects; six inputs that are not valid UTF-8 (including UTF-16 and an otherwise valid request with a bad byte in an ignored field) are refused under both strict and surrogate-escape stdin decoding, pinned with PYTHONIOENCODING; and three known-good lisbon requests (year 2000, year 9999, and a continuation from 41 to 42) still succeed."
+strength = "tested"
+run = ["python3", "invalid.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "H8"
+covers = ["C5"]
+statement = "Successful answers exit 0 with one object holding exactly a text number and a whole-number sequence, seven extra request fields change nothing in four answers, and four kinds of refusal (unknown branch, another branch's number, missing field, non-JSON text) exit 2 with nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "H9"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The four example requests in the intent get exactly the answers the intent gives, twice in a row."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["numbering"]

@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+"""pay: split one workweek into regular, overtime and double time, and price it in cents.
+
+Reads one JSON object on standard input and writes one JSON object on standard output.
+Exit status 0 on success, 2 when the request is refused (nothing is written then).
+"""
+
+import json
+import sys
+
+DAY_REGULAR = 480      # first 8 hours of an ordinary day are regular
+DAY_OVERTIME = 660     # up to 11 hours of an ordinary day is overtime, then double time
+SEVENTH_OVERTIME = 480 # first 8 hours of a seventh consecutive day are overtime
+WEEK_REGULAR = 2400    # at most 40 hours of regular time per week
+MAX_DAY = 1440
+MAX_RATE = 100000
+
+
+def refuse():
+    sys.exit(2)
+
+
+def whole(value, low, high):
+    return type(value) is int and low <= value <= high
+
+
+def read_request():
+    try:
+        request = json.loads(sys.stdin.read())
+    except (ValueError, RecursionError):
+        refuse()
+    if not isinstance(request, dict):
+        refuse()
+    if "minutes" not in request or "rate_cents" not in request:
+        refuse()
+    minutes, rate = request["minutes"], request["rate_cents"]
+    if not isinstance(minutes, list) or len(minutes) != 7:
+        refuse()
+    if not all(whole(day, 0, MAX_DAY) for day in minutes):
+        refuse()
+    if not whole(rate, 1, MAX_RATE):
+        refuse()
+    return minutes, rate
+
+
+def split_day(worked, seventh):
+    """Return (regular, overtime, double) minutes for one day."""
+    if seventh:
+        overtime = min(worked, SEVENTH_OVERTIME)
+        return 0, overtime, worked - overtime
+    regular = min(worked, DAY_REGULAR)
+    overtime = min(worked, DAY_OVERTIME) - regular
+    return regular, overtime, worked - regular - overtime
+
+
+def split_week(minutes):
+    seventh = all(day > 0 for day in minutes)
+    regular = overtime = double = 0
+    for index, worked in enumerate(minutes):
+        r, o, d = split_day(worked, seventh and index == 6)
+        regular, overtime, double = regular + r, overtime + o, double + d
+    return min(regular, WEEK_REGULAR), overtime, double
+
+
+def cents(numerator, denominator):
+    """numerator / denominator rounded to the nearest whole number, halves up (both >= 0)."""
+    return (2 * numerator + denominator) // (2 * denominator)
+
+
+def main():
+    minutes, rate = read_request()
+    regular, overtime, double = split_week(minutes)
+    regular_cents = cents(rate * regular, 60)
+    overtime_cents = cents(3 * rate * overtime, 120)
+    double_cents = cents(2 * rate * double, 60)
+    print(json.dumps({
+        "regular_minutes": regular,
+        "overtime_minutes": overtime,
+        "double_minutes": double,
+        "regular_cents": regular_cents,
+        "overtime_cents": overtime_cents,
+        "double_cents": double_cents,
+        "total_cents": regular_cents + overtime_cents + double_cents,
+    }))
+
+
+if __name__ == "__main__":
+    main()

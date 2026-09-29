@@ -1,0 +1,95 @@
+{
+ "task": "T11-reorder-quantity",
+ "reference": {
+  "V": {
+   "P1": true,
+   "P2": true
+  },
+  "H": {
+   "H1": true,
+   "H2": true,
+   "H3": true,
+   "H4": true,
+   "H5": true,
+   "H6": true,
+   "H7": true,
+   "H8": true
+  },
+  "X": {
+   "X1": true,
+   "X2": true,
+   "X3": true,
+   "X4": true,
+   "X5": true,
+   "X6": true,
+   "X7": true,
+   "X8": true,
+   "X9": true,
+   "X10": true,
+   "X11": true,
+   "X12": true,
+   "X13": true,
+   "X14": true,
+   "X15": true,
+   "X16": true,
+   "X17": true,
+   "X18": true,
+   "X19": true,
+   "X20": true,
+   "X21": true,
+   "X22": true
+  }
+ },
+ "broken": {
+  "G1": {
+   "caught_by_X": [
+    "X3",
+    "X4"
+   ],
+   "passes_V": false
+  },
+  "G2": {
+   "caught_by_X": [
+    "X5",
+    "X6"
+   ],
+   "passes_V": true
+  },
+  "G3": {
+   "caught_by_X": [
+    "X8",
+    "X9"
+   ],
+   "passes_V": true
+  },
+  "G4": {
+   "caught_by_X": [
+    "X11",
+    "X12"
+   ],
+   "passes_V": true
+  },
+  "C1": {
+   "caught_by_X": [
+    "X1"
+   ],
+   "passes_V": false
+  },
+  "C2": {
+   "caught_by_X": [
+    "X13",
+    "X14"
+   ],
+   "passes_V": false
+  },
+  "C3": {
+   "caught_by_X": [
+    "X16"
+   ],
+   "passes_V": true
+  }
+ },
+ "warrant_check": 0,
+ "fails": [],
+ "passed": true
+}

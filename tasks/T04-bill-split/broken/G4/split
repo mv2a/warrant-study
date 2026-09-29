@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""Split a restaurant bill with tip among diners: one JSON object in, one JSON object out."""
+
+import json
+import sys
+from fractions import Fraction
+
+PAYS = ("own", "share")
+
+
+def refuse(reason):
+    print(f"invalid request: {reason}", file=sys.stderr)
+    sys.exit(2)
+
+
+def whole(value):
+    # bool is a subclass of int in Python, so compare types exactly.
+    return type(value) is int
+
+
+def validate(request):
+    if not isinstance(request, dict):
+        refuse("expected a JSON object")
+    for field in ("diners", "items", "tip_percent"):
+        if field not in request:
+            refuse(f"missing {field}")
+
+    diners = request["diners"]
+    if not isinstance(diners, list) or not diners:
+        refuse("diners must be a non-empty list")
+    pays = {}
+    for diner in diners:
+        if not isinstance(diner, dict):
+            refuse("each diner must be an object")
+        name = diner.get("name")
+        if not isinstance(name, str) or not name:
+            refuse("each diner needs a non-empty name")
+        if name in pays:
+            refuse(f"two diners are named {name!r}")
+        if not isinstance(diner.get("pays"), str) or diner["pays"] not in PAYS:
+            refuse(f"{name} must pay \"own\" or \"share\"")
+        pays[name] = diner["pays"]
+
+    items = request["items"]
+    if not isinstance(items, list) or not items:
+        refuse("items must be a non-empty list")
+    for item in items:
+        if not isinstance(item, dict):
+            refuse("each item must be an object")
+        price = item.get("price_cents")
+        if not whole(price) or price < 1:
+            refuse("price_cents must be a whole number of cents, 1 or more")
+        if not isinstance(item.get("diner"), str) or item["diner"] not in pays:
+            refuse("each item must name a listed diner")
+
+    tip_percent = request["tip_percent"]
+    if not whole(tip_percent) or not 0 <= tip_percent <= 100:
+        refuse("tip_percent must be a whole number from 0 to 100")
+
+    names = [diner["name"] for diner in diners]
+    return names, pays, items, tip_percent
+
+
+def split(names, pays, items, tip_percent):
+    subtotal = sum(item["price_cents"] for item in items)
+    tip = (subtotal * tip_percent + 50) // 100  # nearest cent, exact halves up
+    total = subtotal + tip
+
+    own = {name: 0 for name in names if pays[name] == "own"}
+    pool = 0
+    for item in items:
+        if pays[item["diner"]] == "own":
+            own[item["diner"]] += item["price_cents"]
+        else:
+            pool += item["price_cents"]
+    sharers = [name for name in names if pays[name] == "share"]
+    part = {name: Fraction(own[name]) for name in own}
+    for name in sharers:
+        part[name] = Fraction(pool, len(sharers))
+
+    fair = {name: part[name] + Fraction(tip, len(names)) for name in names}
+    shares = {name: fair[name].numerator // fair[name].denominator for name in names}
+    leftover = total - sum(shares.values())
+    by_fraction = sorted(range(len(names)), key=lambda i: (-(fair[names[i]] - shares[names[i]]), i))
+    for index in by_fraction[:leftover]:
+        shares[names[index]] += 1
+
+    return {
+        "subtotal_cents": subtotal,
+        "tip_cents": tip,
+        "total_cents": total,
+        "shares": {name: shares[name] for name in names},
+    }
+
+
+def main():
+    try:
+        request = json.loads(sys.stdin.buffer.read().decode("utf-8"))  # UTF-8, whatever the locale
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        refuse("not valid JSON")
+    json.dump(split(*validate(request)), sys.stdout)
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()

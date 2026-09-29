@@ -1,0 +1,138 @@
+# Audit checks (X): written from intent.md alone, independently of the holdout checks.
+# Ground truth for scoring; never run during development.
+
+[[check]]
+id = "X01"
+covers = ["C1"]
+statement = "Valid requests, including the empty list, one item of each type, pretty-printed input, shuffled lists of up to 25 items and non-ASCII ids, exit 0 with one JSON object holding exactly items and total_cents, one entry per request item in the request's order with exactly id (echoed unchanged), days_late and fine_cents, every amount and day count a JSON integer."
+strength = "tested"
+run = ["python3", "x_interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X02"
+covers = ["C1"]
+statement = "Extra fields at the top level and inside items, including ones named total_cents, fine_cents, days_late or differing from real fields only in case, change nothing in the response and never appear in it."
+strength = "tested"
+run = ["python3", "x_extra_fields.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X03"
+covers = ["C1", "C3"]
+statement = "Refused requests of several kinds, including empty input, a bad item after valid ones and requests holding a 300-character id, type or day string, exit with status 2, write nothing at all on standard output and write a non-empty reason of at most 200 characters (surrounding whitespace aside) without the word Traceback on standard error."
+strength = "tested"
+run = ["python3", "x_refusal_form.py"]
+tags = ["interface", "refusal"]
+
+[[check]]
+id = "X04"
+covers = ["C3"]
+statement = "Input that is not a JSON object (a list, string, number, null, true, blank text, broken or trailing-garbage JSON, a NaN literal) and objects whose items is missing, misspelled or not a list (null, object, string, number, false) are refused with status 2, nothing on standard output and a non-empty reason of at most 200 characters without the word Traceback on standard error."
+strength = "tested"
+run = ["python3", "x_refuse_top.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X05"
+covers = ["C3"]
+statement = "Requests are refused with status 2, nothing on standard output and a non-empty reason of at most 200 characters without the word Traceback on standard error, when an item is not an object, lacks any one of its four fields (for every type), has an id that is not a non-empty string, shares its id with another item, or has a type other than exactly book, dvd or reference (wrong case, surrounding spaces, other words, or not a string)."
+strength = "tested"
+run = ["python3", "x_refuse_items.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X06"
+covers = ["C3"]
+statement = "Requests are refused with status 2, nothing on standard output and a non-empty reason of at most 200 characters without the word Traceback on standard error, when due_day or returned_day, for any type, is negative, a whole or fractional float (4.0, 12.5, 1e1, 5.00), a string, true, false, null, a list or an object."
+strength = "tested"
+run = ["python3", "x_refuse_days.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X07"
+covers = ["C3"]
+statement = "Ninety generated valid requests of 1 to 9 items, each given one refusable defect at a random item (seed 730291), are refused as a whole with status 2, nothing on standard output and a non-empty reason of at most 200 characters without the word Traceback on standard error."
+strength = "tested"
+run = ["python3", "x_refuse_generated.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X08"
+covers = ["C3", "C1"]
+statement = "Requests that break no rule in C3 but sit close to one (day 0, very large day numbers, ids differing only in case or a trailing space, a one-character id, an id of one space, identical items with distinct ids, extra whitespace in the JSON) are answered with status 0 and the promised fines."
+strength = "tested"
+run = ["python3", "x_accept_near_misses.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X09"
+covers = ["C2"]
+statement = "days_late equals returned_day minus due_day, floored at zero and not reduced by grace or caps, and items of every type returned on or before their due day have days_late 0 and fine 0, on fixed cases and 30 generated ones (seed 58113)."
+strength = "tested"
+run = ["python3", "x_days_late.py"]
+tags = ["days"]
+
+[[check]]
+id = "X10"
+covers = ["G1"]
+statement = "For every uncapped number of charged days (1 to 32 for a book, 1 to 20 for a DVD, 1 to 10 for a reference item), a single-item request's fine and total equal the charged days times 25, 100 or 150 cents, and one charged day of each type in one request gives 25, 100 and 150."
+strength = "tested"
+run = ["python3", "x_rates.py"]
+tags = ["money"]
+
+[[check]]
+id = "X11"
+covers = ["G2"]
+statement = "Books and DVDs 1 to 3 days late owe nothing and later ones are charged only for days after the third, reference items are charged from the first late day, on three different due days, and the grace period applies to each item separately."
+strength = "tested"
+run = ["python3", "x_grace.py"]
+tags = ["money"]
+
+[[check]]
+id = "X12"
+covers = ["G3"]
+statement = "Item fines stop exactly at 800 cents for a book (from 35 days late), 2000 for a DVD (from 23) and 1500 for a reference item (from 10), just below each cap they are 775, 1900 and 1350, and further late days up to a billion add nothing."
+strength = "tested"
+run = ["python3", "x_item_cap.py"]
+tags = ["money"]
+
+[[check]]
+id = "X13"
+covers = ["G4"]
+statement = "total_cents is the plain sum of item fines when that is at most 2500 (1200, 2450, 2475, 2500) and exactly 2500 above it (2525, 3000, 4300, 6000), while each item's fine_cents stays at its own capped value, including 40 generated accounts (seed 9024417)."
+strength = "tested"
+run = ["python3", "x_account_cap.py"]
+tags = ["money"]
+
+[[check]]
+id = "X14"
+covers = ["G1", "G2", "G3", "G4", "C2"]
+statement = "120 generated requests of 0 to 15 items (seed 61803399), with lateness concentrated around the grace and cap boundaries, get exactly the days_late, fine_cents and total_cents that G1 to G4 and C2 give."
+strength = "tested"
+run = ["python3", "x_generated.py"]
+tags = ["money"]
+
+[[check]]
+id = "X15"
+covers = ["S1"]
+statement = "The S1 request gets exactly the S1 response with status 0, and a book 7 days late on other due days also gets days_late 7 and 100 cents."
+strength = "tested"
+run = ["python3", "x_s1.py"]
+tags = ["scenario"]
+
+[[check]]
+id = "X16"
+covers = ["S2"]
+statement = "The S2 request gets exactly the S2 response with status 0, and the same reference-and-DVD pair two days late on other days and in the other order gets 300 and 0 cents with a total of 300."
+strength = "tested"
+run = ["python3", "x_s2.py"]
+tags = ["scenario"]
+
+[[check]]
+id = "X17"
+covers = ["S3"]
+statement = "The S3 request gets exactly the S3 response with status 0, and the same DVD-and-reference pair on other days and in the other order gets 2000 and 750 cents with a total of 2500."
+strength = "tested"
+run = ["python3", "x_s3.py"]
+tags = ["scenario"]

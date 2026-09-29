@@ -1,0 +1,182 @@
+# Audit checks (X): written from intent.md alone, independently of the public and hidden checks.
+# The ground truth for scoring; never run during development.
+#
+# The study counts every promise that a failing X check covers as broken, so each check judges
+# only what the promises it covers decide (see _audit.py):
+# - C1 judges the interface strictly: status 0 with exactly one JSON object holding the four
+#   JSON-integer fields and total = base + surcharge, or status 2 with nothing at all on standard
+#   output, and no other status. Whether a request should be priced is not C1's business.
+# - G1 to G4 and S1 to S3 judge the values of the response fields they define. A refused parcel
+#   that sits exactly on a carrying limit is left to C2.
+# - C2, C3 and S4 judge priced (status 0 with a JSON object) or refused (status 2, no price).
+# G2 and G3 are judged on parcels billed on their actual weight and not oversize. How the dimensional
+# weight is rounded never decides whether a parcel is carried (see _audit.py), so the C2 checks judge
+# every parcel, including light ones whose dimensional weight is exactly 30,000 g.
+
+[[check]]
+id = "X01"
+covers = ["C1"]
+statement = "Four plain valid requests and one request sent in five JSON layouts (indented, compact, wrapped in whitespace, keys in two other orders) exit 0 with exactly one JSON object holding the integer fields billable_g, base_cents, surcharge_cents and total_cents, total equal to base plus surcharge, every layout getting the same answer; and 14 requests of every refused kind (not JSON, empty, a list, a missing field, bad zones, bad weights and sides, too heavy, too long, too big) either exit 0 with such an object or exit 2 with nothing at all on standard output (23 requests, plus 6 for the layout comparison)."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X02"
+covers = ["C1"]
+statement = "Six sets of extra request fields, including fields named like the answer's fields, differently cased field names, nulls, lists and nested objects, change nothing: three priced parcels and one parcel over 30,000 g each get exactly the same status and output with them as the command gives without them (28 requests)."
+strength = "tested"
+run = ["python3", "extra_fields.py"]
+tags = ["interface"]
+
+[[check]]
+id = "X03"
+covers = ["G1"]
+statement = "billable_g is the greater of the actual weight and length x width x height / 5 rounded up to a whole gram, in 24 hand-worked parcels (remainders of 1 to 4, exact multiples, ties, and rounding that pushes a parcel into the next bracket or over 10,000 g) and in every side order of three parcels (42 requests); and in every zone, 13 light parcels billed on a dimensional weight of 500, 501, 1000, 1001, 2000, 2001, 5000, 5001, 10000, 10001, 11000, 11001 or 30000 g get the same base_cents as a small parcel of that actual weight and the same oversize status (52 pairs)."
+strength = "tested"
+run = ["python3", "dimweight.py"]
+tags = ["money"]
+
+[[check]]
+id = "X04"
+covers = ["G2"]
+statement = "In every zone, parcels billed on their actual weight of 2 to 10,000 g get base_cents equal to the table price of the lightest bracket that holds that weight, each bracket including its upper limit: on both sides of 500, 1,000, 2,000, 5,000 and 10,000 g and within each bracket (80 requests)."
+strength = "tested"
+run = ["python3", "brackets.py"]
+tags = ["money"]
+
+[[check]]
+id = "X05"
+covers = ["G3"]
+statement = "In every zone, parcels billed on their actual weight over 10,000 g get base_cents equal to the zone's 10,000 g price plus its per-kilogram price for every started kilogram above 10,000 g, for 20 weights from 10,001 g to 30,000 g, including 10,001, 11,000, 11,001, 12,000, 12,001, 20,000, 20,001, 29,999 and 30,000 g (80 requests)."
+strength = "tested"
+run = ["python3", "heavy.py"]
+tags = ["money"]
+
+[[check]]
+id = "X06"
+covers = ["G4"]
+statement = "surcharge_cents is exactly 1500 when, and only when, the longest side is over 100 cm or length plus girth is over 220 cm, total_cents is base_cents plus the surcharge, and base_cents equals that of a small parcel of the same zone and weight: 16 shapes at 100/101 cm and at 210, 219, 220, 221 and 222 cm, including ties for the longest side, each in every side order, all billed on their actual weight (66 requests, plus 66 pairs for the base-price comparison)."
+strength = "tested"
+run = ["python3", "oversize.py"]
+tags = ["money"]
+
+[[check]]
+id = "X07"
+covers = ["C2"]
+statement = "Parcels exactly at a limit (billable 30,000 g reached by the actual weight, by the dimensional weight or by both, longest side 150 cm, length plus girth 300 cm, and all three at once) or just inside one are priced, and parcels past a limit (30,001 g and more, dimensional 30,005 g, 30,008 g and 50,000 g, a side of 151 cm or more, length plus girth of 301 or 302 cm) are refused with status 2 and no price; 33 shapes, each in three side orders (99 requests)."
+strength = "tested"
+run = ["python3", "limits.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X08"
+covers = ["C3"]
+statement = "35 malformed requests are refused with status 2 and no price: 12 texts that are not JSON (empty, blank, prose, form encoding, unquoted keys, single quotes, truncated, trailing comma, trailing text, two objects, XML), 10 JSON values that are not objects, and objects missing any one field, with that field only in upper case, empty, or holding only other fields."
+strength = "tested"
+run = ["python3", "invalid_shape.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X09"
+covers = ["C3"]
+statement = "18 invalid zones (0, 5, 7, negative, text, null, true, false, fractions, a list, an object) and 15 invalid values for each of weight_g, length_cm, width_cm and height_cm (zero, negative, fractional, text, true, false, null, a list, an object), plus -0, NaN and Infinity, and 12 whole zones, weights and sides written with a decimal point or an exponent (such as 3.0, 2400.0, 2.4e3 and 1.8e+1), are refused with status 2 and no price, while 10 control requests with valid values, down to 1 g and 1 cm, are priced (106 requests)."
+strength = "tested"
+run = ["python3", "invalid_values.py"]
+tags = ["refusal"]
+
+[[check]]
+id = "X10"
+covers = ["S1"]
+statement = "The S1 parcel (zone 1, 1500 g, 30 x 20 x 10 cm) is priced with status 0 and billable_g 1500, base_cents 690, surcharge_cents 0 and total_cents 690."
+strength = "tested"
+run = ["python3", "scenarios.py", "S1"]
+tags = ["money"]
+
+[[check]]
+id = "X11"
+covers = ["S2"]
+statement = "The S2 parcel (zone 3, 800 g, 50 x 40 x 30 cm) is priced with status 0 and billable_g 12000, base_cents 2190, surcharge_cents 0 and total_cents 2190."
+strength = "tested"
+run = ["python3", "scenarios.py", "S2"]
+tags = ["money"]
+
+[[check]]
+id = "X12"
+covers = ["S3"]
+statement = "The S3 parcel (zone 4, 3500 g, 20 x 110 x 15 cm) is priced with status 0 and billable_g 6600, base_cents 2520, surcharge_cents 1500 and total_cents 4020."
+strength = "tested"
+run = ["python3", "scenarios.py", "S3"]
+tags = ["money"]
+
+[[check]]
+id = "X13"
+covers = ["S4"]
+statement = "The S4 parcel (zone 1, 3000 g, 20 x 10 x 155 cm) is refused with status 2 and no price."
+strength = "tested"
+run = ["python3", "scenarios.py", "S4"]
+tags = ["refusal"]
+
+[[check]]
+id = "X14"
+covers = ["G1"]
+statement = "Every carried parcel among 400 generated ones (seed 604211: all zones, weights clustered at the bracket limits, small, bulky and long shapes; seed 3301977: actual or dimensional weight near 30,000 g and sides near every size threshold) gets billable_g equal to the greater of its actual weight and its volume / 5 rounded up."
+strength = "tested"
+run = ["python3", "generated.py", "billable"]
+tags = ["money"]
+
+[[check]]
+id = "X15"
+covers = ["C2"]
+statement = "Of 400 generated parcels (seeds 604211 and 3301977, many on or next to the 30,000 g, 150 cm and 300 cm limits, in random side order), each one within every limit is priced and each one past a limit is refused with status 2 and no price."
+strength = "tested"
+run = ["python3", "generated.py", "limits"]
+tags = ["refusal"]
+
+[[check]]
+id = "X16"
+covers = ["C3"]
+statement = "160 random valid parcels (seed 81457), each spoiled one way (a missing field, a bad zone, a zero, negative, fractional, text, boolean, null, list or object weight or side, JSON cut short, or the object wrapped in a list), are all refused with status 2 and no price."
+strength = "tested"
+run = ["python3", "generated.py", "invalid"]
+tags = ["refusal"]
+
+[[check]]
+id = "X17"
+covers = ["C1"]
+statement = "60 random parcels (seed 5150) with one to four extra fields of random names and types, in random key order, get exactly the same status and output as the command gives the same parcel without them, priced or refused (120 requests)."
+strength = "tested"
+run = ["python3", "generated.py", "extra"]
+tags = ["interface"]
+
+[[check]]
+id = "X18"
+covers = ["G2"]
+statement = "Every carried parcel of 10,000 g or less that is billed on its actual weight and not oversize, among 150 generated light parcels (seed 7040913, clustered at the bracket limits) and the 400 parcels of seeds 604211 and 3301977, gets base_cents equal to the table price for its zone and the lightest bracket that holds its weight."
+strength = "tested"
+run = ["python3", "generated.py", "brackets"]
+tags = ["money"]
+
+[[check]]
+id = "X19"
+covers = ["G3"]
+statement = "Every carried parcel over 10,000 g that is billed on its actual weight and not oversize, among 400 generated ones (seeds 604211 and 3301977, many near 30,000 g), gets base_cents equal to its zone's 10,000 g price plus its per-kilogram price for every started kilogram above 10,000 g."
+strength = "tested"
+run = ["python3", "generated.py", "heavy"]
+tags = ["money"]
+
+[[check]]
+id = "X20"
+covers = ["G4"]
+statement = "Every carried parcel among 400 generated ones (seeds 604211 and 3301977, many with a longest side of 98 to 102 cm or a length plus girth of 218 to 222 cm, in random side order) gets surcharge_cents 1500 exactly when it is oversize and 0 otherwise, with total_cents equal to base_cents plus the surcharge."
+strength = "tested"
+run = ["python3", "generated.py", "oversize"]
+tags = ["money"]
+
+[[check]]
+id = "X21"
+covers = ["C1"]
+statement = "Every answer to 560 generated requests (seeds 604211, 3301977 and 81457: valid parcels, parcels on and past the carrying limits, and invalid requests) either exits 0 with exactly one JSON object holding the four integer fields with total equal to base plus surcharge, or exits 2 with nothing at all on standard output."
+strength = "tested"
+run = ["python3", "generated.py", "interface"]
+tags = ["interface"]
