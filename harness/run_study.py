@@ -113,7 +113,10 @@ def builder_turn(run_dir, message, resume_id, budget_usd, timeout_s):
                 "-e", "DISABLE_AUTOUPDATER=1", "-e", "DISABLE_ERROR_REPORTING=1"]
     else:
         cmd += ["--env-file", str(ENV_FILE)]
-    cmd += ["-v", f"{ws}:/work", "-v", f"{home}:/home/builder/.claude", "-w", "/work",
+    # Run as the host user so the builder can write its workspace and its session store,
+    # with a per-run home directory (sessions persist across submissions for --resume).
+    cmd += ["--user", f"{os.getuid()}:{os.getgid()}", "-e", "HOME=/home/builder",
+            "-v", f"{ws}:/work", "-v", f"{home}:/home/builder", "-w", "/work",
             CONFIG["builder_image"],
             "claude", "-p", message, "--bare", "--model", CONFIG["model"],
             "--output-format", "json", "--permission-mode", "bypassPermissions",
@@ -155,7 +158,7 @@ def snapshot(run_dir, k):
 
 def verify_container(mounts, script, timeout):
     """Run a shell script in a network-less evaluation container."""
-    cmd = ["docker", "run", "--rm", "--init", "--network", "none",
+    cmd = ["docker", "run", "--rm", "--init", "--network", "none", "--user", f"{os.getuid()}:{os.getgid()}", "-e", "HOME=/tmp",
            "--cpus", CONFIG["verify_cpus"], "--memory", CONFIG["verify_memory"],
            "-e", "PYTHONDONTWRITEBYTECODE=1", "-e", "PYTHONPATH=/vendor"]
     for src, dst, mode in mounts:
