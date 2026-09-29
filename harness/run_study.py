@@ -45,10 +45,12 @@ CONFIG = {
     "ollama_url": "http://localhost:11434",
     "max_submissions": 5,
     "wall_clock_s": 45 * 60,
-    # A local model has no prompt caching, so every turn re-sends the whole context and
-    # input tokens grow fast; the pilot's qwen3 run passed 200k by submission 4. Tokens cost
-    # nothing locally, so the cap is a runaway guard and the wall clock is the real limit.
-    "token_cap": 1_000_000,
+    # The cap counts generated (output) tokens. A local model has no prompt caching, so every
+    # turn re-sends the whole context and input tokens say more about turn count than work:
+    # in the pilot a 1M total-token cap stopped B and C after 11 and 17 of their 45 minutes
+    # (B's first submission: 390k input, 19k output). Input tokens are still recorded.
+    "token_cap": 200_000,
+    "token_cap_basis": "output",
     "run_budget_usd": 1.00,
     "study_budget_usd": 75.00,
     "builder_cpus": "2",
@@ -144,8 +146,10 @@ def builder_turn(run_dir, message, resume_id, budget_usd, timeout_s):
 
 
 def usage_tokens(result):
+    """(input tokens including cache reads and writes, output tokens) for one builder turn."""
     u = (result or {}).get("usage") or {}
-    return sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
+    tin = sum(int(u.get(k) or 0) for k in ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
+    return tin, int(u.get("output_tokens") or 0)
 
 
 # ---------------------------------------------------------------- evaluation
@@ -243,25 +247,30 @@ def execute_run(entry, spent):
               "replicate": entry["replicate"], "config": CONFIG, "started": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
               "workspace_digest_start": sha256_dir(ws), "submissions": [], "accepted": False}
     start = time.time()
-    session, tokens, cost = None, 0, 0.0
+    session, tokens_in, tokens_out, cost = None, 0, 0, 0.0
     message = PROMPT.format(command=meta["command"], max_submissions=CONFIG["max_submissions"])
     for k in range(1, CONFIG["max_submissions"] + 1):
         remaining_time = CONFIG["wall_clock_s"] - (time.time() - start)
         remaining_budget = min(CONFIG["run_budget_usd"] - cost, CONFIG["study_budget_usd"] - spent() - cost)
-        if remaining_time <= 0 or tokens >= CONFIG["token_cap"] or remaining_budget <= 0:
-            record["ended"] = "limit"
+        capped = tokens_out if CONFIG["token_cap_basis"] == "output" else tokens_in + tokens_out
+        limit = ("time" if remaining_time <= 0 else "tokens" if capped >= CONFIG["token_cap"]
+                 else "budget" if remaining_budget <= 0 else None)
+        if limit:
+            record["ended"] = "limit:" + limit
             break
         result, wall, raw = builder_turn(run_dir, message, session, remaining_budget, remaining_time)
         (run_dir / f"transcript_s{k}.json").write_text(raw)
         session = (result or {}).get("session_id") or session
-        tokens += usage_tokens(result)
+        tin, tout = usage_tokens(result)
+        tokens_in, tokens_out = tokens_in + tin, tokens_out + tout
+        tokens = tokens_in + tokens_out
         reported = float((result or {}).get("total_cost_usd") or 0)
         record["claude_reported_cost_usd"] = round(record.get("claude_reported_cost_usd", 0) + reported, 4)
         if CONFIG["builder_backend"] != "ollama":  # a local model has no list price (protocol deviation D1)
             cost += reported
         snap, digest = snapshot(run_dir, k)
         v = run_suite(task_dir / "checks" / "public", snap)
-        sub = {"k": k, "digest": digest, "builder_wall_s": round(wall, 1), "tokens_cumulative": tokens,
+        sub = {"k": k, "digest": digest, "builder_wall_s": round(wall, 1), "tokens_cumulative": tokens, "output_tokens_cumulative": tokens_out,
                "cost_cumulative_usd": round(cost, 4), "visible": {c: r["ok"] for c, r in v.items()},
                "builder_error": None if result else "no parseable builder result"}
         if condition == "A":
@@ -284,7 +293,7 @@ def execute_run(entry, spent):
             record["ended"] = "submissions"
             break
         message = FEEDBACK.format(k=k, feedback=feedback, left=left)
-    record.setdefault("ended", "limit")
+    record.setdefault("ended", "limit:time")  # the last builder turn ran out the wall clock
     last = record["submissions"][-1]["k"] if record["submissions"] else None
     final_k = next((s["k"] for s in record["submissions"] if s["accepted"]), last)
     if final_k is not None:
@@ -299,7 +308,9 @@ def execute_run(entry, spent):
         record["correct_delivery"] = int(record["accepted"] and not broken)
     else:
         record.update({"final_submission": None, "audit": {}, "promises_broken": [], "escaped_defects": 0, "false_pass": 0, "correct_delivery": 0})
-    record["tokens"] = tokens
+    record["tokens"] = tokens_in + tokens_out
+    record["tokens_input"] = tokens_in
+    record["tokens_output"] = tokens_out
     record["cost_usd"] = round(cost, 4)
     record["wall_minutes"] = round((time.time() - start) / 60, 2)
     record["finished"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
