@@ -1,0 +1,125 @@
+{
+ "run_id": "T00-pricing-C-r1",
+ "label": "35bf992d",
+ "task": "T00-pricing",
+ "condition": "C",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T17:27:13Z",
+ "workspace_digest_start": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+   "builder_wall_s": 108.0,
+   "tokens_cumulative": 16971,
+   "output_tokens_cumulative": 495,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:f8e0c2e848f4)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "102946dc702269a10c4ffad37c525e6d25f0f21e2f6305234897603567f1357d",
+   "builder_wall_s": 82.5,
+   "tokens_cumulative": 175761,
+   "output_tokens_cumulative": 7962,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:91b5d7a910a6)\n  - H5 failed\nRecorded in ledger entry #5.",
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "29065054535a3e850f2bd19e2ff91ec3893c39aab62263eb8c54e5f0b6b99229",
+   "builder_wall_s": 328.7,
+   "tokens_cumulative": 983722,
+   "output_tokens_cumulative": 29983,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: WARRANTED for ../tmp/ws (sha256:114cb6174a05)\n  strength   tested\n  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5\n  caveat     only checks the builder could see cover C4, S1, S2, S3\nRecorded in ledger entry #7.",
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 984276,
+ "claude_reported_cost_usd": 5.9726,
+ "ended": "accepted",
+ "final_submission": 3,
+ "audit": {
+  "H1": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "H2": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "H3": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "H4": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "H5": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  }
+ },
+ "promises_broken": [],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 1,
+ "tokens": 983722,
+ "tokens_input": 953739,
+ "tokens_output": 29983,
+ "model_calls": 71,
+ "cost_usd": 0.0,
+ "wall_minutes": 9.22,
+ "finished": "2026-09-29T17:36:26Z"
+}

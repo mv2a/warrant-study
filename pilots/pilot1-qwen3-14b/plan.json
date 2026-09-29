@@ -1,0 +1,87 @@
+{
+ "seed": 1,
+ "created": "2026-09-29T14:24:04Z",
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "qwen3-14b-32k",
+  "model_base": "qwen3:14b@bdbd181c33f2",
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "runs": [
+  {
+   "run_id": "T00-pricing-B-r3",
+   "label": "c9e9c616",
+   "task": "T00-pricing",
+   "condition": "B",
+   "replicate": 3
+  },
+  {
+   "run_id": "T00-pricing-C-r1",
+   "label": "35bf992d",
+   "task": "T00-pricing",
+   "condition": "C",
+   "replicate": 1
+  },
+  {
+   "run_id": "T00-pricing-C-r2",
+   "label": "18072e8c",
+   "task": "T00-pricing",
+   "condition": "C",
+   "replicate": 2
+  },
+  {
+   "run_id": "T00-pricing-B-r2",
+   "label": "7ce42c82",
+   "task": "T00-pricing",
+   "condition": "B",
+   "replicate": 2
+  },
+  {
+   "run_id": "T00-pricing-B-r1",
+   "label": "0741c7a8",
+   "task": "T00-pricing",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T00-pricing-A-r1",
+   "label": "e4b06ce6",
+   "task": "T00-pricing",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T00-pricing-C-r3",
+   "label": "d5f4b3b2",
+   "task": "T00-pricing",
+   "condition": "C",
+   "replicate": 3
+  },
+  {
+   "run_id": "T00-pricing-A-r2",
+   "label": "63ca828d",
+   "task": "T00-pricing",
+   "condition": "A",
+   "replicate": 2
+  },
+  {
+   "run_id": "T00-pricing-A-r3",
+   "label": "6ec9d286",
+   "task": "T00-pricing",
+   "condition": "A",
+   "replicate": 3
+  }
+ ]
+}

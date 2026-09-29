@@ -1,11 +1,19 @@
 # Warrant study: visible-test-only versus evidence-gated agent development
 
-Private working repository for the pre-registered study in
-`mv2a/warrant/docs/experiments/visible-vs-evidence-gated/PROTOCOL.md`.
-Nothing here is published until all runs are complete: the audit suites (X) stay sealed
-until then (protocol §4, §10).
+Working repository for an exploratory evaluation of Warrant. The design is in
+`EVALUATION_PLAN.md`. It replaced the larger pre-registered design drafted in
+`mv2a/warrant/docs/experiments/visible-vs-evidence-gated/PROTOCOL.md` (v0.1), which was
+never frozen or registered and was not run.
 
-- `tasks/Txx-slug/`: one task per directory (see `TASK_SPEC.md`).
-- `harness/gates.py`: the validity gates of protocol §4, run before any builder run.
-- `harness/`: the run harness (protocol §6), added before the freeze.
-- `runs/`, `analysis/`: filled only after the protocol is frozen and deposited.
+- `tasks/Txx-slug/`: the 20 study tasks, one per directory (see `TASK_SPEC.md`). Each has
+  its intent, visible checks (V), hidden checks (H), audit checks (X), a reference and
+  deliberately broken implementations.
+- `harness/gates.py`: validity gates run on every task before any builder run.
+- `harness/eval_mutants.py`: Part 1, the seeded-defect evaluation (no builder).
+- `harness/run_study.py`: Part 2, the agent runs. `harness/analyse.py`: the Part 2 analysis.
+- `results/`: Part 1 and Part 2 results.
+- `review/`: the AI review record for each task (see `review/README.md`).
+- `pilots/`: run records from the pilots on a non-study task (see `pilots/README.md`).
+
+The tasks, checks and implementations were written by AI agents (Anthropic's Claude) at
+the author's request and reviewed by an AI model, not by an independent person.

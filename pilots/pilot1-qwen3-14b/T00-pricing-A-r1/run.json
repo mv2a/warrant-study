@@ -1,0 +1,130 @@
+{
+ "run_id": "T00-pricing-A-r1",
+ "label": "e4b06ce6",
+ "task": "T00-pricing",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "qwen3-14b-32k",
+  "model_base": "qwen3:14b@bdbd181c33f2",
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T14:42:51Z",
+ "workspace_digest_start": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "307812629a3cf814c4225e2af66c2c60b37a96d91dc5c8a6d3d7b158025249d2",
+   "builder_wall_s": 34.7,
+   "tokens_cumulative": 8303,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "5b89976862cdc703df2d7f481f2b6e1848e6d405310a7a0dd6f42dab4c93ceff",
+   "builder_wall_s": 134.6,
+   "tokens_cumulative": 51468,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "e76099183adb365524e9d1687d9423ba7e188ef50bc518b3e2b144fc7f236698",
+   "builder_wall_s": 234.3,
+   "tokens_cumulative": 171982,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 4,
+   "digest": "a08fbf41d1052354b5fdedd446170ba52b47a64eb9422924412aa70900c239a9",
+   "builder_wall_s": 117.7,
+   "tokens_cumulative": 212766,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  }
+ ],
+ "accepted": false,
+ "claude_reported_cost_usd": 1.7144,
+ "ended": "limit",
+ "final_submission": 4,
+ "audit": {
+  "H1": {
+   "ok": false,
+   "covers": [
+    "G1"
+   ]
+  },
+  "H2": {
+   "ok": false,
+   "covers": [
+    "C1"
+   ]
+  },
+  "H3": {
+   "ok": false,
+   "covers": [
+    "G2"
+   ]
+  },
+  "H4": {
+   "ok": false,
+   "covers": [
+    "C2"
+   ]
+  },
+  "H5": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C1",
+  "C2",
+  "G1",
+  "G2"
+ ],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 0,
+ "tokens": 212766,
+ "cost_usd": 0.0,
+ "wall_minutes": 9.01,
+ "finished": "2026-09-29T14:51:51Z"
+}

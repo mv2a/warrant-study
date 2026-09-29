@@ -1,0 +1,93 @@
+{
+ "run_id": "T00-pricing-C-r1",
+ "label": "35bf992d",
+ "task": "T00-pricing",
+ "condition": "C",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-32k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T15:48:08Z",
+ "workspace_digest_start": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "81ea977ed2a714f01961485aecd1551ec0beb64b31a6d4948d751336096c83ee",
+   "builder_wall_s": 2781.1,
+   "tokens_cumulative": 0,
+   "output_tokens_cumulative": 0,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": "no parseable builder result",
+   "gate": "merge: DENIED for ../tmp/ws (sha256:0eeca2d499de)\n  - H5 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  }
+ ],
+ "accepted": false,
+ "claude_reported_cost_usd": 0.0,
+ "ended": "limit:time",
+ "final_submission": 1,
+ "audit": {
+  "H1": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "H2": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "H3": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "H4": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "H5": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C3"
+ ],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 0,
+ "tokens": 0,
+ "tokens_input": 0,
+ "tokens_output": 0,
+ "cost_usd": 0.0,
+ "wall_minutes": 46.82,
+ "finished": "2026-09-29T16:34:58Z"
+}

@@ -1,0 +1,103 @@
+{
+ "run_id": "T00-pricing-B-r1",
+ "label": "0741c7a8",
+ "task": "T00-pricing",
+ "condition": "B",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-32k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 1000000,
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T15:29:27Z",
+ "workspace_digest_start": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "f3aa7ddc32f0695b941fe7c77fb90ae6d51f71cc78fab701a418b8a633e716b5",
+   "builder_wall_s": 231.3,
+   "tokens_cumulative": 409119,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:df31870adbc0)\n  - H5 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "f9c49a7ce94b665884b3f868a40e48ea8efb7ef2a5a394b90282595c6937fa61",
+   "builder_wall_s": 373.0,
+   "tokens_cumulative": 1096579,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:30ff18ebed70)\n  - H5 failed\nRecorded in ledger entry #5.",
+   "accepted": false
+  }
+ ],
+ "accepted": false,
+ "claude_reported_cost_usd": 6.2923,
+ "ended": "limit",
+ "final_submission": 2,
+ "audit": {
+  "H1": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "H2": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "H3": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "H4": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "H5": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C3"
+ ],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 0,
+ "tokens": 1096579,
+ "cost_usd": 0.0,
+ "wall_minutes": 10.67,
+ "finished": "2026-09-29T15:40:07Z"
+}

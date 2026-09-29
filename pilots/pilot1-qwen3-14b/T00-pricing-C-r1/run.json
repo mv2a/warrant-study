@@ -1,0 +1,149 @@
+{
+ "run_id": "T00-pricing-C-r1",
+ "label": "35bf992d",
+ "task": "T00-pricing",
+ "condition": "C",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "qwen3-14b-32k",
+  "model_base": "qwen3:14b@bdbd181c33f2",
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T14:24:05Z",
+ "workspace_digest_start": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "b1f60f0d01aa39f57fb3f424f43dc9e91e53ec3cab68306f722d037723d12de2",
+   "builder_wall_s": 51.3,
+   "tokens_cumulative": 10418,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:772bb3f5a979)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "b1f60f0d01aa39f57fb3f424f43dc9e91e53ec3cab68306f722d037723d12de2",
+   "builder_wall_s": 8.0,
+   "tokens_cumulative": 14112,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:61566fc9478d)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\nRecorded in ledger entry #5.",
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "d94f29eeb7924e37ecbd2ac752a849c0eee067356854ebd4ce4fbdfefcb02e69",
+   "builder_wall_s": 50.9,
+   "tokens_cumulative": 30117,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:83346a9c96e2)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\nRecorded in ledger entry #7.",
+   "accepted": false
+  },
+  {
+   "k": 4,
+   "digest": "6865f918b7789e3f8442ff07fac1694939d918ffa8d57907d539464a0fb5c1e8",
+   "builder_wall_s": 32.4,
+   "tokens_cumulative": 48397,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:898657f8659b)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\nRecorded in ledger entry #9.",
+   "accepted": false
+  },
+  {
+   "k": 5,
+   "digest": "6865f918b7789e3f8442ff07fac1694939d918ffa8d57907d539464a0fb5c1e8",
+   "builder_wall_s": 48.9,
+   "tokens_cumulative": 75852,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:898657f8659b)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\nRecorded in ledger entry #11.",
+   "accepted": false
+  }
+ ],
+ "accepted": false,
+ "claude_reported_cost_usd": 0.6347,
+ "ended": "submissions",
+ "final_submission": 5,
+ "audit": {
+  "H1": {
+   "ok": false,
+   "covers": [
+    "G1"
+   ]
+  },
+  "H2": {
+   "ok": false,
+   "covers": [
+    "C1"
+   ]
+  },
+  "H3": {
+   "ok": false,
+   "covers": [
+    "G2"
+   ]
+  },
+  "H4": {
+   "ok": false,
+   "covers": [
+    "C2"
+   ]
+  },
+  "H5": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C1",
+  "C2",
+  "C3",
+  "G1",
+  "G2"
+ ],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 0,
+ "tokens": 75852,
+ "cost_usd": 0.0,
+ "wall_minutes": 7.19,
+ "finished": "2026-09-29T14:31:17Z"
+}

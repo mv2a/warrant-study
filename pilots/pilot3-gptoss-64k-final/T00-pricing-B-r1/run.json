@@ -1,0 +1,155 @@
+{
+ "run_id": "T00-pricing-B-r1",
+ "label": "0741c7a8",
+ "task": "T00-pricing",
+ "condition": "B",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T17:36:27Z",
+ "workspace_digest_start": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+   "builder_wall_s": 293.2,
+   "tokens_cumulative": 48597,
+   "output_tokens_cumulative": 32451,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:f8e0c2e848f4)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+   "builder_wall_s": 153.2,
+   "tokens_cumulative": 52118,
+   "output_tokens_cumulative": 32451,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:f8e0c2e848f4)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\nRecorded in ledger entry #5.",
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "221e1fdf251b2b3380285bcceefb9f8695351c513d1f3697b9138513402051a3",
+   "builder_wall_s": 45.5,
+   "tokens_cumulative": 142532,
+   "output_tokens_cumulative": 36874,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:ed448cd2dca0)\n  - H5 failed\nRecorded in ledger entry #7.",
+   "accepted": false
+  },
+  {
+   "k": 4,
+   "digest": "4027e922a5ce714a55e7f09404787200d6a3110724a40b622bc07003310eabe6",
+   "builder_wall_s": 76.0,
+   "tokens_cumulative": 349972,
+   "output_tokens_cumulative": 41538,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:aa5766517ee7)\n  - H5 failed\nRecorded in ledger entry #9.",
+   "accepted": false
+  },
+  {
+   "k": 5,
+   "digest": "97dc439669716b5c9b78e1c8090410d104434da93dfecdbdc6fdc07e0c056278",
+   "builder_wall_s": 246.9,
+   "tokens_cumulative": 930093,
+   "output_tokens_cumulative": 60494,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: WARRANTED for ../tmp/ws (sha256:a8d1ae256b40)\n  strength   tested\n  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5\n  caveat     only checks the builder could see cover C4, S1, S2, S3\nRecorded in ledger entry #11.",
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 870306,
+ "claude_reported_cost_usd": 6.1762,
+ "ended": "accepted",
+ "final_submission": 5,
+ "audit": {
+  "H1": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "H2": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "H3": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "H4": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "H5": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  }
+ },
+ "promises_broken": [],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 1,
+ "tokens": 930093,
+ "tokens_input": 869599,
+ "tokens_output": 60494,
+ "model_calls": 69,
+ "cost_usd": 0.0,
+ "wall_minutes": 14.41,
+ "finished": "2026-09-29T17:50:52Z"
+}

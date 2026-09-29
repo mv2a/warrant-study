@@ -1,0 +1,101 @@
+{
+ "run_id": "T00-pricing-A-r1",
+ "label": "e4b06ce6",
+ "task": "T00-pricing",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-32k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 1000000,
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T15:40:07Z",
+ "workspace_digest_start": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "8997ee1a51314003573e382289c8cf221728df41a533f252cbd7a645464d6936",
+   "builder_wall_s": 115.2,
+   "tokens_cumulative": 269879,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "b69543d730166cba0505839d8935ff226d3fed1c34fee642ff663f2e0c22b0ef",
+   "builder_wall_s": 279.7,
+   "tokens_cumulative": 798469,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "claude_reported_cost_usd": 4.4,
+ "ended": "accepted",
+ "final_submission": 2,
+ "audit": {
+  "H1": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "H2": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "H3": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "H4": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "H5": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C3"
+ ],
+ "escaped_defects": 1,
+ "false_pass": 1,
+ "correct_delivery": 0,
+ "tokens": 798469,
+ "cost_usd": 0.0,
+ "wall_minutes": 6.78,
+ "finished": "2026-09-29T15:46:54Z"
+}

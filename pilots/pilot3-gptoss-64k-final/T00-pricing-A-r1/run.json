@@ -1,0 +1,108 @@
+{
+ "run_id": "T00-pricing-A-r1",
+ "label": "e4b06ce6",
+ "task": "T00-pricing",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T17:50:52Z",
+ "workspace_digest_start": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "2d14de9f69232458a642e9749f58570aeb67add3fd1ad318b62adeab1be2608c",
+   "builder_wall_s": 78.2,
+   "tokens_cumulative": 17908,
+   "output_tokens_cumulative": 402,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "516790088fc84941f399e8a876170bac48f90f76dd6730ba6c5c58bb0a35c17b",
+   "builder_wall_s": 228.5,
+   "tokens_cumulative": 351307,
+   "output_tokens_cumulative": 23220,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 360524,
+ "claude_reported_cost_usd": 2.4535,
+ "ended": "accepted",
+ "final_submission": 2,
+ "audit": {
+  "H1": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "H2": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "H3": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "H4": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "H5": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  }
+ },
+ "promises_broken": [],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 1,
+ "tokens": 351307,
+ "tokens_input": 328087,
+ "tokens_output": 23220,
+ "model_calls": 42,
+ "cost_usd": 0.0,
+ "wall_minutes": 5.31,
+ "finished": "2026-09-29T17:56:10Z"
+}
