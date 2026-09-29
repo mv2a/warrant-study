@@ -1,0 +1,3397 @@
+{
+ "started": "2026-09-29T17:42:11Z",
+ "finished": "2026-09-29T18:01:57Z",
+ "python": "3.13.3",
+ "errors": [],
+ "summary": {
+  "tasks": 20,
+  "reference_visible_accept": 20,
+  "reference_warrant_accept": 20,
+  "reference_x_clean": 20,
+  "broken_implementations": 160,
+  "broken_with_x_defect": 160,
+  "broken_hitting_target_promise": 160,
+  "defective_accepted_visible_only": 93,
+  "defective_accepted_by_warrant": 0,
+  "defective_accepted_by_both": 0,
+  "verify_gate_seconds_median": 20.64,
+  "verify_gate_seconds_max": 34.99,
+  "false_pass_rate_visible_only": 0.581,
+  "false_pass_rate_warrant": 0.0
+ },
+ "rows": [
+  {
+   "task": "T01-parking-fees",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 18.44,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmp87n2doo_/ws (sha256:ac15e6aff281)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, P3, H1, H2, H3, H4, H5, H6, H7, H8, H9, H10",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T01-parking-fees",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1"
+   ],
+   "verify_gate_seconds": 19.27,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpb552vbsa/ws (sha256:ca47f80913cc)",
+    "  - P1 failed",
+    "  - P2 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T01-parking-fees",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "S3"
+   ],
+   "verify_gate_seconds": 19.31,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpjspggsxu/ws (sha256:88bfd780daeb)",
+    "  - P2 failed",
+    "  - H6 failed",
+    "  - H7 failed"
+   ]
+  },
+  {
+   "task": "T01-parking-fees",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3"
+   ],
+   "verify_gate_seconds": 18.66,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpzkjbc6az/ws (sha256:a114861bd326)",
+    "  - H8 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T01-parking-fees",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G3"
+   ],
+   "verify_gate_seconds": 17.83,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpiez56dgo/ws (sha256:3ae4eb688b94)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T01-parking-fees",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 18.01,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpixxcpywn/ws (sha256:f5c64de8294e)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T01-parking-fees",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G3"
+   ],
+   "verify_gate_seconds": 18.87,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpcqj2_tn8/ws (sha256:cc1f4a06144e)",
+    "  - H3 failed",
+    "  - H4 failed",
+    "  - H7 failed"
+   ]
+  },
+  {
+   "task": "T01-parking-fees",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G4"
+   ],
+   "verify_gate_seconds": 17.72,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpme0jy5z2/ws (sha256:8c03f55c231c)",
+    "  - H2 failed",
+    "  - H4 failed",
+    "  - H7 failed"
+   ]
+  },
+  {
+   "task": "T01-parking-fees",
+   "impl": "broken/G5",
+   "target": "G5",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G5",
+    "S2"
+   ],
+   "verify_gate_seconds": 20.24,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpe8hbovuc/ws (sha256:1b019611c342)",
+    "  - P2 failed",
+    "  - H5 failed",
+    "  - H7 failed"
+   ]
+  },
+  {
+   "task": "T02-library-fines",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 9.78,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpaaop9bks/ws (sha256:f5d0c0f3b139)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T02-library-fines",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3"
+   ],
+   "verify_gate_seconds": 9.7,
+   "gate_tail": [
+    "merge: DENIED for ../../tmplqnw31n3/ws (sha256:4ca31a17afaa)",
+    "  - P1 failed",
+    "  - H6 failed",
+    "Recorded in ledger entry #5."
+   ]
+  },
+  {
+   "task": "T02-library-fines",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "verify_gate_seconds": 10.82,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp9q3hnb40/ws (sha256:e4c87f15934a)",
+    "  - H5 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T02-library-fines",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3"
+   ],
+   "verify_gate_seconds": 12.17,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpkptlphhr/ws (sha256:dc736cefc6d3)",
+    "  - H7 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T02-library-fines",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 11.11,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpsakt5su2/ws (sha256:7f3a6b33cf92)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T02-library-fines",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "S1"
+   ],
+   "verify_gate_seconds": 12.18,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp3dnox85k/ws (sha256:f15b2f1d45e6)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T02-library-fines",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "verify_gate_seconds": 12.6,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpm6rutxmn/ws (sha256:7915d7e68344)",
+    "  - H3 failed",
+    "  - H4 failed",
+    "Recorded in ledger entry #15."
+   ]
+  },
+  {
+   "task": "T02-library-fines",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "S3"
+   ],
+   "verify_gate_seconds": 13.38,
+   "gate_tail": [
+    "merge: DENIED for ../../tmphlmslh9t/ws (sha256:9f439bf9e57d)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H4 failed"
+   ]
+  },
+  {
+   "task": "T03-bus-fare",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 17.82,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpod01udk4/ws (sha256:35ccacdbf4ac)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8, H9",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T03-bus-fare",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "verify_gate_seconds": 21.19,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpvyahc0of/ws (sha256:726a5eda3b7a)",
+    "  - H5 failed",
+    "  - H9 failed",
+    "Recorded in ledger entry #5."
+   ]
+  },
+  {
+   "task": "T03-bus-fare",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "C3"
+   ],
+   "verify_gate_seconds": 24.32,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp2acguv0a/ws (sha256:c43a56798ae8)",
+    "  - H6 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T03-bus-fare",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "C3"
+   ],
+   "verify_gate_seconds": 23.81,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpdzq_c7yr/ws (sha256:3a147a92f6aa)",
+    "  - P1 failed",
+    "  - H6 failed",
+    "  - H7 failed"
+   ]
+  },
+  {
+   "task": "T03-bus-fare",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "verify_gate_seconds": 18.29,
+   "gate_tail": [
+    "merge: DENIED for ../../tmprlyfgcqo/ws (sha256:ff37ca7b6d54)",
+    "  - H1 failed",
+    "  - H9 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T03-bus-fare",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "verify_gate_seconds": 20.52,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp6u2ct0be/ws (sha256:b4d2cd3fd468)",
+    "  - H2 failed",
+    "  - H9 failed",
+    "Recorded in ledger entry #13."
+   ]
+  },
+  {
+   "task": "T03-bus-fare",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "verify_gate_seconds": 22.33,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpofpoaw9h/ws (sha256:201417880430)",
+    "  - H3 failed",
+    "  - H9 failed",
+    "Recorded in ledger entry #15."
+   ]
+  },
+  {
+   "task": "T03-bus-fare",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "verify_gate_seconds": 21.26,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp9yknnvbv/ws (sha256:c1ba7e884aca)",
+    "  - H4 failed",
+    "  - H9 failed",
+    "Recorded in ledger entry #17."
+   ]
+  },
+  {
+   "task": "T04-bill-split",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 30.49,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmp9goi6duw/ws (sha256:d39e337b3442)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, P3, H1, H2, H3, H4, H5, H6, H7, H8, H9",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T04-bill-split",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "G4",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 33.4,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpqdu4ubeq/ws (sha256:89f38b6a70f6)",
+    "  - P2 failed",
+    "  - P3 failed",
+    "  - H5 failed"
+   ]
+  },
+  {
+   "task": "T04-bill-split",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G4"
+   ],
+   "verify_gate_seconds": 32.03,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpm6cujt7m/ws (sha256:eb0362b1eb5f)",
+    "  - H6 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T04-bill-split",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3"
+   ],
+   "verify_gate_seconds": 29.5,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpwf21io42/ws (sha256:94edbbfc04cf)",
+    "  - H7 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T04-bill-split",
+   "impl": "broken/C4",
+   "target": "C4",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3",
+    "C4"
+   ],
+   "verify_gate_seconds": 31.63,
+   "gate_tail": [
+    "merge: DENIED for ../../tmptu2p3cqf/ws (sha256:68e67a28b380)",
+    "  - P1 failed",
+    "  - H7 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T04-bill-split",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1"
+   ],
+   "verify_gate_seconds": 30.6,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp9503diwh/ws (sha256:9be5b59d8964)",
+    "  - H1 failed",
+    "Recorded in ledger entry #13."
+   ]
+  },
+  {
+   "task": "T04-bill-split",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "verify_gate_seconds": 28.3,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpcub_29hl/ws (sha256:898ed713cb23)",
+    "  - H2 failed",
+    "  - H3 failed",
+    "  - H4 failed"
+   ]
+  },
+  {
+   "task": "T04-bill-split",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G3",
+    "G4",
+    "S3"
+   ],
+   "verify_gate_seconds": 28.4,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpte8tuamc/ws (sha256:46f1f9d5848e)",
+    "  - P2 failed",
+    "  - H3 failed",
+    "  - H4 failed"
+   ]
+  },
+  {
+   "task": "T04-bill-split",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G2",
+    "G4",
+    "S1",
+    "S3"
+   ],
+   "verify_gate_seconds": 27.48,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp0ws9b62p/ws (sha256:fa4f975fbe5c)",
+    "  - P2 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T05-loyalty-points",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 14.4,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmp0_j84mtc/ws (sha256:bd1dde277e43)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T05-loyalty-points",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 15.36,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp25_7w5po/ws (sha256:c89d726aaeb7)",
+    "  - H4 failed",
+    "Recorded in ledger entry #5."
+   ]
+  },
+  {
+   "task": "T05-loyalty-points",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 15.42,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpmner3tdn/ws (sha256:1af51ee51f02)",
+    "  - H5 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T05-loyalty-points",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "S1",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 14.67,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp28ckfox3/ws (sha256:5083bc593f2e)",
+    "  - P1 failed",
+    "  - H6 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T05-loyalty-points",
+   "impl": "broken/C4",
+   "target": "C4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3",
+    "C4"
+   ],
+   "verify_gate_seconds": 14.22,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpz4lmqj9n/ws (sha256:e8e7d02dff7a)",
+    "  - H7 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T05-loyalty-points",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "S1",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 14.36,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpr7zqhcvn/ws (sha256:ab416041800a)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T05-loyalty-points",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 14.42,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp_pd3czfv/ws (sha256:1ed2539fc437)",
+    "  - H2 failed",
+    "Recorded in ledger entry #15."
+   ]
+  },
+  {
+   "task": "T05-loyalty-points",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "S1",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 13.96,
+   "gate_tail": [
+    "merge: DENIED for ../../tmppr3upecn/ws (sha256:91ee5ca51711)",
+    "  - P2 failed",
+    "  - H3 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T06-parcel-rates",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 18.13,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpc5jsd4bn/ws (sha256:e2e4c0bc06a7)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, P3, H1, H2, H3, H4, H5, H6, H7, H8",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T06-parcel-rates",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1"
+   ],
+   "verify_gate_seconds": 19.08,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpi9w9wkc6/ws (sha256:818c88e5cdc3)",
+    "  - P1 failed",
+    "  - H5 failed",
+    "Recorded in ledger entry #5."
+   ]
+  },
+  {
+   "task": "T06-parcel-rates",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2"
+   ],
+   "verify_gate_seconds": 19.03,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpawi3mcvm/ws (sha256:326befb7ee6d)",
+    "  - H6 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T06-parcel-rates",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3"
+   ],
+   "verify_gate_seconds": 18.48,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpwnxclr3u/ws (sha256:9c8d45e40a4b)",
+    "  - H7 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T06-parcel-rates",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1"
+   ],
+   "verify_gate_seconds": 18.29,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpl86ddxbg/ws (sha256:475d4ade01b8)",
+    "  - H1 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T06-parcel-rates",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G2"
+   ],
+   "verify_gate_seconds": 17.87,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpn_q7oaiv/ws (sha256:d96bcbc82a50)",
+    "  - H2 failed",
+    "Recorded in ledger entry #13."
+   ]
+  },
+  {
+   "task": "T06-parcel-rates",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G3"
+   ],
+   "verify_gate_seconds": 18.31,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpx6heiq13/ws (sha256:5aa882440104)",
+    "  - H3 failed",
+    "Recorded in ledger entry #15."
+   ]
+  },
+  {
+   "task": "T06-parcel-rates",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G4"
+   ],
+   "verify_gate_seconds": 17.69,
+   "gate_tail": [
+    "merge: DENIED for ../../tmprgerd9i2/ws (sha256:3f42cbf7aca4)",
+    "  - H4 failed",
+    "Recorded in ledger entry #17."
+   ]
+  },
+  {
+   "task": "T07-progressive-tax",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 14.83,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpgedec_s2/ws (sha256:4cdf332283fc)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T07-progressive-tax",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1"
+   ],
+   "verify_gate_seconds": 15.91,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpqv4sh1ba/ws (sha256:fd099c98164e)",
+    "  - H4 failed",
+    "Recorded in ledger entry #5."
+   ]
+  },
+  {
+   "task": "T07-progressive-tax",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2"
+   ],
+   "verify_gate_seconds": 17.23,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpgzfw1aae/ws (sha256:fcfa592247d4)",
+    "  - H5 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T07-progressive-tax",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3"
+   ],
+   "verify_gate_seconds": 15.76,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp2ll6wuu5/ws (sha256:c14f88a67bd3)",
+    "  - H6 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T07-progressive-tax",
+   "impl": "broken/C4",
+   "target": "C4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C4"
+   ],
+   "verify_gate_seconds": 17.61,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpwzw2zoz0/ws (sha256:74f3d5a8a45f)",
+    "  - H7 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T07-progressive-tax",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1"
+   ],
+   "verify_gate_seconds": 16.88,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpu_lmtj3n/ws (sha256:093d7fc4c392)",
+    "  - H1 failed",
+    "Recorded in ledger entry #13."
+   ]
+  },
+  {
+   "task": "T07-progressive-tax",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G2"
+   ],
+   "verify_gate_seconds": 16.09,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpn13wd8mc/ws (sha256:5dd6f5e94beb)",
+    "  - H2 failed",
+    "Recorded in ledger entry #15."
+   ]
+  },
+  {
+   "task": "T07-progressive-tax",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G3",
+    "S3"
+   ],
+   "verify_gate_seconds": 15.37,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpdwa6fnhb/ws (sha256:db743112c478)",
+    "  - P2 failed",
+    "  - H3 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T08-loan-schedule",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 23.48,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpvm8q2xy0/ws (sha256:5707feccf441)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T08-loan-schedule",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3"
+   ],
+   "verify_gate_seconds": 22.36,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp2z4u6duo/ws (sha256:b66fbc40f304)",
+    "  - P1 failed",
+    "  - H1 failed",
+    "  - H7 failed"
+   ]
+  },
+  {
+   "task": "T08-loan-schedule",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "S1",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 19.32,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpkacbe8g2/ws (sha256:565de013eefd)",
+    "  - P2 failed",
+    "  - H6 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T08-loan-schedule",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3"
+   ],
+   "verify_gate_seconds": 19.7,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpiu70rf4r/ws (sha256:1bda0e6f5519)",
+    "  - H7 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T08-loan-schedule",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "S1"
+   ],
+   "verify_gate_seconds": 20.24,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp6c90hl5p/ws (sha256:6a96dd5a4a5b)",
+    "  - P2 failed",
+    "  - H2 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T08-loan-schedule",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G2",
+    "S1",
+    "S3"
+   ],
+   "verify_gate_seconds": 21.16,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpbyigto_0/ws (sha256:5637aa0e43f6)",
+    "  - P2 failed",
+    "  - H3 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T08-loan-schedule",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G3"
+   ],
+   "verify_gate_seconds": 20.05,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpyvixcvd1/ws (sha256:9082318e5fa7)",
+    "  - H4 failed",
+    "Recorded in ledger entry #15."
+   ]
+  },
+  {
+   "task": "T08-loan-schedule",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G4",
+    "S2"
+   ],
+   "verify_gate_seconds": 18.94,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpmrekddwu/ws (sha256:961d06107208)",
+    "  - P2 failed",
+    "  - H5 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 22.53,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmprbkb04_c/ws (sha256:243fa40ac17c)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, P3, H1, H2, H3, H4, H5, H6, H7, H8, H9, H10",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 20.61,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpkaq238w0/ws (sha256:2b0f4bc20086)",
+    "  - P1 failed",
+    "  - P2 failed",
+    "  - P3 failed"
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2"
+   ],
+   "verify_gate_seconds": 22.04,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp4e4lnx17/ws (sha256:5b356f61bcf5)",
+    "  - H7 failed",
+    "  - H10 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3"
+   ],
+   "verify_gate_seconds": 21.66,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpa92yaqot/ws (sha256:ea33ea8ae54d)",
+    "  - H8 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1"
+   ],
+   "verify_gate_seconds": 20.68,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpgneixs1d/ws (sha256:09cf9a881ae6)",
+    "  - H1 failed",
+    "  - H10 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G2"
+   ],
+   "verify_gate_seconds": 21.24,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpajoybj6w/ws (sha256:709d6ded079b)",
+    "  - H2 failed",
+    "  - H10 failed",
+    "Recorded in ledger entry #13."
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G3"
+   ],
+   "verify_gate_seconds": 22.04,
+   "gate_tail": [
+    "merge: DENIED for ../../tmprvw6le_9/ws (sha256:c8c60084dd98)",
+    "  - H3 failed",
+    "  - H7 failed",
+    "  - H10 failed"
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G4"
+   ],
+   "verify_gate_seconds": 23.47,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpaaz9n9oz/ws (sha256:e564af2bbbfe)",
+    "  - H4 failed",
+    "  - H10 failed",
+    "Recorded in ledger entry #17."
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/G5",
+   "target": "G5",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G5"
+   ],
+   "verify_gate_seconds": 20.96,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpv0jl_igl/ws (sha256:f38cf766f9b3)",
+    "  - H5 failed",
+    "  - H10 failed",
+    "Recorded in ledger entry #19."
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/S1",
+   "target": "S1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "S1"
+   ],
+   "verify_gate_seconds": 22.11,
+   "gate_tail": [
+    "merge: DENIED for ../../tmphxlzymqh/ws (sha256:a1cdfe70c4cd)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H9 failed"
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/S2",
+   "target": "S2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G3",
+    "S2"
+   ],
+   "verify_gate_seconds": 22.33,
+   "gate_tail": [
+    "merge: DENIED for ../../tmppxvm9w09/ws (sha256:472f5b868b1d)",
+    "  - P2 failed",
+    "  - H3 failed",
+    "  - H9 failed"
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/S3",
+   "target": "S3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G3",
+    "S3"
+   ],
+   "verify_gate_seconds": 20.84,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpf8e7_a7w/ws (sha256:e03e17e2f52d)",
+    "  - P2 failed",
+    "  - H3 failed",
+    "  - H9 failed"
+   ]
+  },
+  {
+   "task": "T09-password-policy",
+   "impl": "broken/S4",
+   "target": "S4",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3",
+    "S4"
+   ],
+   "verify_gate_seconds": 21.9,
+   "gate_tail": [
+    "merge: DENIED for ../../tmptgvq5o0o/ws (sha256:520a9985b187)",
+    "  - P1 failed",
+    "  - H6 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T10-free-slots",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 21.98,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpky5aep7r/ws (sha256:e8cb9a939757)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8, H9",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T10-free-slots",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "S1",
+    "S2",
+    "S4"
+   ],
+   "verify_gate_seconds": 22.28,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpx8yru2o6/ws (sha256:090495159cb2)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T10-free-slots",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 21.92,
+   "gate_tail": [
+    "merge: DENIED for ../../tmppxz8cky6/ws (sha256:3a9e30f2a65f)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T10-free-slots",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 22.48,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpeq_ivzkw/ws (sha256:18edbe248dad)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T10-free-slots",
+   "impl": "broken/C4",
+   "target": "C4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C4"
+   ],
+   "verify_gate_seconds": 23.75,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp_g0fqk7l/ws (sha256:e79ad378405d)",
+    "  - H7 failed",
+    "  - H8 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T10-free-slots",
+   "impl": "broken/C5",
+   "target": "C5",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C4",
+    "C5"
+   ],
+   "verify_gate_seconds": 22.31,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpm5bqdyra/ws (sha256:aedb3bdc95a6)",
+    "  - P1 failed",
+    "  - H7 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T10-free-slots",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "S4"
+   ],
+   "verify_gate_seconds": 22.33,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpo4azpxy_/ws (sha256:754fe6fbf771)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T10-free-slots",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 20.4,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpp4cbf2pl/ws (sha256:78c5109ffa10)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T10-free-slots",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "S4"
+   ],
+   "verify_gate_seconds": 21.97,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpp_zikxks/ws (sha256:d66557140b15)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T11-reorder-quantity",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 8.75,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpuxdnqtrj/ws (sha256:30714ba34140)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T11-reorder-quantity",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3"
+   ],
+   "verify_gate_seconds": 10.02,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpcxtbvn1d/ws (sha256:713a7ce2fc1b)",
+    "  - P1 failed",
+    "  - H5 failed",
+    "Recorded in ledger entry #5."
+   ]
+  },
+  {
+   "task": "T11-reorder-quantity",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "S2"
+   ],
+   "verify_gate_seconds": 10.89,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp_uctuz35/ws (sha256:6f97719a4be5)",
+    "  - P2 failed",
+    "  - H6 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T11-reorder-quantity",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3"
+   ],
+   "verify_gate_seconds": 11.3,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp6mqh1j9u/ws (sha256:244cc6b84fdc)",
+    "  - H7 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T11-reorder-quantity",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "S1",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 10.08,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp3vevcday/ws (sha256:2f52c24d5e8b)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T11-reorder-quantity",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "verify_gate_seconds": 9.02,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp28p1wddr/ws (sha256:cf6bfb723b84)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T11-reorder-quantity",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G3"
+   ],
+   "verify_gate_seconds": 9.36,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp7cldyxga/ws (sha256:1a080095055b)",
+    "  - H3 failed",
+    "  - H4 failed",
+    "Recorded in ledger entry #15."
+   ]
+  },
+  {
+   "task": "T11-reorder-quantity",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G4"
+   ],
+   "verify_gate_seconds": 10.34,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp7rd6900w/ws (sha256:5b1fbc8818e4)",
+    "  - H4 failed",
+    "Recorded in ledger entry #17."
+   ]
+  },
+  {
+   "task": "T12-course-grade",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 23.29,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpij4eq3iy/ws (sha256:f4d2606d6c7f)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8, H9",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T12-course-grade",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "G4",
+    "S2"
+   ],
+   "verify_gate_seconds": 21.92,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp1x220eks/ws (sha256:694cce6a348d)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T12-course-grade",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2"
+   ],
+   "verify_gate_seconds": 24.36,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpr1oqswso/ws (sha256:487acea6cf07)",
+    "  - H6 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T12-course-grade",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "S1",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 22.38,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpq06gjrhi/ws (sha256:f234bd1eff47)",
+    "  - P1 failed",
+    "  - P2 failed",
+    "  - H1 failed"
+   ]
+  },
+  {
+   "task": "T12-course-grade",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "S1",
+    "S3"
+   ],
+   "verify_gate_seconds": 24.11,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpwsnn0k26/ws (sha256:436b52aae1dd)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T12-course-grade",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3",
+    "G1",
+    "G2",
+    "G4"
+   ],
+   "verify_gate_seconds": 29.39,
+   "gate_tail": [
+    "merge: DENIED for ../../tmprzqrydgf/ws (sha256:8cc21e45e0f0)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T12-course-grade",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "G2",
+    "G3",
+    "G4",
+    "S1",
+    "S3"
+   ],
+   "verify_gate_seconds": 29.27,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpma2zcisj/ws (sha256:ff0735e111d0)",
+    "  - P2 failed",
+    "  - H3 failed",
+    "  - H4 failed"
+   ]
+  },
+  {
+   "task": "T12-course-grade",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G4",
+    "S2"
+   ],
+   "verify_gate_seconds": 21.65,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp93onut4y/ws (sha256:2d22e446599a)",
+    "  - P2 failed",
+    "  - H4 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 27.69,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmp2cxq81f4/ws (sha256:8d83b0ed73d0)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8, H9, H10, H11, H12",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3",
+    "C4"
+   ],
+   "verify_gate_seconds": 24.22,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpslxd2iro/ws (sha256:980b96e45673)",
+    "  - P1 failed",
+    "  - H1 failed",
+    "  - H7 failed"
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2"
+   ],
+   "verify_gate_seconds": 25.36,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpuyvzchk3/ws (sha256:865ff7fd0ecf)",
+    "  - H4 failed",
+    "  - H5 failed",
+    "  - H6 failed"
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3"
+   ],
+   "verify_gate_seconds": 26.4,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpv8wjmc6j/ws (sha256:a1b141b1381b)",
+    "  - H7 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/C4",
+   "target": "C4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C4"
+   ],
+   "verify_gate_seconds": 27.01,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpsgqmkao9/ws (sha256:71e671398048)",
+    "  - H8 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "S2"
+   ],
+   "verify_gate_seconds": 23.04,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpaphnbtsc/ws (sha256:7d3ffafeee35)",
+    "  - P2 failed",
+    "  - H2 failed",
+    "  - H10 failed"
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G2",
+    "G3",
+    "G4",
+    "S1",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 29.3,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpnodgxwqu/ws (sha256:86b8b79a3af7)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G2",
+    "G3",
+    "G4",
+    "S1",
+    "S2"
+   ],
+   "verify_gate_seconds": 30.46,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp_mhcxb9r/ws (sha256:bde7d674f94e)",
+    "  - P2 failed",
+    "  - H4 failed",
+    "  - H5 failed"
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G2",
+    "G3",
+    "G4",
+    "S1",
+    "S2"
+   ],
+   "verify_gate_seconds": 25.14,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpe81w0a8z/ws (sha256:d0825ead66a8)",
+    "  - P2 failed",
+    "  - H4 failed",
+    "  - H5 failed"
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/S1",
+   "target": "S1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G2",
+    "G3",
+    "G4",
+    "S1",
+    "S2"
+   ],
+   "verify_gate_seconds": 25.97,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp7grfs_1j/ws (sha256:60ac769a807b)",
+    "  - P2 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/S2",
+   "target": "S2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "G1",
+    "S2"
+   ],
+   "verify_gate_seconds": 27.66,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp8_fnjfee/ws (sha256:9f5274a2c829)",
+    "  - P1 failed",
+    "  - P2 failed",
+    "  - H1 failed"
+   ]
+  },
+  {
+   "task": "T13-rate-limit",
+   "impl": "broken/S3",
+   "target": "S3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G2",
+    "G3",
+    "G4",
+    "S3"
+   ],
+   "verify_gate_seconds": 25.11,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp2z7yfupn/ws (sha256:7aba6ccc7c96)",
+    "  - P2 failed",
+    "  - H3 failed",
+    "  - H4 failed"
+   ]
+  },
+  {
+   "task": "T14-row-validator",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 5.16,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmp6jk5xehk/ws (sha256:4658bff638da)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8, H9, H10",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T14-row-validator",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 6.24,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpg42rebu1/ws (sha256:011ca1097e11)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T14-row-validator",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5"
+   ],
+   "verify_gate_seconds": 5.21,
+   "gate_tail": [
+    "merge: DENIED for ../../tmphadmt1c0/ws (sha256:e44d5b9b0c45)",
+    "  - H7 failed",
+    "  - H8 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T14-row-validator",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 5.65,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpzw3wa_fm/ws (sha256:2fbe8d4c7f05)",
+    "  - P2 failed",
+    "  - H8 failed",
+    "  - H10 failed"
+   ]
+  },
+  {
+   "task": "T14-row-validator",
+   "impl": "broken/C4",
+   "target": "C4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C4"
+   ],
+   "verify_gate_seconds": 6.03,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpupds7gjk/ws (sha256:564e6118b06a)",
+    "  - H9 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T14-row-validator",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "S1",
+    "S2"
+   ],
+   "verify_gate_seconds": 5.25,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpp65bm97r/ws (sha256:9191a188a9db)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H4 failed"
+   ]
+  },
+  {
+   "task": "T14-row-validator",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5"
+   ],
+   "verify_gate_seconds": 4.91,
+   "gate_tail": [
+    "merge: DENIED for ../../tmptm7vlp5n/ws (sha256:db89d2251f15)",
+    "  - H2 failed",
+    "  - H4 failed",
+    "  - H9 failed"
+   ]
+  },
+  {
+   "task": "T14-row-validator",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "C3",
+    "C4",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5"
+   ],
+   "verify_gate_seconds": 5.56,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpbfsaio0s/ws (sha256:0a3edc7936f3)",
+    "  - H3 failed",
+    "Recorded in ledger entry #17."
+   ]
+  },
+  {
+   "task": "T14-row-validator",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "S3"
+   ],
+   "verify_gate_seconds": 5.54,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp63iy79iq/ws (sha256:77bc7ab03ca9)",
+    "  - P2 failed",
+    "  - H4 failed",
+    "  - H7 failed"
+   ]
+  },
+  {
+   "task": "T14-row-validator",
+   "impl": "broken/G5",
+   "target": "G5",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 5.27,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpb16a8hu9/ws (sha256:43fbb9e731c4)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T15-unit-convert",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 28.66,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpxvbo_q5a/ws (sha256:66d1e35a1ea9)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, P3, H1, H2, H3, H4, H5, H6, H7, H8, H9",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T15-unit-convert",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 29.19,
+   "gate_tail": [
+    "merge: DENIED for ../../tmplia5lq89/ws (sha256:526d0e5eac7c)",
+    "  - H4 failed",
+    "  - H5 failed",
+    "Recorded in ledger entry #5."
+   ]
+  },
+  {
+   "task": "T15-unit-convert",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 28.91,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp2zmb22kn/ws (sha256:bbbf00cf58d9)",
+    "  - H5 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T15-unit-convert",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3",
+    "C5",
+    "S3"
+   ],
+   "verify_gate_seconds": 29.57,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp8x5o3ylp/ws (sha256:c9307b5274e4)",
+    "  - P2 failed",
+    "  - H6 failed",
+    "  - H9 failed"
+   ]
+  },
+  {
+   "task": "T15-unit-convert",
+   "impl": "broken/C4",
+   "target": "C4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C4",
+    "C5"
+   ],
+   "verify_gate_seconds": 30.94,
+   "gate_tail": [
+    "merge: DENIED for ../../tmppyd62zhm/ws (sha256:7e5f77d2be25)",
+    "  - H7 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T15-unit-convert",
+   "impl": "broken/C5",
+   "target": "C5",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3",
+    "C4",
+    "C5",
+    "S3"
+   ],
+   "verify_gate_seconds": 34.99,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp7q0lqwjs/ws (sha256:d9daea6a89da)",
+    "  - P1 failed",
+    "  - P2 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T15-unit-convert",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "C5",
+    "G1"
+   ],
+   "verify_gate_seconds": 33.98,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpu9ln6jnm/ws (sha256:2b8faf805e99)",
+    "  - H1 failed",
+    "  - H4 failed",
+    "Recorded in ledger entry #15."
+   ]
+  },
+  {
+   "task": "T15-unit-convert",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "G2"
+   ],
+   "verify_gate_seconds": 28.64,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpy1wgu7bf/ws (sha256:002aa86a7e3d)",
+    "  - H2 failed",
+    "  - H4 failed",
+    "  - H5 failed"
+   ]
+  },
+  {
+   "task": "T15-unit-convert",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "C3",
+    "C5",
+    "G3"
+   ],
+   "verify_gate_seconds": 28.46,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp7h7z9xk4/ws (sha256:7b07783b6c65)",
+    "  - H3 failed",
+    "  - H4 failed",
+    "  - H5 failed"
+   ]
+  },
+  {
+   "task": "T16-invoice-number",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 24.18,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpd44zvlla/ws (sha256:10cfccf0f88a)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8, H9",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T16-invoice-number",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "S1",
+    "S2",
+    "S3"
+   ],
+   "verify_gate_seconds": 29.27,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpylm6knin/ws (sha256:ab133735cc5b)",
+    "  - P2 failed",
+    "  - H4 failed",
+    "  - H9 failed"
+   ]
+  },
+  {
+   "task": "T16-invoice-number",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "C5"
+   ],
+   "verify_gate_seconds": 28.49,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp45gr_hy6/ws (sha256:74380b657884)",
+    "  - H5 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T16-invoice-number",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3",
+    "C5"
+   ],
+   "verify_gate_seconds": 24.01,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpbs5nn5c3/ws (sha256:8a4d5b2c3413)",
+    "  - H6 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T16-invoice-number",
+   "impl": "broken/C4",
+   "target": "C4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C4",
+    "C5"
+   ],
+   "verify_gate_seconds": 22.53,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpekw5g65r/ws (sha256:7c45afa18336)",
+    "  - H7 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T16-invoice-number",
+   "impl": "broken/C5",
+   "target": "C5",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C5"
+   ],
+   "verify_gate_seconds": 22.64,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpa9pnow_2/ws (sha256:feb06d123a08)",
+    "  - H8 failed",
+    "Recorded in ledger entry #13."
+   ]
+  },
+  {
+   "task": "T16-invoice-number",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C5",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 25.68,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpxp_zox3h/ws (sha256:f0a53b77e981)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T16-invoice-number",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "G2"
+   ],
+   "verify_gate_seconds": 22.64,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp16dn1j0h/ws (sha256:b5674c533c7d)",
+    "  - H2 failed",
+    "Recorded in ledger entry #17."
+   ]
+  },
+  {
+   "task": "T16-invoice-number",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "G1",
+    "G3"
+   ],
+   "verify_gate_seconds": 22.83,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpe9lj0q23/ws (sha256:fe0163a0dbd8)",
+    "  - H3 failed",
+    "Recorded in ledger entry #19."
+   ]
+  },
+  {
+   "task": "T17-hotel-stay",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 21.39,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmp1c30zawo/ws (sha256:5db61a395040)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, P3, H1, H2, H3, H4, H5, H6, H7, H8, H9",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T17-hotel-stay",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3",
+    "G4",
+    "S3"
+   ],
+   "verify_gate_seconds": 26.42,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpqp3r363z/ws (sha256:9086e44670fd)",
+    "  - P1 failed",
+    "  - P2 failed",
+    "  - H5 failed"
+   ]
+  },
+  {
+   "task": "T17-hotel-stay",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 21.88,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpqrn5a7sn/ws (sha256:6c5c717d8f11)",
+    "  - H6 failed",
+    "  - H9 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T17-hotel-stay",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3"
+   ],
+   "verify_gate_seconds": 21.0,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpeb619gyg/ws (sha256:61a2e18a86f5)",
+    "  - H7 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T17-hotel-stay",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G1",
+    "G2",
+    "G3",
+    "S4"
+   ],
+   "verify_gate_seconds": 21.14,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp1nq8ocq9/ws (sha256:28c441da7edb)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T17-hotel-stay",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 22.24,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpouejzl4p/ws (sha256:dc5ad497720a)",
+    "  - H2 failed",
+    "  - H9 failed",
+    "Recorded in ledger entry #13."
+   ]
+  },
+  {
+   "task": "T17-hotel-stay",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G1",
+    "G2",
+    "G3",
+    "S4"
+   ],
+   "verify_gate_seconds": 18.51,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp4sf9tks6/ws (sha256:c1e4c5e584b1)",
+    "  - P2 failed",
+    "  - H3 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T17-hotel-stay",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G4"
+   ],
+   "verify_gate_seconds": 23.01,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpvkvqkgu9/ws (sha256:9e6d84dcdc38)",
+    "  - H4 failed",
+    "  - H9 failed",
+    "Recorded in ledger entry #17."
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 11.47,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpmwqbq85n/ws (sha256:5caead0e25d8)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, P3, H1, H2, H3, H4, H5, H6, H7",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1"
+   ],
+   "verify_gate_seconds": 14.58,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp5ve35qcj/ws (sha256:a2858b3aa590)",
+    "  - H4 failed",
+    "Recorded in ledger entry #5."
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C2",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ],
+   "verify_gate_seconds": 13.16,
+   "gate_tail": [
+    "merge: DENIED for ../../tmppt45brib/ws (sha256:bd5a7b8be4f9)",
+    "  - P1 failed",
+    "  - H5 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C3"
+   ],
+   "verify_gate_seconds": 10.54,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpak_a841_/ws (sha256:7df10b05e3fc)",
+    "  - H6 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 12.46,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp4zhiv4ko/ws (sha256:fd546ad92a64)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 10.88,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpwodvcf8g/ws (sha256:1d9793c3c118)",
+    "  - H2 failed",
+    "  - H3 failed",
+    "  - H4 failed"
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "verify_gate_seconds": 12.59,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpgul5n_tr/ws (sha256:f462a88cfd81)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/S1",
+   "target": "S1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G2",
+    "G3",
+    "S1"
+   ],
+   "verify_gate_seconds": 10.52,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpbfy8ov2q/ws (sha256:7b3b9360a49d)",
+    "  - P2 failed",
+    "  - H1 failed",
+    "  - H2 failed"
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/S2",
+   "target": "S2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "G1",
+    "G2",
+    "G3",
+    "S2",
+    "S5"
+   ],
+   "verify_gate_seconds": 10.61,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpa6drvdp8/ws (sha256:6e45ece82948)",
+    "  - P2 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/S3",
+   "target": "S3",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G2",
+    "G3",
+    "S3",
+    "S5"
+   ],
+   "verify_gate_seconds": 10.54,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp73um7z1o/ws (sha256:95d0001369f8)",
+    "  - P2 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/S4",
+   "target": "S4",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "S4"
+   ],
+   "verify_gate_seconds": 10.06,
+   "gate_tail": [
+    "merge: DENIED for ../../tmplbu10uxr/ws (sha256:886f4e862892)",
+    "  - P2 failed",
+    "  - H4 failed",
+    "  - H7 failed"
+   ]
+  },
+  {
+   "task": "T18-overtime-pay",
+   "impl": "broken/S5",
+   "target": "S5",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G2",
+    "G3",
+    "S5"
+   ],
+   "verify_gate_seconds": 10.67,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp672d144m/ws (sha256:9e167deab4da)",
+    "  - P2 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T19-seat-groups",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 15.11,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmphjk35ot2/ws (sha256:c069fe68c471)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T19-seat-groups",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3"
+   ],
+   "verify_gate_seconds": 14.3,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp1aprk528/ws (sha256:0517bf2cbb1d)",
+    "  - P1 failed",
+    "  - H5 failed",
+    "  - H7 failed"
+   ]
+  },
+  {
+   "task": "T19-seat-groups",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2",
+    "S2"
+   ],
+   "verify_gate_seconds": 14.41,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp4okmvjag/ws (sha256:6d21bdeaff9e)",
+    "  - P2 failed",
+    "  - H6 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T19-seat-groups",
+   "impl": "broken/C3",
+   "target": "C3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1",
+    "C3"
+   ],
+   "verify_gate_seconds": 13.29,
+   "gate_tail": [
+    "merge: DENIED for ../../tmppakx4ghr/ws (sha256:4d296eb84e94)",
+    "  - H7 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T19-seat-groups",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "verify_gate_seconds": 15.02,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpkkmwqh75/ws (sha256:d7d015a95cfd)",
+    "  - H1 failed",
+    "  - H2 failed",
+    "  - H3 failed"
+   ]
+  },
+  {
+   "task": "T19-seat-groups",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G2"
+   ],
+   "verify_gate_seconds": 13.88,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpqche_u62/ws (sha256:976fe357a988)",
+    "  - H2 failed",
+    "Recorded in ledger entry #13."
+   ]
+  },
+  {
+   "task": "T19-seat-groups",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G3"
+   ],
+   "verify_gate_seconds": 12.88,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpasmmifuk/ws (sha256:8dc1ccdcf302)",
+    "  - H3 failed",
+    "Recorded in ledger entry #15."
+   ]
+  },
+  {
+   "task": "T19-seat-groups",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": false,
+   "warrant_accept": false,
+   "x_broken": [
+    "G4",
+    "S3"
+   ],
+   "verify_gate_seconds": 12.59,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpz5_wtb1a/ws (sha256:c3b60ad44d1a)",
+    "  - P2 failed",
+    "  - H4 failed",
+    "  - H8 failed"
+   ]
+  },
+  {
+   "task": "T20-name-normalise",
+   "impl": "reference",
+   "target": null,
+   "visible_accept": true,
+   "warrant_accept": true,
+   "x_broken": [],
+   "verify_gate_seconds": 33.57,
+   "gate_tail": [
+    "merge: WARRANTED for ../../tmpdvzi6fh0/ws (sha256:590c1e0e7ea8)",
+    "  strength   tested",
+    "  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8, H9",
+    "Recorded in ledger entry #3."
+   ]
+  },
+  {
+   "task": "T20-name-normalise",
+   "impl": "broken/C1",
+   "target": "C1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C1"
+   ],
+   "verify_gate_seconds": 32.14,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp3g_ssi_6/ws (sha256:75976b8313bc)",
+    "  - H7 failed",
+    "Recorded in ledger entry #5."
+   ]
+  },
+  {
+   "task": "T20-name-normalise",
+   "impl": "broken/C2",
+   "target": "C2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "C2"
+   ],
+   "verify_gate_seconds": 28.37,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpldr1lk42/ws (sha256:bce5482ddefb)",
+    "  - H8 failed",
+    "Recorded in ledger entry #7."
+   ]
+  },
+  {
+   "task": "T20-name-normalise",
+   "impl": "broken/G1",
+   "target": "G1",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G1",
+    "G5"
+   ],
+   "verify_gate_seconds": 24.53,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp0s14gvz6/ws (sha256:9d6f70dda984)",
+    "  - H1 failed",
+    "Recorded in ledger entry #9."
+   ]
+  },
+  {
+   "task": "T20-name-normalise",
+   "impl": "broken/G2",
+   "target": "G2",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G2",
+    "G4"
+   ],
+   "verify_gate_seconds": 25.56,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpm5vvvi14/ws (sha256:a09180455530)",
+    "  - H2 failed",
+    "Recorded in ledger entry #11."
+   ]
+  },
+  {
+   "task": "T20-name-normalise",
+   "impl": "broken/G3",
+   "target": "G3",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G3"
+   ],
+   "verify_gate_seconds": 26.0,
+   "gate_tail": [
+    "merge: DENIED for ../../tmpci2a9y0g/ws (sha256:dcefea91fa04)",
+    "  - H3 failed",
+    "Recorded in ledger entry #13."
+   ]
+  },
+  {
+   "task": "T20-name-normalise",
+   "impl": "broken/G4",
+   "target": "G4",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G4"
+   ],
+   "verify_gate_seconds": 25.91,
+   "gate_tail": [
+    "merge: DENIED for ../../tmporlg99sn/ws (sha256:3ebf76ae2f06)",
+    "  - H4 failed",
+    "Recorded in ledger entry #15."
+   ]
+  },
+  {
+   "task": "T20-name-normalise",
+   "impl": "broken/G5",
+   "target": "G5",
+   "visible_accept": true,
+   "warrant_accept": false,
+   "x_broken": [
+    "G5"
+   ],
+   "verify_gate_seconds": 24.87,
+   "gate_tail": [
+    "merge: DENIED for ../../tmp9n51nnr6/ws (sha256:faf0dc57f452)",
+    "  - H5 failed",
+    "Recorded in ledger entry #17."
+   ]
+  }
+ ]
+}
