@@ -248,7 +248,10 @@ def execute_run(entry, spent):
         (run_dir / f"transcript_s{k}.json").write_text(raw)
         session = (result or {}).get("session_id") or session
         tokens += usage_tokens(result)
-        cost += float((result or {}).get("total_cost_usd") or 0)
+        reported = float((result or {}).get("total_cost_usd") or 0)
+        record["claude_reported_cost_usd"] = round(record.get("claude_reported_cost_usd", 0) + reported, 4)
+        if CONFIG["builder_backend"] != "ollama":  # a local model has no list price (protocol deviation D1)
+            cost += reported
         snap, digest = snapshot(run_dir, k)
         v = run_suite(task_dir / "checks" / "public", snap)
         sub = {"k": k, "digest": digest, "builder_wall_s": round(wall, 1), "tokens_cumulative": tokens,
