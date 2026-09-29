@@ -40,8 +40,14 @@ CONFIG = {
     # Builder: Claude Code driving a local open-weights model through Ollama's
     # Anthropic-compatible API on the verification host's GPU (RTX 5070 Ti, 16 GB).
     "builder_backend": "ollama",
-    "model": "gpt-oss-20b-32k",          # alias of gpt-oss:20b (digest 17052f91a42e) with num_ctx 32768
+    "model": "gpt-oss-20b-64k",          # alias of gpt-oss:20b (digest 17052f91a42e) with num_ctx 65536
     "model_base": "gpt-oss:20b@17052f91a42e",
+    # Ollama serves the model with a 65,536-token window. Past it, Ollama cut prompts from the
+    # front (32k pilot: the task prompt was lost) or refused them (64k test: HTTP 500), and
+    # Claude Code does not know an unrecognised model's window, so it never compacted. It is
+    # told a 60,000-token window (CLAUDE_CODE_MAX_CONTEXT_TOKENS) and compacts before the edge.
+    "model_context_tokens": 65_536,
+    "builder_context_tokens": 60_000,
     "ollama_url": "http://localhost:11434",
     "max_submissions": 5,
     "wall_clock_s": 45 * 60,
@@ -118,6 +124,7 @@ def builder_turn(run_dir, message, resume_id, budget_usd, timeout_s):
         cmd += ["--network", "host",
                 "-e", f"ANTHROPIC_BASE_URL={CONFIG['ollama_url']}", "-e", "ANTHROPIC_API_KEY=ollama",
                 "-e", f"ANTHROPIC_SMALL_FAST_MODEL={CONFIG['model']}",
+                "-e", f"CLAUDE_CODE_MAX_CONTEXT_TOKENS={CONFIG['builder_context_tokens']}",
                 "-e", "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1", "-e", "DISABLE_TELEMETRY=1",
                 "-e", "DISABLE_AUTOUPDATER=1", "-e", "DISABLE_ERROR_REPORTING=1"]
     else:
