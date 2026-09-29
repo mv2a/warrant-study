@@ -108,7 +108,10 @@ def builder_turn(run_dir, message, resume_id, budget_usd, timeout_s):
     ws = run_dir / "workspace"
     home = run_dir / "builder_home"
     home.mkdir(exist_ok=True)
-    cmd = ["docker", "run", "--rm", "--init",
+    # A named container, so a turn that runs out the clock can be killed: stopping the
+    # docker client alone leaves the container running (seen in the gpt-oss pilot).
+    name = f"wstudy-{run_dir.name}-{int(time.time() * 1000)}"
+    cmd = ["docker", "run", "--rm", "--init", "--name", name,
            "--cpus", CONFIG["builder_cpus"], "--memory", CONFIG["builder_memory"], "-e", "IS_SANDBOX=1"]
     if CONFIG["builder_backend"] == "ollama":
         # Host network only so the builder can reach Ollama on localhost; no host paths but the workspace.
@@ -136,8 +139,9 @@ def builder_turn(run_dir, message, resume_id, budget_usd, timeout_s):
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=max(timeout_s, 30))
         raw = p.stdout
     except subprocess.TimeoutExpired as e:
+        subprocess.run(["docker", "kill", name], capture_output=True)
         raw = (e.stdout or b"").decode() if isinstance(e.stdout, bytes) else (e.stdout or "")
-        return None, time.time() - start, raw + "\n[harness] builder turn timed out"
+        return None, time.time() - start, raw + "\n[harness] builder turn timed out; container killed"
     wall = time.time() - start
     try:
         return json.loads(raw.strip().splitlines()[-1]), wall, raw
@@ -145,11 +149,36 @@ def builder_turn(run_dir, message, resume_id, budget_usd, timeout_s):
         return None, wall, raw + "\n" + p.stderr[-2000:]
 
 
-def usage_tokens(result):
-    """(input tokens including cache reads and writes, output tokens) for one builder turn."""
-    u = (result or {}).get("usage") or {}
+def _tokens(u):
     tin = sum(int(u.get(k) or 0) for k in ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
     return tin, int(u.get("output_tokens") or 0)
+
+
+def usage_tokens(result):
+    """(input tokens including cache reads and writes, output tokens) as one turn's result reports them."""
+    return _tokens((result or {}).get("usage") or {})
+
+
+def session_usage(run_dir):
+    """(input tokens, output tokens, model calls) over the run, from Claude Code's session logs.
+
+    These logs are written as the builder works, so they still count a turn that timed out
+    and returned no result. Resumed sessions can repeat earlier messages; each model reply is
+    counted once, by its message id."""
+    seen, tin, tout = set(), 0, 0
+    for f in sorted((run_dir / "builder_home" / ".claude" / "projects").rglob("*.jsonl")):
+        for line in f.read_text(errors="replace").splitlines():
+            try:
+                d = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            m = d.get("message") if d.get("type") == "assistant" else None
+            if not isinstance(m, dict) or not m.get("usage") or m.get("id") in seen:
+                continue
+            seen.add(m.get("id"))
+            i, o = _tokens(m["usage"])
+            tin, tout = tin + i, tout + o
+    return tin, tout, len(seen)
 
 
 # ---------------------------------------------------------------- evaluation
@@ -261,9 +290,10 @@ def execute_run(entry, spent):
         result, wall, raw = builder_turn(run_dir, message, session, remaining_budget, remaining_time)
         (run_dir / f"transcript_s{k}.json").write_text(raw)
         session = (result or {}).get("session_id") or session
-        tin, tout = usage_tokens(result)
-        tokens_in, tokens_out = tokens_in + tin, tokens_out + tout
+        tokens_in, tokens_out, _ = session_usage(run_dir)
         tokens = tokens_in + tokens_out
+        rin, rout = usage_tokens(result)
+        record["tokens_reported"] = record.get("tokens_reported", 0) + rin + rout
         reported = float((result or {}).get("total_cost_usd") or 0)
         record["claude_reported_cost_usd"] = round(record.get("claude_reported_cost_usd", 0) + reported, 4)
         if CONFIG["builder_backend"] != "ollama":  # a local model has no list price (protocol deviation D1)
@@ -308,9 +338,11 @@ def execute_run(entry, spent):
         record["correct_delivery"] = int(record["accepted"] and not broken)
     else:
         record.update({"final_submission": None, "audit": {}, "promises_broken": [], "escaped_defects": 0, "false_pass": 0, "correct_delivery": 0})
+    tokens_in, tokens_out, calls = session_usage(run_dir)
     record["tokens"] = tokens_in + tokens_out
     record["tokens_input"] = tokens_in
     record["tokens_output"] = tokens_out
+    record["model_calls"] = calls
     record["cost_usd"] = round(cost, 4)
     record["wall_minutes"] = round((time.time() - start) / 60, 2)
     record["finished"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
