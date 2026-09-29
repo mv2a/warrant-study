@@ -361,17 +361,17 @@ def execute_run(entry, spent):
 
 # ---------------------------------------------------------------- plan and main
 
-def make_plan(seed):
+def make_plan(seed, conditions=CONDITIONS, replicates=REPLICATES):
     rng = random.Random(seed)
     tasks = sorted(p.name for p in TASKS.iterdir() if (p / "task.json").exists())
     entries = []
     for t in tasks:
-        cells = [(c, r) for c in CONDITIONS for r in REPLICATES]
+        cells = [(c, r) for c in conditions for r in replicates]
         rng.shuffle(cells)
         for c, r in cells:
             label = "%08x" % rng.getrandbits(32)
             entries.append({"run_id": f"{t}-{c}-r{r}", "label": label, "task": t, "condition": c, "replicate": r})
-    plan = {"seed": seed, "created": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "config": CONFIG, "runs": entries}
+    plan = {"seed": seed, "conditions": list(conditions), "replicates": list(replicates), "created": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "config": CONFIG, "runs": entries}
     RUNS.mkdir(exist_ok=True)
     (RUNS / "plan.json").write_text(json.dumps(plan, indent=1))
     print(f"planned {len(entries)} runs over {len(tasks)} tasks, seed {seed}")
@@ -381,10 +381,12 @@ def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
     p1 = sub.add_parser("plan"); p1.add_argument("--seed", type=int, required=True)
+    p1.add_argument("--conditions", nargs="+", choices=CONDITIONS, default=list(CONDITIONS))
+    p1.add_argument("--replicates", type=int, default=len(REPLICATES))
     p2 = sub.add_parser("run"); p2.add_argument("--only", nargs="*"); p2.add_argument("--parallel", type=int, default=3)
     a = ap.parse_args()
     if a.cmd == "plan":
-        make_plan(a.seed)
+        make_plan(a.seed, tuple(a.conditions), tuple(range(1, a.replicates + 1)))
         return
     if CONFIG["builder_backend"] != "ollama" and not ENV_FILE.exists():
         sys.exit(f"missing {ENV_FILE}: the API key file must be created by the study owner")
