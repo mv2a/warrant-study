@@ -40,12 +40,15 @@ CONFIG = {
     # Builder: Claude Code driving a local open-weights model through Ollama's
     # Anthropic-compatible API on the verification host's GPU (RTX 5070 Ti, 16 GB).
     "builder_backend": "ollama",
-    "model": "qwen3-14b-32k",            # alias of qwen3:14b (digest bdbd181c33f2) with num_ctx 32768
-    "model_base": "qwen3:14b@bdbd181c33f2",
+    "model": "gpt-oss-20b-32k",          # alias of gpt-oss:20b (digest 17052f91a42e) with num_ctx 32768
+    "model_base": "gpt-oss:20b@17052f91a42e",
     "ollama_url": "http://localhost:11434",
     "max_submissions": 5,
     "wall_clock_s": 45 * 60,
-    "token_cap": 200_000,
+    # A local model has no prompt caching, so every turn re-sends the whole context and
+    # input tokens grow fast; the pilot's qwen3 run passed 200k by submission 4. Tokens cost
+    # nothing locally, so the cap is a runaway guard and the wall clock is the real limit.
+    "token_cap": 1_000_000,
     "run_budget_usd": 1.00,
     "study_budget_usd": 75.00,
     "builder_cpus": "2",
@@ -84,7 +87,8 @@ PROMPT = """You are building a small command-line program. Its promises are in i
 directory. Write the program as one executable file named `{command}` in this directory,
 starting with a python3 shebang, using only the Python standard library.
 
-The visible checks in checks/public/ show how the program will be called. Run one with:
+Before writing any code, read intent.md and every file in checks/public/. The visible
+checks there show how the program will be called and what it must print. Run one with:
   cd checks/public && WARRANT_WORKSPACE=.. python3 <script>.py
 
 When you have finished, stop. Your work will then be evaluated. If it is not accepted you
