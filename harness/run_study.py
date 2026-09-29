@@ -37,7 +37,12 @@ ENV_FILE = pathlib.Path.home() / ".wstudy" / "env"
 CONFIG = {
     "builder_image": "wstudy-builder:1",
     "verify_image": "python:3.11-slim",
-    "model": "claude-haiku-4-5-20251001",
+    # Builder: Claude Code driving a local open-weights model through Ollama's
+    # Anthropic-compatible API on the verification host's GPU (RTX 5070 Ti, 16 GB).
+    "builder_backend": "ollama",
+    "model": "qwen3-14b-32k",            # alias of qwen3:14b (digest bdbd181c33f2) with num_ctx 32768
+    "model_base": "qwen3:14b@bdbd181c33f2",
+    "ollama_url": "http://localhost:11434",
     "max_submissions": 5,
     "wall_clock_s": 45 * 60,
     "token_cap": 200_000,
@@ -97,17 +102,24 @@ def builder_turn(run_dir, message, resume_id, budget_usd, timeout_s):
     ws = run_dir / "workspace"
     home = run_dir / "builder_home"
     home.mkdir(exist_ok=True)
-    cmd = [
-        "docker", "run", "--rm", "--init",
-        "--cpus", CONFIG["builder_cpus"], "--memory", CONFIG["builder_memory"],
-        "--env-file", str(ENV_FILE), "-e", "IS_SANDBOX=1",
-        "-v", f"{ws}:/work", "-v", f"{home}:/home/builder/.claude", "-w", "/work",
-        CONFIG["builder_image"],
-        "claude", "-p", message, "--bare", "--model", CONFIG["model"],
-        "--output-format", "json", "--permission-mode", "bypassPermissions",
-        "--disallowedTools", "WebFetch", "WebSearch",
-        "--max-budget-usd", f"{max(budget_usd, 0.01):.2f}",
-    ]
+    cmd = ["docker", "run", "--rm", "--init",
+           "--cpus", CONFIG["builder_cpus"], "--memory", CONFIG["builder_memory"], "-e", "IS_SANDBOX=1"]
+    if CONFIG["builder_backend"] == "ollama":
+        # Host network only so the builder can reach Ollama on localhost; no host paths but the workspace.
+        cmd += ["--network", "host",
+                "-e", f"ANTHROPIC_BASE_URL={CONFIG['ollama_url']}", "-e", "ANTHROPIC_API_KEY=ollama",
+                "-e", f"ANTHROPIC_SMALL_FAST_MODEL={CONFIG['model']}",
+                "-e", "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1", "-e", "DISABLE_TELEMETRY=1",
+                "-e", "DISABLE_AUTOUPDATER=1", "-e", "DISABLE_ERROR_REPORTING=1"]
+    else:
+        cmd += ["--env-file", str(ENV_FILE)]
+    cmd += ["-v", f"{ws}:/work", "-v", f"{home}:/home/builder/.claude", "-w", "/work",
+            CONFIG["builder_image"],
+            "claude", "-p", message, "--bare", "--model", CONFIG["model"],
+            "--output-format", "json", "--permission-mode", "bypassPermissions",
+            "--disallowedTools", "WebFetch", "WebSearch"]
+    if CONFIG["builder_backend"] != "ollama":
+        cmd += ["--max-budget-usd", f"{max(budget_usd, 0.01):.2f}"]
     if resume_id:
         cmd += ["--resume", resume_id]
     start = time.time()
@@ -314,7 +326,7 @@ def main():
     if a.cmd == "plan":
         make_plan(a.seed)
         return
-    if not ENV_FILE.exists():
+    if CONFIG["builder_backend"] != "ollama" and not ENV_FILE.exists():
         sys.exit(f"missing {ENV_FILE}: the API key file must be created by the study owner")
     plan = json.loads((RUNS / "plan.json").read_text())
     todo = [e for e in plan["runs"] if (not a.only or e["run_id"] in a.only) and not (RUNS / e["run_id"] / "run.json").exists()]
