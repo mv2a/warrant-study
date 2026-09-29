@@ -1,9 +1,12 @@
 # Warrant study: visible-test-only versus evidence-gated agent development
 
 Working repository for an exploratory evaluation of Warrant. The design is in
-`EVALUATION_PLAN.md`. It replaced the larger pre-registered design drafted in
+`EVALUATION_PLAN.md`. It replaced a larger design drafted for pre-registration in
 `mv2a/warrant/docs/experiments/visible-vs-evidence-gated/PROTOCOL.md` (v0.1), which was
 never frozen or registered and was not run.
+
+The repository stays private until the results are published. The audit suites (X) are
+not published before all runs are complete.
 
 - `tasks/Txx-slug/`: the 20 study tasks, one per directory (see `TASK_SPEC.md`). Each has
   its intent, visible checks (V), hidden checks (H), audit checks (X), a reference and
