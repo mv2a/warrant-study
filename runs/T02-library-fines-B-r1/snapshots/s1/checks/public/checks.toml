@@ -1,0 +1,17 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C1", "C3"]
+statement = "The fine command follows the interface: a request with a late book and a late DVD, and a request with an empty item list, each get an object with exactly items and total_cents, one entry per request item in the request's order with exactly id, days_late and fine_cents, all amounts and day counts as integers, and a total of 0 for the empty list; a request with an item of type \"cd\" is refused with status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3"]
+statement = "The three example requests in the intent get exactly the responses the intent gives, with status 0."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]

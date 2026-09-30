@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+import sys, json, re
+
+def main():
+    try:
+        text = sys.stdin.read()
+    except UnicodeDecodeError:
+        sys.exit(2)
+    try:
+        data = json.loads(text)
+    except Exception:
+        sys.exit(2)
+    if not isinstance(data, dict):
+        sys.exit(2)
+    if 'branch' not in data or 'year' not in data or 'previous' not in data:
+        sys.exit(2)
+    branch = data['branch']
+    year = data['year']
+    previous = data['previous']
+    if not isinstance(branch, str):
+        sys.exit(2)
+    if branch not in ('lisbon', 'porto', 'faro', 'braga'):
+        sys.exit(2)
+    if not isinstance(year, int):
+        sys.exit(2)
+    if not (2000 <= year <= 9999):
+        sys.exit(2)
+    if previous is not None and not isinstance(previous, str):
+        sys.exit(2)
+    mapping = {'lisbon': 'LIS', 'porto': 'OPO', 'faro': 'FAO', 'braga': 'BRG'}
+    prefix = mapping[branch]
+    if previous is None:
+        seq = 1
+    else:
+        m = re.match(r'^(LIS|OPO|FAO|BRG)-([0-9]{4})-([0-9]{5})$', previous)
+        if not m:
+            sys.exit(2)
+        prev_prefix, prev_year_str, prev_seq_str = m.groups()
+        if prev_prefix != prefix:
+            sys.exit(2)
+        prev_year = int(prev_year_str)
+        prev_seq = int(prev_seq_str)
+        if prev_seq == 0:
+            sys.exit(2)
+        if prev_year < 2000 or prev_year > 9999:
+            sys.exit(2)
+        if prev_year > year:
+            sys.exit(2)
+        if prev_year == year:
+            if prev_seq == 99999:
+                sys.exit(2)
+            seq = prev_seq + 1
+        else:
+            seq = 1
+    number = f'{prefix}-{year}-{seq:05d}'
+    print(json.dumps({'number': number, 'sequence': seq}))
+    sys.exit(0)
+
+if __name__ == '__main__':
+    main()

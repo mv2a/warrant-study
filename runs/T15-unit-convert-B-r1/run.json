@@ -1,0 +1,172 @@
+{
+ "run_id": "T15-unit-convert-B-r1",
+ "label": "80b0e666",
+ "task": "T15-unit-convert",
+ "condition": "B",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-30T02:13:57Z",
+ "workspace_digest_start": "ca5ba82a00588f763d3c9facddba4313a219ff89c9cca3bd98dad2f04a034092",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "913504982486a8bec440650a3ae119ab357acbc929b851eeb5bb15596c5ae6a1",
+   "builder_wall_s": 445.0,
+   "tokens_cumulative": 303554,
+   "output_tokens_cumulative": 36843,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true,
+    "P3": true
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:0aa726bbc4fc)\n  - H4 failed\n  - H7 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "913504982486a8bec440650a3ae119ab357acbc929b851eeb5bb15596c5ae6a1",
+   "builder_wall_s": 1587.0,
+   "tokens_cumulative": 2817453,
+   "output_tokens_cumulative": 98400,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true,
+    "P3": true
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:0aa726bbc4fc)\n  - H4 failed\n  - H7 failed\nRecorded in ledger entry #5.",
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "49967f7ad0569f0c591892c740a8dcfdd4de19c2366e9cded4f9508d97db8a24",
+   "builder_wall_s": 579.7,
+   "tokens_cumulative": 4252614,
+   "output_tokens_cumulative": 132544,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true,
+    "P3": true
+   },
+   "builder_error": "no parseable builder result",
+   "gate": "merge: DENIED for ../tmp/ws (sha256:b306ba5e83f4)\n  - H4 failed\nRecorded in ledger entry #7.",
+   "accepted": false
+  }
+ ],
+ "accepted": false,
+ "tokens_reported": 2801693,
+ "claude_reported_cost_usd": 18.6557,
+ "ended": "limit:time",
+ "final_submission": 3,
+ "audit": {
+  "X1": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X2": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X3": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X4": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X5": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X6": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X7": {
+   "ok": true,
+   "covers": [
+    "C4"
+   ]
+  },
+  "X8": {
+   "ok": true,
+   "covers": [
+    "C5"
+   ]
+  },
+  "X9": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X10": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X11": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X12": {
+   "ok": false,
+   "covers": [
+    "C1"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C1"
+ ],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 0,
+ "tokens": 4252614,
+ "tokens_input": 4120070,
+ "tokens_output": 132544,
+ "model_calls": 253,
+ "cost_usd": 0.0,
+ "wall_minutes": 47.88,
+ "finished": "2026-09-30T03:01:50Z"
+}

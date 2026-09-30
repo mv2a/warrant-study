@@ -1,0 +1,185 @@
+{
+ "run_id": "T08-loan-schedule-A-r1",
+ "label": "fe59f72f",
+ "task": "T08-loan-schedule",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T21:48:06Z",
+ "workspace_digest_start": "59ce1fe9b6ab211c9d51dbe3422b225f4681ec62860fd948f471b4290faff07c",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "59ce1fe9b6ab211c9d51dbe3422b225f4681ec62860fd948f471b4290faff07c",
+   "builder_wall_s": 460.3,
+   "tokens_cumulative": 66245,
+   "output_tokens_cumulative": 33413,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "47448c409075d1d3ffb19764f6c723610646f8c431ce0ac1565b71daf8fe1ab5",
+   "builder_wall_s": 25.4,
+   "tokens_cumulative": 90378,
+   "output_tokens_cumulative": 36203,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "47448c409075d1d3ffb19764f6c723610646f8c431ce0ac1565b71daf8fe1ab5",
+   "builder_wall_s": 1213.7,
+   "tokens_cumulative": 541286,
+   "output_tokens_cumulative": 136451,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 4,
+   "digest": "47448c409075d1d3ffb19764f6c723610646f8c431ce0ac1565b71daf8fe1ab5",
+   "builder_wall_s": 49.2,
+   "tokens_cumulative": 544342,
+   "output_tokens_cumulative": 136451,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 5,
+   "digest": "47448c409075d1d3ffb19764f6c723610646f8c431ce0ac1565b71daf8fe1ab5",
+   "builder_wall_s": 137.1,
+   "tokens_cumulative": 549825,
+   "output_tokens_cumulative": 136451,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  }
+ ],
+ "accepted": false,
+ "tokens_reported": 583068,
+ "claude_reported_cost_usd": 7.9843,
+ "ended": "submissions",
+ "final_submission": 5,
+ "audit": {
+  "X1": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X2": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X3": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X4": {
+   "ok": false,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X5": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X6": {
+   "ok": false,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X7": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X8": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X9": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X10": {
+   "ok": false,
+   "covers": [
+    "S3"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C2",
+  "C3",
+  "G3",
+  "S3"
+ ],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 0,
+ "tokens": 549825,
+ "tokens_input": 413374,
+ "tokens_output": 136451,
+ "model_calls": 35,
+ "cost_usd": 0.0,
+ "wall_minutes": 31.89,
+ "finished": "2026-09-29T22:19:59Z"
+}

@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+import sys,json
+from fractions import Fraction
+
+
+def main():
+    try:
+        raw = sys.stdin.read()
+        data = json.loads(raw)
+    except Exception:
+        sys.exit(2)
+    if type(data) is not dict:
+        sys.exit(2)
+    required = {"burst", "rate", "requests"}
+    if not required.issubset(data):
+        sys.exit(2)
+    burst = data.get("burst")
+    rate = data.get("rate")
+    requests = data.get("requests")
+    if type(burst) is not int or burst < 1:
+        sys.exit(2)
+    if type(rate) is not int or rate < 1:
+        sys.exit(2)
+    if type(requests) is not list:
+        sys.exit(2)
+    prev_time = None
+    for req in requests:
+        if type(req) is not dict:
+            sys.exit(2)
+        if "client" not in req or "at" not in req:
+            sys.exit(2)
+        client = req["client"]
+        at = req["at"]
+        if type(client) is not str or len(client) == 0:
+            sys.exit(2)
+        if type(at) is not int or at < 0:
+            sys.exit(2)
+        if prev_time is not None and at < prev_time:
+            sys.exit(2)
+        prev_time = at
+    decisions = []
+    client_state = {}
+    for req in requests:
+        client = req["client"]
+        at = req["at"]
+        state = client_state.get(client)
+        if state is None:
+            tokens = Fraction(burst)
+            last = at
+            accepted = 0
+            rejected = 0
+            if tokens >= 1:
+                decisions.append("accept")
+                tokens -= 1
+                accepted += 1
+            else:
+                decisions.append("reject")
+                rejected += 1
+            client_state[client] = {"tokens": tokens, "last": last, "accepted": accepted, "rejected": rejected}
+        else:
+            elapsed = at - state["last"]
+            state["last"] = at
+            added = Fraction(rate * elapsed, 1000)
+            new_tokens = state["tokens"] + added
+            if new_tokens > burst:
+                new_tokens = Fraction(burst)
+            state["tokens"] = new_tokens
+            if state["tokens"] >= 1:
+                decisions.append("accept")
+                state["tokens"] -= 1
+                state["accepted"] += 1
+            else:
+                decisions.append("reject")
+                state["rejected"] += 1
+    clients = {client: {"accepted": st["accepted"], "rejected": st["rejected"]} for client, st in client_state.items()}
+    output = {"decisions": decisions, "clients": clients}
+    sys.stdout.write(json.dumps(output))
+    sys.exit(0)
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+import sys, json, re
+from decimal import Decimal, getcontext, ROUND_HALF_UP
+
+getcontext().prec = 200
+
+UNITS = {
+    # Length
+    "mm": (Decimal("1"), "length"),
+    "cm": (Decimal("10"), "length"),
+    "m": (Decimal("1000"), "length"),
+    "km": (Decimal("1000000"), "length"),
+    "in": (Decimal("25.4"), "length"),
+    "ft": (Decimal("304.8"), "length"),
+    "yd": (Decimal("914.4"), "length"),
+    "mi": (Decimal("1609344"), "length"),
+    # Mass
+    "mg": (Decimal("1"), "mass"),
+    "g": (Decimal("1000"), "mass"),
+    "kg": (Decimal("1000000"), "mass"),
+    "t": (Decimal("1000000000"), "mass"),
+    "lb": (Decimal("453592.37"), "mass"),
+    "oz": (Decimal("28349.523125"), "mass"),
+    "st": (Decimal("6350303.18"), "mass"),
+    # Volume
+    "ml": (Decimal("1"), "volume"),
+    "l": (Decimal("1000"), "volume"),
+    "m3": (Decimal("1000000"), "volume"),
+    "gal": (Decimal("3785.411784"), "volume"),
+    "qt": (Decimal("946.352946"), "volume"),
+    "pt": (Decimal("473.176473"), "volume"),
+    "floz": (Decimal("29.5735295625"), "volume"),
+}
+
+VALUE_RE = re.compile(r"^[0-9]+(\.[0-9]+)?$")
+
+def main():
+    data = sys.stdin.read().strip()
+    if not data:
+        sys.exit(2)
+    try:
+        request = json.loads(data)
+    except Exception:
+        sys.exit(2)
+    if not isinstance(request, dict):
+        sys.exit(2)
+    required_keys = {"value", "from", "to", "places"}
+    if set(request.keys()) != required_keys:
+        sys.exit(2)
+    value_str = request["value"]
+    unit_from = request["from"]
+    unit_to = request["to"]
+    places = request["places"]
+    if not isinstance(value_str, str) or not VALUE_RE.fullmatch(value_str):
+        sys.exit(2)
+    if not isinstance(unit_from, str) or not isinstance(unit_to, str):
+        sys.exit(2)
+    if not isinstance(places, int) or not (0 <= places <= 12):
+        sys.exit(2)
+    if unit_from not in UNITS or unit_to not in UNITS:
+        sys.exit(2)
+    dim_from = UNITS[unit_from][1]
+    dim_to = UNITS[unit_to][1]
+    if dim_from != dim_to:
+        sys.exit(2)
+    try:
+        value_dec = Decimal(value_str)
+    except Exception:
+        sys.exit(2)
+    factor_from = UNITS[unit_from][0]
+    factor_to = UNITS[unit_to][0]
+    ratio = factor_from / factor_to
+    product = value_dec * ratio
+    quant = Decimal(f"1e-{places}")
+    result = product.quantize(quant, rounding=ROUND_HALF_UP)
+    result_str = format(result, "f")
+    output = {"value": result_str, "unit": unit_to, "dimension": dim_from}
+    json.dump(output, sys.stdout)
+    sys.stdout.write("\n")
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()

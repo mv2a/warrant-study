@@ -1,0 +1,17 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C1", "C3"]
+statement = "The schedule command follows the interface: three valid loans each get one object with exactly the promised whole-number fields and rows numbered from 1, and a request for 0 months or with no rate is refused with status 2 and nothing at all on standard output."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3"]
+statement = "The three example loans in the intent get exactly the payments, interest, principal, balances and totals the intent states."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]

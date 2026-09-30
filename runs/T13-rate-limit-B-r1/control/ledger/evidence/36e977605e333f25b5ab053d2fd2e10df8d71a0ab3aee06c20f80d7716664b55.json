@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:da8ed961383ea01a4abf322ee53f4405ee97722a5de43757a17fbc47f0e61741",
+    "check": {
+      "covers": [
+        "C4"
+      ],
+      "digest": "sha256:a0590d718387657b76564aeb653049a776565dfddd3c86067641db4ff4312835",
+      "id": "H8",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "invalid.py"
+    ],
+    "durationSeconds": 1.831,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:0c0498cf1a9feb979374758f85e99ecec62f021c2245d46a3cf6b0c1c2f77f1b",
+      "tail": "a burst of true: expected a refusal (status 2, no output), got status 0 and {'decisions': ['accept', 'reject'], 'clients': {'a': {'accep\na rate of true: expected a refusal (status 2, no output), got status 0 and {'decisions': ['accept', 'accept'], 'clients': {'a': {'accep\nan at of true: expected a refusal (status 2, no output), got status 0 and {'decisions': ['accept', 'accept', 'accept'], 'clients': {'a\nan at of false: expected a refusal (status 2, no output), got status 0 and {'decisions': ['accept', 'accept', 'accept'], 'clients': {'a"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T01:03:12Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "7bf33a06329457702b9650807c9ae33a17e57555cb983ca7eab229acba1d76e3"
+      },
+      "name": "workspace"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:015bbf3335f46a9cc8a3cc5d56fd3958e699b22e987f3bf3c64691ae6832813f",
+    "check": {
+      "covers": [
+        "S1",
+        "S2",
+        "S3",
+        "S4"
+      ],
+      "digest": "sha256:040b4413bd21cb5b79ebe98619536eb477bcd0acd38f9a22826404c7c43cb486",
+      "id": "P2",
+      "strength": "tested",
+      "visibility": "public"
+    },
+    "command": [
+      "python3",
+      "scenarios.py"
+    ],
+    "durationSeconds": 40.084,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:3bb56eb835c67e017f4dacbd09b0c8605b0fa95301eb5dd64949f3f168748e55",
+      "tail": "S1: expected {'room_cents': 24000, 'discount_cents': 0, 'tax_cents': 550, 'total_cents': 24550} with status 0, got None (status 124)\nS2: expected {'room_cents': 42000, 'discount_cents': 0, 'tax_cents': 825, 'total_cents': 42825} with status 0, got None (status 124)\nS4: expected {'room_cents': 120000, 'discount_cents': 18000, 'tax_cents': 2750, 'total_cents': 104750} with status 0, got None (status 124)\nS3: a 2-night Saturday check-in should be refused with status 2, got status 124 and None"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T04:55:18Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "fa8764d326d988eb3d673a2242481e9de59749a66393c678fd6bd36314b96aa5"
+      },
+      "name": "workspace"
+    }
+  ]
+}

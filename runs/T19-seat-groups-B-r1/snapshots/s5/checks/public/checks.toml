@@ -1,0 +1,17 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C1", "C3"]
+statement = "The seats command answers two valid requests with exit status 0 and exactly the fields seated, refused and free in the documented shapes, and refuses a request with a group of size 0 with exit status 2 and no output."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3"]
+statement = "The three example requests in the intent get exit status 0 and exactly the responses the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["scenarios"]

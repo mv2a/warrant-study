@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+import sys, json, re
+
+
+def reject():
+    sys.exit(2)
+
+
+def transform(s):
+    # convert ASCII uppercase to lowercase, keep others unchanged
+    res = []
+    for c in s:
+        if 'A' <= c <= 'Z':
+            res.append(c.lower())
+        else:
+            res.append(c)
+    return ''.join(res)
+
+
+def main():
+    data = sys.stdin.read()
+    if data == '':
+        reject()
+    trimmed = data.strip()
+    if trimmed == '':
+        reject()
+    try:
+        obj = json.loads(trimmed)
+    except Exception:
+        reject()
+    if not isinstance(obj, dict):
+        reject()
+    keys = set(obj.keys())
+    if keys != {'password', 'username', 'banned'}:
+        reject()
+    password = obj['password']
+    username = obj['username']
+    banned = obj['banned']
+    if not isinstance(password, str):
+        reject()
+    if not isinstance(username, str):
+        reject()
+    if not isinstance(banned, list):
+        reject()
+    if not (1 <= len(username) <= 32):
+        reject()
+    if not re.fullmatch(r'[A-Za-z0-9._-]+', username):
+        reject()
+    if len(banned) > 20:
+        reject()
+    for entry in banned:
+        if not isinstance(entry, str) or entry == '':
+            reject()
+    violations = set()
+    pwd_len = len(password)
+    if pwd_len < 12:
+        violations.add('too_short')
+    elif pwd_len > 64:
+        violations.add('too_long')
+    classes = set()
+    for ch in password:
+        if 'a' <= ch <= 'z':
+            classes.add('lower')
+        elif 'A' <= ch <= 'Z':
+            classes.add('upper')
+        elif '0' <= ch <= '9':
+            classes.add('digit')
+        else:
+            classes.add('symbol')
+    if len(classes) < 3:
+        violations.add('classes')
+    if len(username) >= 4:
+        t_username = transform(username)
+        t_password = transform(password)
+        found = False
+        for i in range(len(username) - 3):
+            sub = t_username[i:i+4]
+            if sub in t_password:
+                found = True
+                break
+        if found:
+            violations.add('username')
+    for i in range(len(password) - 2):
+        if password[i] == password[i+1] == password[i+2]:
+            violations.add('repeat')
+            break
+    t_password = transform(password)
+    for entry in banned:
+        t_entry = transform(entry)
+        if t_entry in t_password:
+            violations.add('banned')
+            break
+    ok = not violations
+    out = {'ok': ok, 'violations': sorted(violations)}
+    sys.stdout.write(json.dumps(out))
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

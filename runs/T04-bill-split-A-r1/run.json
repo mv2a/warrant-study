@@ -1,0 +1,184 @@
+{
+ "run_id": "T04-bill-split-A-r1",
+ "label": "7b7a453c",
+ "task": "T04-bill-split",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T19:51:01Z",
+ "workspace_digest_start": "6a3c75de9645b72a07e59aec824703f5913df5a5442283a0585f5021ca1f66db",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "6a3c75de9645b72a07e59aec824703f5913df5a5442283a0585f5021ca1f66db",
+   "builder_wall_s": 479.7,
+   "tokens_cumulative": 77359,
+   "output_tokens_cumulative": 33282,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "6a3c75de9645b72a07e59aec824703f5913df5a5442283a0585f5021ca1f66db",
+   "builder_wall_s": 20.4,
+   "tokens_cumulative": 97205,
+   "output_tokens_cumulative": 33282,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "8c023e2ba1af043d17af37fed891a92a8b25a6ff9f462a30246e73c340afa39d",
+   "builder_wall_s": 293.8,
+   "tokens_cumulative": 166712,
+   "output_tokens_cumulative": 63650,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true,
+    "P3": true
+   },
+   "builder_error": null,
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 174801,
+ "claude_reported_cost_usd": 2.9326,
+ "ended": "accepted",
+ "final_submission": 3,
+ "audit": {
+  "X1": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X2": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X3": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X4": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X5": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X6": {
+   "ok": false,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X7": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X8": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X9": {
+   "ok": true,
+   "covers": [
+    "C4"
+   ]
+  },
+  "X10": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X11": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X12": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X13": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X14": {
+   "ok": false,
+   "covers": [
+    "G4",
+    "C2"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C2",
+  "C3",
+  "G4"
+ ],
+ "escaped_defects": 3,
+ "false_pass": 1,
+ "correct_delivery": 0,
+ "tokens": 166712,
+ "tokens_input": 103062,
+ "tokens_output": 63650,
+ "model_calls": 14,
+ "cost_usd": 0.0,
+ "wall_minutes": 13.96,
+ "finished": "2026-09-29T20:04:59Z"
+}

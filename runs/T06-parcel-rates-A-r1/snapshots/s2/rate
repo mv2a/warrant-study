@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+import sys
+import json
+
+
+def main():
+    try:
+        data = sys.stdin.read()
+        req = json.loads(data)
+    except Exception:
+        sys.exit(2)
+
+    if not isinstance(req, dict):
+        sys.exit(2)
+
+    required = {'zone', 'weight_g', 'length_cm', 'width_cm', 'height_cm'}
+    if not required.issubset(req):
+        sys.exit(2)
+
+    zone = req['zone']
+    weight_g = req['weight_g']
+    length_cm = req['length_cm']
+    width_cm = req['width_cm']
+    height_cm = req['height_cm']
+
+    if not isinstance(zone, int) or zone not in (1, 2, 3, 4):
+        sys.exit(2)
+    for val in (weight_g, length_cm, width_cm, height_cm):
+        if not isinstance(val, int) or val <= 0:
+            sys.exit(2)
+
+    L, W, H = length_cm, width_cm, height_cm
+    longest = max(L, W, H)
+    sum_sides = L + W + H
+    girth = 2 * (sum_sides - longest)
+    length_plus_girth = longest + girth
+
+    dim_weight = (L * W * H + 5 - 1) // 5
+    billable_weight = max(weight_g, dim_weight)
+
+    if billable_weight > 30000 or longest > 150 or length_plus_girth > 300:
+        sys.exit(2)
+
+    base_prices = {
+        1: [(500, 450), (1000, 540), (2000, 690), (5000, 920), (10000, 1350)],
+        2: [(500, 520), (1000, 630), (2000, 810), (5000, 1090), (10000, 1600)],
+        3: [(500, 610), (1000, 740), (2000, 960), (5000, 1310), (10000, 1930)],
+        4: [(500, 780), (1000, 950), (2000, 1240), (5000, 1700), (10000, 2520)],
+    }
+    perkg = {1: 85, 2: 105, 3: 130, 4: 175}
+
+    if billable_weight <= 10000:
+        for thresh, price in base_prices[zone]:
+            if billable_weight <= thresh:
+                base_cents = price
+                break
+    else:
+        base_cents = base_prices[zone][-1][1]
+        extra_kg = (billable_weight - 10000 + 1000 - 1) // 1000
+        base_cents += extra_kg * perkg[zone]
+
+    surcharge_cents = 1500 if (longest > 100 or length_plus_girth > 220) else 0
+    total_cents = base_cents + surcharge_cents
+
+    result = {
+        'billable_g': billable_weight,
+        'base_cents': base_cents,
+        'surcharge_cents': surcharge_cents,
+        'total_cents': total_cents,
+    }
+
+    print(json.dumps(result))
+    sys.exit(0)
+
+if __name__ == '__main__':
+    main()

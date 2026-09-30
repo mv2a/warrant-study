@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:015bbf3335f46a9cc8a3cc5d56fd3958e699b22e987f3bf3c64691ae6832813f",
+    "check": {
+      "covers": [
+        "G3"
+      ],
+      "digest": "sha256:915925238b758d9ff005fbaf84d5b76e3e2bfcdfb5203e98b406b253af52e03d",
+      "id": "H3",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "city_tax.py"
+    ],
+    "durationSeconds": 0.071,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:ef87cc8b81cb2ef4b654b9027997f0396e1f50263c6b6479ae4186f0ef2a5696",
+      "tail": "the workspace has no executable named stay"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T04:18:32Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "271bca90fedd7e1f6f826cbc6ca46e62a8fa01dfd4ca6dd5cac4ba9565d90fd8"
+      },
+      "name": "workspace"
+    }
+  ]
+}

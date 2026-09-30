@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:3e57534cdd2d0c49827df8696af2749cfbebb65952e4a84ff96a713e3ed2526e",
+    "check": {
+      "covers": [
+        "C3"
+      ],
+      "digest": "sha256:7c48c1290f64f2bdb5816dd6ab10b79135f326c2d0633c3309a8f59e21c4aee4",
+      "id": "H6",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "refusals.py"
+    ],
+    "durationSeconds": 1.664,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:8b0e2bcc9d634bbbd71ea764acf547f07bd03a9f8ebf11cdcee0e8b86856dfc4",
+      "tail": "an income of true: expected a refusal with status 2, got status 0 and {'income_cents': True, 'allowance_cents': 1200000, 'taxable_cents': 0, 'tax_before_credit_cents': 0, 'credit_cents': 0, 'tax_cents': 0}\nan income of false: expected a refusal with status 2, got status 0 and {'income_cents': False, 'allowance_cents': 1200000, 'taxable_cents': 0, 'tax_before_credit_cents': 0, 'credit_cents': 0, 'tax_cents': 0}\na dependents count of true: expected a refusal with status 2, got status 0 and {'income_cents': 3000000, 'allowance_cents': 1200000, 'taxable_cents': 1800000, 'tax_before_credit_cents': 170000, 'credit_cents': 45000, 'tax_cents': 125000}\na dependents count of false: expected a refusal with status 2, got status 0 and {'income_cents': 3000000, 'allowance_cents': 1200000, 'taxable_cents': 1800000, 'tax_before_credit_cents': 170000, 'credit_cents': 0, 'tax_cents': 170000}"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-29T21:34:45Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "a5f30f33f24b6a14bf1eb24bc4755f3de09b37eaa1d18f1d9c932c04a161b37e"
+      },
+      "name": "workspace"
+    }
+  ]
+}

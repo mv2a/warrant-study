@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+"""Reorder command-line tool.
+
+Reads a single JSON object from stdin, writes a single JSON object to stdout.
+Implements the specification from intent.md.
+Exits with status 0 on success, status 2 on refusal.
+"""
+
+import sys
+import json
+
+
+def exit_refusal():
+    """Terminate without output, exit status 2."""
+    sys.exit(2)
+
+
+def main():
+    # Read entire stdin
+    try:
+        raw = sys.stdin.read()
+        if not raw.strip():
+            exit_refusal()
+        request = json.loads(raw)
+    except Exception:
+        exit_refusal()
+
+    # Request must be a dict
+    if not isinstance(request, dict):
+        exit_refusal()
+
+    # Required top-level keys
+    if 'budget_cents' not in request or 'products' not in request:
+        exit_refusal()
+    budget = request['budget_cents']
+    products = request['products']
+
+    # Validate budget_cents
+    if type(budget) is not int or budget < 0:
+        exit_refusal()
+
+    # Validate products list
+    if not isinstance(products, list):
+        exit_refusal()
+
+    # Validate each product
+    seen_skus = set()
+    validated = []
+    for prod in products:
+        if not isinstance(prod, dict):
+            exit_refusal()
+
+        # Required keys
+        required_keys = {
+            'sku',
+            'on_hand',
+            'on_order',
+            'daily_demand',
+            'lead_time_days',
+            'safety_stock',
+            'pack_size',
+            'unit_cost_cents',
+            'priority',
+        }
+        if not required_keys.issubset(prod.keys()):
+            exit_refusal()
+
+        sku = prod['sku']
+        if type(sku) is not str or sku == '':
+            exit_refusal()
+        if sku in seen_skus:
+            exit_refusal()
+        seen_skus.add(sku)
+
+        # Validate integer fields (non‑negative)
+        for key in ('on_hand', 'on_order', 'daily_demand',
+                    'lead_time_days', 'safety_stock'):
+            val = prod[key]
+            if type(val) is not int or val < 0:
+                exit_refusal()
+
+        # Validate integer fields (positive)
+        for key in ('pack_size', 'unit_cost_cents', 'priority'):
+            val = prod[key]
+            if type(val) is not int or val < 1:
+                exit_refusal()
+
+        validated.append(prod)
+
+    # Compute wanted for each product
+    orders = []
+    for prod in validated:
+        target = prod['daily_demand'] * prod['lead_time_days'] + prod['safety_stock']
+        units_needed = target - prod['on_hand'] - prod['on_order']
+        if units_needed <= 0:
+            wanted = 0
+        else:
+            pack_size = prod['pack_size']
+            wanted = ((units_needed + pack_size - 1) // pack_size) * pack_size
+        prod['_wanted'] = wanted
+        orders.append({
+            'sku': prod['sku'],
+            'wanted': wanted,
+            'quantity': 0,
+            'cost_cents': 0,
+        })
+
+    # Order by priority (ascending), then original index
+    sorted_prods = sorted(enumerate(validated), key=lambda x: (x[1]['priority'], x[0]))
+
+    budget_left = budget
+    total_cost = 0
+    sku_to_index = {orders[i]['sku']: i for i in range(len(orders))}
+
+    for _, prod in sorted_prods:
+        wanted = prod['_wanted']
+        if wanted == 0:
+            continue
+        pack_size = prod['pack_size']
+        unit_cost = prod['unit_cost_cents']
+        cost_per_pack = unit_cost * pack_size
+        packs_needed = wanted // pack_size
+        affordable_packs = budget_left // cost_per_pack
+        packs_to_order = packs_needed if packs_needed <= affordable_packs else affordable_packs
+        quantity = packs_to_order * pack_size
+        cost = quantity * unit_cost
+        budget_left -= cost
+        total_cost += cost
+        order_idx = sku_to_index[prod['sku']]
+        orders[order_idx]['quantity'] = quantity
+        orders[order_idx]['cost_cents'] = cost
+
+    output = {
+        'orders': orders,
+        'total_cost_cents': total_cost,
+        'budget_left_cents': budget_left,
+    }
+
+    print(json.dumps(output, separators=(',', ':')))
+    sys.exit(0)
+
+
+if __name__ == '__main__':
+    main()

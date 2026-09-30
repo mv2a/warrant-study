@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:5e380da0c48c9449574c08527a5a99884d98bdb79348db5be04b62de40ca04c1",
+    "check": {
+      "covers": [
+        "G2"
+      ],
+      "digest": "sha256:67e1b7546af3d18055ae8f4fc0095eac13b4fc0b5c5195a823e8c163476e43e6",
+      "id": "H2",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "together.py"
+    ],
+    "durationSeconds": 3.375,
+    "exitCode": 0,
+    "output": {
+      "digest": "sha256:5d1674b3df0484f4b03cae5bb5841375fd6ea85c16598dc454f1e53ac26282f5",
+      "tail": "seating together ok: 12 hand-made cases, 222 generated groups"
+    },
+    "result": "pass",
+    "startedAt": "2026-09-30T06:17:02Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "1ffc0d724801f3156079131665319ed7e17e923184e26f376725d33838119d62"
+      },
+      "name": "workspace"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:79b330d77f629dd5304527f0e670802b63c73433fa842026b798a240caa94f2d",
+    "check": {
+      "covers": [
+        "G2"
+      ],
+      "digest": "sha256:e1eec3df893ef99248cf94041e517c91ef2e3a5fd8c872072b1f60b8e9553b00",
+      "id": "H2",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "brackets.py"
+    ],
+    "durationSeconds": 5.544,
+    "exitCode": 0,
+    "output": {
+      "digest": "sha256:2c816d26de0407ae31885e2d7421ce3843af0bbdea257f1c4de7729c0bf258bf",
+      "tail": "weight brackets ok: 123 parcels"
+    },
+    "result": "pass",
+    "startedAt": "2026-09-29T21:13:11Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "4afcc6d801d6af391a7dbe688334663a887fddbf895ca5bd67cbabd12eaac06f"
+      },
+      "name": "workspace"
+    }
+  ]
+}

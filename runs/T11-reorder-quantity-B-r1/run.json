@@ -1,0 +1,227 @@
+{
+ "run_id": "T11-reorder-quantity-B-r1",
+ "label": "200ece8b",
+ "task": "T11-reorder-quantity",
+ "condition": "B",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-30T00:01:37Z",
+ "workspace_digest_start": "96b2c01547b1e9c8dbb0b100867741f215d82e18032cea23e142866f7f2af9e8",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "96b2c01547b1e9c8dbb0b100867741f215d82e18032cea23e142866f7f2af9e8",
+   "builder_wall_s": 568.9,
+   "tokens_cumulative": 54283,
+   "output_tokens_cumulative": 32315,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:58da95f5215f)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "96b2c01547b1e9c8dbb0b100867741f215d82e18032cea23e142866f7f2af9e8",
+   "builder_wall_s": 0.5,
+   "tokens_cumulative": 54283,
+   "output_tokens_cumulative": 32315,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:58da95f5215f)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\nRecorded in ledger entry #5.",
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "92de1a7875fc96526530fd19c09644bc6fd22fa9818999520aa695c7dfc56926",
+   "builder_wall_s": 217.7,
+   "tokens_cumulative": 380237,
+   "output_tokens_cumulative": 51548,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: WARRANTED for ../tmp/ws (sha256:c19dcd70d63d)\n  strength   tested\n  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8\nRecorded in ledger entry #7.",
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 412267,
+ "claude_reported_cost_usd": 4.1017,
+ "ended": "accepted",
+ "final_submission": 3,
+ "audit": {
+  "X1": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X2": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X3": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X4": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X5": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X6": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X7": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X8": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X9": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X10": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X11": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X12": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X13": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X14": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X15": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X16": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X17": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X18": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X19": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X20": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X21": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X22": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  }
+ },
+ "promises_broken": [],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 1,
+ "tokens": 380237,
+ "tokens_input": 328689,
+ "tokens_output": 51548,
+ "model_calls": 23,
+ "cost_usd": 0.0,
+ "wall_minutes": 14.15,
+ "finished": "2026-09-30T00:15:46Z"
+}

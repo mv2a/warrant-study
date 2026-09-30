@@ -1,0 +1,193 @@
+{
+ "run_id": "T09-password-policy-B-r1",
+ "label": "21e324b6",
+ "task": "T09-password-policy",
+ "condition": "B",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T22:56:00Z",
+ "workspace_digest_start": "4296f590e7d23d2138b63567fac6655f987036de04c2433e31d156cdc887feb8",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "4296f590e7d23d2138b63567fac6655f987036de04c2433e31d156cdc887feb8",
+   "builder_wall_s": 481.2,
+   "tokens_cumulative": 58890,
+   "output_tokens_cumulative": 32459,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:35a11c4dbcfb)\n  - P1 failed\n  - P2 failed\n  - P3 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\n  - H9 failed\n  - H10 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "4296f590e7d23d2138b63567fac6655f987036de04c2433e31d156cdc887feb8",
+   "builder_wall_s": 75.3,
+   "tokens_cumulative": 91191,
+   "output_tokens_cumulative": 32459,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:35a11c4dbcfb)\n  - P1 failed\n  - P2 failed\n  - P3 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\n  - H9 failed\n  - H10 failed\nRecorded in ledger entry #5.",
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "4296f590e7d23d2138b63567fac6655f987036de04c2433e31d156cdc887feb8",
+   "builder_wall_s": 693.1,
+   "tokens_cumulative": 168864,
+   "output_tokens_cumulative": 96459,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:35a11c4dbcfb)\n  - P1 failed\n  - P2 failed\n  - P3 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\n  - H9 failed\n  - H10 failed\nRecorded in ledger entry #7.",
+   "accepted": false
+  },
+  {
+   "k": 4,
+   "digest": "c0e3334dfd1e76844ea8725aeec0d01c9b4121e1e51b62ab62cf768321f59100",
+   "builder_wall_s": 360.0,
+   "tokens_cumulative": 234359,
+   "output_tokens_cumulative": 124947,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true,
+    "P3": true
+   },
+   "builder_error": null,
+   "gate": "merge: WARRANTED for ../tmp/ws (sha256:5c19a763752e)\n  strength   tested\n  grounds    passing evidence from P1, P2, P3, H1, H2, H3, H4, H5, H6, H7, H8, H9, H10\nRecorded in ledger entry #9.",
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 252513,
+ "claude_reported_cost_usd": 5.4804,
+ "ended": "accepted",
+ "final_submission": 4,
+ "audit": {
+  "X1": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X2": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X3": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X4": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X5": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X6": {
+   "ok": true,
+   "covers": [
+    "G5"
+   ]
+  },
+  "X7": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X8": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X9": {
+   "ok": true,
+   "covers": [
+    "C1",
+    "C3"
+   ]
+  },
+  "X10": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X11": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X12": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X13": {
+   "ok": true,
+   "covers": [
+    "S4"
+   ]
+  }
+ },
+ "promises_broken": [],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 1,
+ "tokens": 234359,
+ "tokens_input": 109412,
+ "tokens_output": 124947,
+ "model_calls": 15,
+ "cost_usd": 0.0,
+ "wall_minutes": 28.82,
+ "finished": "2026-09-29T23:24:49Z"
+}

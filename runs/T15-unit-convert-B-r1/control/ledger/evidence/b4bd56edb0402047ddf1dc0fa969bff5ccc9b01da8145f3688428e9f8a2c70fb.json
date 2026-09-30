@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:f05dfb03fc8b398f7c15cfc18a13be2d6ad6254371df6e161abd2157503964a4",
+    "check": {
+      "covers": [
+        "C1"
+      ],
+      "digest": "sha256:5a5c0c443c6849634e840bcd21065750de67353cf5b37f877e155eaaa484289f",
+      "id": "H4",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "exact.py"
+    ],
+    "durationSeconds": 4.19,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:d8267d844f806e83c8f18e316daa20adca00835ed80b4b3896c88210382b5ffa",
+      "tail": "7530166606495189...25857347 (4800 characters) yd to km at 12 places: expected 6885584344979201...96800000 (4810 characters), got None (status 2)\n2.94911247581892...25985846 (4452 characters) oz to kg at 12 places: expected 0.083605932331, got None (status 2)\n4005341092110711...21086359 (4298 characters) m3 to floz at 6 places: expected 1354366946172562...9.963015 (4310 characters), got None (status 2)"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T02:59:51Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "b306ba5e83f4a59a6844f61d140539a363f738e266d48465a949a03adf8f5a3c"
+      },
+      "name": "workspace"
+    }
+  ]
+}

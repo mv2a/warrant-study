@@ -1,0 +1,25 @@
+# Visible checks: the builder may read and run these. Deliberately incomplete.
+
+[[check]]
+id = "P1"
+covers = ["C1"]
+statement = "The stay command follows the interface: a valid request exits 0 with exactly the four integer amount fields, and a request for 0 nights and text that is not JSON both exit 2 with nothing on standard output."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The four example stays in the intent get exactly the amounts the intent gives, and the Saturday check-in for 2 nights is refused with exit status 2."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]
+
+[[check]]
+id = "P3"
+covers = ["G1", "G3", "G4"]
+statement = "One-night stays at $200.00 cost $202.75 from Sunday to Thursday and $252.75 on Friday, and a one-night Saturday stay is refused."
+strength = "tested"
+run = ["python3", "one_night.py"]
+tags = ["money"]

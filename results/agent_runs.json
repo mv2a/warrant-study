@@ -1,0 +1,789 @@
+{
+ "summary": {
+  "tasks": 20,
+  "paired_tasks": 20,
+  "dropped_tasks": [],
+  "A": {
+   "runs": 20,
+   "accepted": 18,
+   "false_pass": 12,
+   "correct_delivery": 6,
+   "escaped_defects": 28,
+   "median_submissions": 2.0,
+   "median_wall_minutes": 11.7,
+   "median_tokens_input": 103139.0,
+   "median_tokens_output": 58756.5,
+   "ended": {
+    "accepted": 18,
+    "submissions": 2
+   }
+  },
+  "B": {
+   "runs": 20,
+   "accepted": 13,
+   "false_pass": 1,
+   "correct_delivery": 12,
+   "escaped_defects": 1,
+   "median_submissions": 3.0,
+   "median_wall_minutes": 22.810000000000002,
+   "median_tokens_input": 362356.5,
+   "median_tokens_output": 92679.5,
+   "ended": {
+    "accepted": 13,
+    "limit:time": 1,
+    "limit:tokens": 1,
+    "submissions": 5
+   },
+   "visible_pass_denied_by_gate": 21
+  }
+ },
+ "tests": {
+  "false_pass": {
+   "test": "exact McNemar",
+   "A_only": 11,
+   "B_only": 0,
+   "p_two_sided": 0.001
+  },
+  "correct_delivery": {
+   "test": "exact McNemar",
+   "A_only": 0,
+   "B_only": 6,
+   "p_two_sided": 0.0312
+  },
+  "escaped_defects": {
+   "test": "Wilcoxon signed-rank, B minus A, zero_method=wilcox, method=auto",
+   "n_pairs": 20,
+   "n_nonzero": 11,
+   "median_difference": -1.0,
+   "statistic": 0.0,
+   "p_two_sided": 0.003
+  }
+ },
+ "table": [
+  {
+   "task": "T01-parking-fees",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 5,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C2",
+     "G1",
+     "G2",
+     "G3",
+     "G4"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 11.03,
+    "tokens_input": 96923,
+    "tokens_output": 37053,
+    "model_calls": 15,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": false,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C1",
+     "C2",
+     "C3",
+     "G1",
+     "G2",
+     "G3",
+     "G4",
+     "G5",
+     "S1",
+     "S2",
+     "S3",
+     "S4"
+    ],
+    "ended": "submissions",
+    "wall_minutes": 30.62,
+    "tokens_input": 159581,
+    "tokens_output": 95892,
+    "model_calls": 21,
+    "submissions": 5,
+    "visible_pass_denied_by_gate": 0
+   }
+  },
+  {
+   "task": "T02-library-fines",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 1,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C3"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 15.49,
+    "tokens_input": 673773,
+    "tokens_output": 89018,
+    "model_calls": 41,
+    "submissions": 3,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 1,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C3"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 13.9,
+    "tokens_input": 1543074,
+    "tokens_output": 57438,
+    "model_calls": 95,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 1
+   }
+  },
+  {
+   "task": "T03-bus-fare",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 10.14,
+    "tokens_input": 1702072,
+    "tokens_output": 33014,
+    "model_calls": 110,
+    "submissions": 1,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 33.31,
+    "tokens_input": 2015964,
+    "tokens_output": 126768,
+    "model_calls": 153,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 1
+   }
+  },
+  {
+   "task": "T04-bill-split",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 3,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C2",
+     "C3",
+     "G4"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 13.96,
+    "tokens_input": 103062,
+    "tokens_output": 63650,
+    "model_calls": 14,
+    "submissions": 3,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 23.92,
+    "tokens_input": 382975,
+    "tokens_output": 89467,
+    "model_calls": 27,
+    "submissions": 4,
+    "visible_pass_denied_by_gate": 2
+   }
+  },
+  {
+   "task": "T05-loyalty-points",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 2,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C3",
+     "C4"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 5.37,
+    "tokens_input": 243654,
+    "tokens_output": 23026,
+    "model_calls": 19,
+    "submissions": 1,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 16.26,
+    "tokens_input": 892696,
+    "tokens_output": 56233,
+    "model_calls": 66,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 1
+   }
+  },
+  {
+   "task": "T06-parcel-rates",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 1,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C3"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 13.7,
+    "tokens_input": 73773,
+    "tokens_output": 31289,
+    "model_calls": 11,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 11.47,
+    "tokens_input": 346110,
+    "tokens_output": 23343,
+    "model_calls": 27,
+    "submissions": 1,
+    "visible_pass_denied_by_gate": 0
+   }
+  },
+  {
+   "task": "T07-progressive-tax",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 1,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C3"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 10.76,
+    "tokens_input": 404868,
+    "tokens_output": 53863,
+    "model_calls": 25,
+    "submissions": 1,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": false,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C3"
+    ],
+    "ended": "submissions",
+    "wall_minutes": 21.59,
+    "tokens_input": 952495,
+    "tokens_output": 26792,
+    "model_calls": 67,
+    "submissions": 5,
+    "visible_pass_denied_by_gate": 5
+   }
+  },
+  {
+   "task": "T08-loan-schedule",
+   "A": {
+    "accepted": false,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C2",
+     "C3",
+     "G3",
+     "S3"
+    ],
+    "ended": "submissions",
+    "wall_minutes": 31.89,
+    "tokens_input": 413374,
+    "tokens_output": 136451,
+    "model_calls": 35,
+    "submissions": 5,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": false,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C1",
+     "C2",
+     "C3",
+     "G1",
+     "G2",
+     "G3",
+     "G4",
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "ended": "submissions",
+    "wall_minutes": 21.7,
+    "tokens_input": 145170,
+    "tokens_output": 96540,
+    "model_calls": 15,
+    "submissions": 5,
+    "visible_pass_denied_by_gate": 0
+   }
+  },
+  {
+   "task": "T09-password-policy",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 14.29,
+    "tokens_input": 71457,
+    "tokens_output": 83799,
+    "model_calls": 13,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 28.82,
+    "tokens_input": 109412,
+    "tokens_output": 124947,
+    "model_calls": 15,
+    "submissions": 4,
+    "visible_pass_denied_by_gate": 0
+   }
+  },
+  {
+   "task": "T10-free-slots",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 2,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C4",
+     "C5"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 11.55,
+    "tokens_input": 65359,
+    "tokens_output": 64064,
+    "model_calls": 10,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 9.13,
+    "tokens_input": 352561,
+    "tokens_output": 37401,
+    "model_calls": 27,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 0
+   }
+  },
+  {
+   "task": "T11-reorder-quantity",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 16.1,
+    "tokens_input": 140887,
+    "tokens_output": 82134,
+    "model_calls": 20,
+    "submissions": 3,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 14.15,
+    "tokens_input": 328689,
+    "tokens_output": 51548,
+    "model_calls": 23,
+    "submissions": 3,
+    "visible_pass_denied_by_gate": 0
+   }
+  },
+  {
+   "task": "T12-course-grade",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 7.23,
+    "tokens_input": 81508,
+    "tokens_output": 29075,
+    "model_calls": 12,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 9.04,
+    "tokens_input": 1047402,
+    "tokens_output": 36325,
+    "model_calls": 53,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 1
+   }
+  },
+  {
+   "task": "T13-rate-limit",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 11.85,
+    "tokens_input": 67739,
+    "tokens_output": 64389,
+    "model_calls": 11,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 28.29,
+    "tokens_input": 111817,
+    "tokens_output": 147990,
+    "model_calls": 24,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 1
+   }
+  },
+  {
+   "task": "T14-row-validator",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 1,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C4"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 23.31,
+    "tokens_input": 58392,
+    "tokens_output": 142900,
+    "model_calls": 11,
+    "submissions": 1,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": false,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C1",
+     "C4",
+     "G3"
+    ],
+    "ended": "limit:tokens",
+    "wall_minutes": 38.42,
+    "tokens_input": 372152,
+    "tokens_output": 215682,
+    "model_calls": 37,
+    "submissions": 3,
+    "visible_pass_denied_by_gate": 1
+   }
+  },
+  {
+   "task": "T15-unit-convert",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 5,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C1",
+     "C2",
+     "C3",
+     "C4",
+     "G2"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 6.78,
+    "tokens_input": 65583,
+    "tokens_output": 3992,
+    "model_calls": 11,
+    "submissions": 3,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": false,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C1"
+    ],
+    "ended": "limit:time",
+    "wall_minutes": 47.88,
+    "tokens_input": 4120070,
+    "tokens_output": 132544,
+    "model_calls": 253,
+    "submissions": 3,
+    "visible_pass_denied_by_gate": 3
+   }
+  },
+  {
+   "task": "T16-invoice-number",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 1,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C2"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 7.23,
+    "tokens_input": 846214,
+    "tokens_output": 21415,
+    "model_calls": 56,
+    "submissions": 1,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 35.06,
+    "tokens_input": 1545834,
+    "tokens_output": 143314,
+    "model_calls": 95,
+    "submissions": 4,
+    "visible_pass_denied_by_gate": 1
+   }
+  },
+  {
+   "task": "T17-hotel-stay",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 5,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C1",
+     "C3",
+     "S1",
+     "S2",
+     "S4"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 15.91,
+    "tokens_input": 273705,
+    "tokens_output": 83542,
+    "model_calls": 29,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": false,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C1",
+     "C2",
+     "C3",
+     "G1",
+     "G2",
+     "G3",
+     "G4",
+     "S1",
+     "S2",
+     "S3",
+     "S4"
+    ],
+    "ended": "submissions",
+    "wall_minutes": 86.29,
+    "tokens_input": 146123,
+    "tokens_output": 99974,
+    "model_calls": 25,
+    "submissions": 5,
+    "visible_pass_denied_by_gate": 0
+   }
+  },
+  {
+   "task": "T18-overtime-pay",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 5.98,
+    "tokens_input": 265456,
+    "tokens_output": 28104,
+    "model_calls": 32,
+    "submissions": 1,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 9.43,
+    "tokens_input": 159932,
+    "tokens_output": 47730,
+    "model_calls": 18,
+    "submissions": 2,
+    "visible_pass_denied_by_gate": 0
+   }
+  },
+  {
+   "task": "T19-seat-groups",
+   "A": {
+    "accepted": true,
+    "escaped_defects": 1,
+    "false_pass": 1,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C3"
+    ],
+    "ended": "accepted",
+    "wall_minutes": 6.73,
+    "tokens_input": 103216,
+    "tokens_output": 26058,
+    "model_calls": 15,
+    "submissions": 1,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": false,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C3"
+    ],
+    "ended": "submissions",
+    "wall_minutes": 29.76,
+    "tokens_input": 282146,
+    "tokens_output": 99699,
+    "model_calls": 25,
+    "submissions": 5,
+    "visible_pass_denied_by_gate": 4
+   }
+  },
+  {
+   "task": "T20-name-normalise",
+   "A": {
+    "accepted": false,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 0,
+    "promises_broken": [
+     "C1",
+     "C2",
+     "G1",
+     "G2",
+     "G3",
+     "G4",
+     "G5",
+     "S1",
+     "S2",
+     "S3",
+     "S4"
+    ],
+    "ended": "submissions",
+    "wall_minutes": 34.04,
+    "tokens_input": 59989,
+    "tokens_output": 160449,
+    "model_calls": 17,
+    "submissions": 5,
+    "visible_pass_denied_by_gate": 0
+   },
+   "B": {
+    "accepted": true,
+    "escaped_defects": 0,
+    "false_pass": 0,
+    "correct_delivery": 1,
+    "promises_broken": [],
+    "ended": "accepted",
+    "wall_minutes": 10.61,
+    "tokens_input": 624956,
+    "tokens_output": 47395,
+    "model_calls": 49,
+    "submissions": 1,
+    "visible_pass_denied_by_gate": 0
+   }
+  }
+ ]
+}

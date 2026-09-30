@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:ad803da7132099e65943d61b2baa3b5ba43032dcebcf6ee44b798439d4fa2d59",
+    "check": {
+      "covers": [
+        "C2"
+      ],
+      "digest": "sha256:13c73ebd9f6a6b96f05e9702770e817ce01ee03ec00a9a129931517cec3c4653",
+      "id": "H5",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "malformed.py"
+    ],
+    "durationSeconds": 4.545,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:59dc32cc2b9ca01beca33580cfbddaf06bcbcfa7b891c4a66f31ec72a7a21dc6",
+      "tail": "lisbon after 'LIS-2026-00041\\n': expected a refusal (status 2, no output), got status 0 and {'number': 'LIS-2026-00042', 'sequence': 42}"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T03:36:00Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "93beaac8ad1ba1b833639f81a795c63950109ef5cac1d827dadaad14933f4564"
+      },
+      "name": "workspace"
+    }
+  ]
+}

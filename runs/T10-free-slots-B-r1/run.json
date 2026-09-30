@@ -1,0 +1,163 @@
+{
+ "run_id": "T10-free-slots-B-r1",
+ "label": "ec2f3eb9",
+ "task": "T10-free-slots",
+ "condition": "B",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T23:24:50Z",
+ "workspace_digest_start": "c6faee831098e75e543d25ca854411265ea83f60cd2e9f9fd5f1cb522569c3f0",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "f7d6de6c1f80d38d06d80086c148fadde139e6801c445755aa74cee7131b9d73",
+   "builder_wall_s": 311.9,
+   "tokens_cumulative": 77917,
+   "output_tokens_cumulative": 21470,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:c8b5f5d4750c)\n  - P1 failed\n  - P2 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\n  - H9 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "30d0f800df68ca5fe5361913c5119459244b2c274c129eb54ab2b1a5b0a41128",
+   "builder_wall_s": 141.2,
+   "tokens_cumulative": 389962,
+   "output_tokens_cumulative": 37401,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: WARRANTED for ../tmp/ws (sha256:bc01ad556311)\n  strength   tested\n  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8, H9\nRecorded in ledger entry #5.",
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 389989,
+ "claude_reported_cost_usd": 3.1852,
+ "ended": "accepted",
+ "final_submission": 2,
+ "audit": {
+  "X1": {
+   "ok": true,
+   "covers": [
+    "C5"
+   ]
+  },
+  "X2": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X3": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X4": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X13": {
+   "ok": true,
+   "covers": [
+    "S4"
+   ]
+  },
+  "X5": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X6": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X7": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X8": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X9": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X10": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X11": {
+   "ok": true,
+   "covers": [
+    "C4"
+   ]
+  },
+  "X12": {
+   "ok": true,
+   "covers": [
+    "G1",
+    "G2",
+    "G3",
+    "C1",
+    "C2",
+    "C3"
+   ]
+  }
+ },
+ "promises_broken": [],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 1,
+ "tokens": 389962,
+ "tokens_input": 352561,
+ "tokens_output": 37401,
+ "model_calls": 27,
+ "cost_usd": 0.0,
+ "wall_minutes": 9.13,
+ "finished": "2026-09-29T23:33:57Z"
+}

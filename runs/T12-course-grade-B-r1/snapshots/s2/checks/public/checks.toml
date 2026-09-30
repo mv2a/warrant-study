@@ -1,0 +1,17 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C3"]
+statement = "The grade command follows the interface: two valid requests exit 0 with an object holding exactly a numeric percent with at most one decimal place and one of the seven letters, and a quiz score of 101 is refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3"]
+statement = "The three students in the intent's scenarios get exactly the percent and letter the intent states."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["grades"]

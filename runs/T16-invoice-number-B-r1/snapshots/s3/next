@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+import sys, json, re
+
+PREFIX_MAP = {'lisbon':'LIS','porto':'OPO','faro':'FAO','braga':'BRG'}
+INV_RE = re.compile(r'^(?P<prefix>LIS|OPO|FAO|BRG)-(?P<year>[2-9][0-9]{3})-(?P<seq>(?!00000)[0-9]{5})$')
+
+def refuse():
+    sys.exit(2)
+
+def main():
+    try:
+        raw = sys.stdin.buffer.read()
+        text = raw.decode('utf-8')
+    except Exception:
+        refuse()
+
+    try:
+        data = json.loads(text)
+    except Exception:
+        refuse()
+
+    if not isinstance(data, dict):
+        refuse()
+
+    if 'branch' not in data or 'year' not in data or 'previous' not in data:
+        refuse()
+
+    branch = data['branch']
+    year = data['year']
+    previous = data['previous']
+
+    if not isinstance(branch, str) or branch not in PREFIX_MAP:
+        refuse()
+
+    if not isinstance(year, int) or not (2000 <= year <= 9999):
+        refuse()
+
+    if previous is not None and not isinstance(previous, str):
+        refuse()
+
+    prefix = PREFIX_MAP[branch]
+    next_seq = None
+
+    if previous is None:
+        next_seq = 1
+    else:
+        m = INV_RE.match(previous)
+        if not m:
+            refuse()
+        if m.group('prefix') != prefix:
+            refuse()
+        prev_year = int(m.group('year'))
+        if prev_year > year:
+            refuse()
+        prev_seq = int(m.group('seq'))
+        if prev_year < year:
+            next_seq = 1
+        else:
+            if prev_seq == 99999:
+                refuse()
+            next_seq = prev_seq + 1
+
+    if next_seq is None or next_seq > 99999:
+        refuse()
+
+    number = f'{prefix}-{year:04d}-{next_seq:05d}'
+    body = {'number': number, 'sequence': next_seq}
+    sys.stdout.write(json.dumps(body, separators=(',', ':')))
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()

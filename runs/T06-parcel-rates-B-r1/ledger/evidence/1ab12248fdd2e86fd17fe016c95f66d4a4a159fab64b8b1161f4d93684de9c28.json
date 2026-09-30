@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:79b330d77f629dd5304527f0e670802b63c73433fa842026b798a240caa94f2d",
+    "check": {
+      "covers": [
+        "G4"
+      ],
+      "digest": "sha256:8d5d3fc0e5abed1992ece28439ac3b4662f313bd5a1c10c18e146a7ab83f5b5a",
+      "id": "H4",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "oversize.py"
+    ],
+    "durationSeconds": 4.943,
+    "exitCode": 0,
+    "output": {
+      "digest": "sha256:bf15f0c7441ce9941eb7db4e5402ee03bf19b025b09e696f006bd9e7b5978ddf",
+      "tail": "oversize surcharge ok: 111 parcels"
+    },
+    "result": "pass",
+    "startedAt": "2026-09-29T21:13:22Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "4afcc6d801d6af391a7dbe688334663a887fddbf895ca5bd67cbabd12eaac06f"
+      },
+      "name": "workspace"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+import sys, json
+
+def main():
+    raw = sys.stdin.read()
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        sys.exit(2)
+    if not isinstance(data, dict):
+        sys.exit(2)
+
+    burst = data.get('burst')
+    if not isinstance(burst, int) or burst < 1:
+        sys.exit(2)
+
+    rate = data.get('rate')
+    if not isinstance(rate, int) or rate < 1:
+        sys.exit(2)
+
+    requests = data.get('requests')
+    if not isinstance(requests, list):
+        sys.exit(2)
+
+    decisions = []
+    stats = {}
+    buckets = {}
+    prev_at = -1
+    for r in requests:
+        if not isinstance(r, dict):
+            sys.exit(2)
+        client = r.get('client')
+        if not isinstance(client, str) or client == '':
+            sys.exit(2)
+        at = r.get('at')
+        if not isinstance(at, int) or at < 0:
+            sys.exit(2)
+        if at < prev_at:
+            sys.exit(2)
+        prev_at = at
+
+        if client not in buckets:
+            buckets[client] = {'tokens': float(burst), 'last_t': at}
+        bucket = buckets[client]
+        dt = at - bucket['last_t']
+        bucket['tokens'] = min(burst, bucket['tokens'] + rate * dt / 1000.0)
+        bucket['last_t'] = at
+
+        if bucket['tokens'] >= 1.0:
+            decisions.append('accept')
+            bucket['tokens'] -= 1.0
+            stats.setdefault(client, {'accepted': 0, 'rejected': 0})['accepted'] += 1
+        else:
+            decisions.append('reject')
+            stats.setdefault(client, {'accepted': 0, 'rejected': 0})['rejected'] += 1
+
+    output = {'decisions': decisions, 'clients': stats}
+    print(json.dumps(output))
+    sys.exit(0)
+
+if __name__ == '__main__':
+    main()

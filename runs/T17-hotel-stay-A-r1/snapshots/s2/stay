@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+import sys, json
+
+def error(msg):
+    sys.stderr.write(msg + '\n')
+    sys.exit(2)
+
+
+def main():
+    try:
+        raw = sys.stdin.read()
+    except Exception:
+        error('could not read input')
+    stripped = raw.rstrip(' \t\r\n')
+    if stripped != raw:
+        error('trailing characters after JSON')
+    try:
+        data = json.loads(stripped)
+    except Exception:
+        error('invalid JSON')
+    if not isinstance(data, dict):
+        error('JSON is not an object')
+    check_in = data.get('check_in')
+    nights = data.get('nights')
+    rate_cents = data.get('rate_cents')
+    if not isinstance(check_in, str):
+        error('check_in is not a string')
+    if not isinstance(nights, int):
+        error('nights is not an integer')
+    if not isinstance(rate_cents, int):
+        error('rate_cents is not an integer')
+    if check_in not in ('mon','tue','wed','thu','fri','sat','sun'):
+        error('check_in is not a valid weekday')
+    if not (1 <= nights <= 30):
+        error('nights out of range')
+    if rate_cents < 1:
+        error('rate_cents too low')
+    days = ['mon','tue','wed','thu','fri','sat','sun']
+    start_index = days.index(check_in)
+    includes_sat = False
+    room_cents = 0
+    tax_cents = 0
+    for i in range(nights):
+        day = days[(start_index + i) % 7]
+        if day == 'sat':
+            includes_sat = True
+        nightly_rate = rate_cents
+        if day in ('fri','sat'):
+            surcharge = (rate_cents * 25 + 50) // 100
+        else:
+            surcharge = 0
+        nightly_charge = nightly_rate + surcharge
+        room_cents += nightly_charge
+        if i < 10:
+            tax_cents += 275
+    if 7 <= nights <= 13:
+        discount_cents = (room_cents * 10) // 100
+    elif nights >= 14:
+        discount_cents = (room_cents * 15) // 100
+    else:
+        discount_cents = 0
+    if includes_sat and nights < 3:
+        error('Saturday stay too short')
+    total_cents = room_cents - discount_cents + tax_cents
+    output = {
+        'room_cents': room_cents,
+        'discount_cents': discount_cents,
+        'tax_cents': tax_cents,
+        'total_cents': total_cents
+    }
+    print(json.dumps(output, separators=(',', ':')))
+
+if __name__ == '__main__':
+    main()

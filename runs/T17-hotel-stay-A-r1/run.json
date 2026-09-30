@@ -1,0 +1,167 @@
+{
+ "run_id": "T17-hotel-stay-A-r1",
+ "label": "bdd08f4f",
+ "task": "T17-hotel-stay",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-30T03:50:54Z",
+ "workspace_digest_start": "4e8b673397a0f68dad09b95cd7477828cceac2ea38f15669a83b524df52e5f6c",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "4e8b673397a0f68dad09b95cd7477828cceac2ea38f15669a83b524df52e5f6c",
+   "builder_wall_s": 573.2,
+   "tokens_cumulative": 260250,
+   "output_tokens_cumulative": 57013,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "3d2ce3e3c4f391a7bb92e7c5430079cc1f1935daf29f7de635fcbb6e070cb380",
+   "builder_wall_s": 329.5,
+   "tokens_cumulative": 357247,
+   "output_tokens_cumulative": 83542,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true,
+    "P3": true
+   },
+   "builder_error": null,
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 367551,
+ "claude_reported_cost_usd": 4.2744,
+ "ended": "accepted",
+ "final_submission": 2,
+ "audit": {
+  "X1": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X2": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X3": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X4": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X5": {
+   "ok": false,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X6": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X7": {
+   "ok": true,
+   "covers": [
+    "G1",
+    "G2",
+    "G3",
+    "C2"
+   ]
+  },
+  "X8": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X9": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X10": {
+   "ok": false,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X11": {
+   "ok": false,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X12": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X13": {
+   "ok": false,
+   "covers": [
+    "S4"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C1",
+  "C3",
+  "S1",
+  "S2",
+  "S4"
+ ],
+ "escaped_defects": 5,
+ "false_pass": 1,
+ "correct_delivery": 0,
+ "tokens": 357247,
+ "tokens_input": 273705,
+ "tokens_output": 83542,
+ "model_calls": 29,
+ "cost_usd": 0.0,
+ "wall_minutes": 15.91,
+ "finished": "2026-09-30T04:06:49Z"
+}

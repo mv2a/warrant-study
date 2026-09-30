@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+import sys, json
+
+def main():
+    try:
+        data = json.load(sys.stdin)
+    except Exception:
+        sys.stderr.write("invalid JSON input\n")
+        sys.exit(2)
+    if not isinstance(data, dict):
+        sys.stderr.write("request must be a JSON object\n")
+        sys.exit(2)
+    items = data.get("items")
+    if not isinstance(items, list):
+        sys.stderr.write("'items' must be a list\n")
+        sys.exit(2)
+    seen_ids = set()
+    processed_items = []
+    for item in items:
+        if not isinstance(item, dict):
+            sys.stderr.write("each item must be a JSON object\n")
+            sys.exit(2)
+        id_ = item.get("id")
+        type_ = item.get("type")
+        due_day = item.get("due_day")
+        returned_day = item.get("returned_day")
+        if id_ is None or type_ is None or due_day is None or returned_day is None:
+            sys.stderr.write("item missing required fields\n")
+            sys.exit(2)
+        if not isinstance(id_, str) or id_ == "":
+            sys.stderr.write("id must be a non-empty string\n")
+            sys.exit(2)
+        if id_ in seen_ids:
+            sys.stderr.write("duplicate id\n")
+            sys.exit(2)
+        seen_ids.add(id_)
+        if type_ not in {"book", "dvd", "reference"}:
+            sys.stderr.write("invalid type\n")
+            sys.exit(2)
+        if not (isinstance(due_day, int) and due_day >= 0):
+            sys.stderr.write("due_day must be a non-negative integer\n")
+            sys.exit(2)
+        if not (isinstance(returned_day, int) and returned_day >= 0):
+            sys.stderr.write("returned_day must be a non-negative integer\n")
+            sys.exit(2)
+        days_late = returned_day - due_day
+        if days_late < 0:
+            days_late = 0
+        if type_ in {"book", "dvd"}:
+            days_charged = max(0, days_late - 3)
+        else:
+            days_charged = days_late
+        rate = {"book": 25, "dvd": 100, "reference": 150}[type_]
+        fine_cents = days_charged * rate
+        cap = {"book": 800, "dvd": 2000, "reference": 1500}[type_]
+        fine_cents = min(fine_cents, cap)
+        processed_items.append({
+            "id": id_,
+            "days_late": days_late,
+            "fine_cents": fine_cents
+        })
+    total_cents = sum(item["fine_cents"] for item in processed_items)
+    total_cents = min(total_cents, 2500)
+    output = {"items": processed_items, "total_cents": total_cents}
+    json.dump(output, sys.stdout)
+    sys.stdout.write("\n")
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,314 @@
+{
+ "seed": 20260929,
+ "conditions": [
+  "A",
+  "B"
+ ],
+ "replicates": [
+  1
+ ],
+ "created": "2026-09-29T17:56:30Z",
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "runs": [
+  {
+   "run_id": "T01-parking-fees-A-r1",
+   "label": "848d35e7",
+   "task": "T01-parking-fees",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T01-parking-fees-B-r1",
+   "label": "bc588e90",
+   "task": "T01-parking-fees",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T02-library-fines-A-r1",
+   "label": "aa65c8e3",
+   "task": "T02-library-fines",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T02-library-fines-B-r1",
+   "label": "7689082a",
+   "task": "T02-library-fines",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T03-bus-fare-B-r1",
+   "label": "6fa4d1aa",
+   "task": "T03-bus-fare",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T03-bus-fare-A-r1",
+   "label": "3c803596",
+   "task": "T03-bus-fare",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T04-bill-split-A-r1",
+   "label": "7b7a453c",
+   "task": "T04-bill-split",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T04-bill-split-B-r1",
+   "label": "d144988f",
+   "task": "T04-bill-split",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T05-loyalty-points-B-r1",
+   "label": "81f4a968",
+   "task": "T05-loyalty-points",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T05-loyalty-points-A-r1",
+   "label": "0257cee8",
+   "task": "T05-loyalty-points",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T06-parcel-rates-A-r1",
+   "label": "807ebb87",
+   "task": "T06-parcel-rates",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T06-parcel-rates-B-r1",
+   "label": "9540bf12",
+   "task": "T06-parcel-rates",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T07-progressive-tax-A-r1",
+   "label": "e5273fa5",
+   "task": "T07-progressive-tax",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T07-progressive-tax-B-r1",
+   "label": "759c9875",
+   "task": "T07-progressive-tax",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T08-loan-schedule-A-r1",
+   "label": "fe59f72f",
+   "task": "T08-loan-schedule",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T08-loan-schedule-B-r1",
+   "label": "fc84768a",
+   "task": "T08-loan-schedule",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T09-password-policy-A-r1",
+   "label": "ac2fd19a",
+   "task": "T09-password-policy",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T09-password-policy-B-r1",
+   "label": "21e324b6",
+   "task": "T09-password-policy",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T10-free-slots-B-r1",
+   "label": "ec2f3eb9",
+   "task": "T10-free-slots",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T10-free-slots-A-r1",
+   "label": "2f943e9e",
+   "task": "T10-free-slots",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T11-reorder-quantity-A-r1",
+   "label": "6f1a52f4",
+   "task": "T11-reorder-quantity",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T11-reorder-quantity-B-r1",
+   "label": "200ece8b",
+   "task": "T11-reorder-quantity",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T12-course-grade-B-r1",
+   "label": "410c8771",
+   "task": "T12-course-grade",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T12-course-grade-A-r1",
+   "label": "a2cc85fc",
+   "task": "T12-course-grade",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T13-rate-limit-A-r1",
+   "label": "7e22c263",
+   "task": "T13-rate-limit",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T13-rate-limit-B-r1",
+   "label": "e7ecbf45",
+   "task": "T13-rate-limit",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T14-row-validator-B-r1",
+   "label": "d299768e",
+   "task": "T14-row-validator",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T14-row-validator-A-r1",
+   "label": "024a808d",
+   "task": "T14-row-validator",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T15-unit-convert-B-r1",
+   "label": "80b0e666",
+   "task": "T15-unit-convert",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T15-unit-convert-A-r1",
+   "label": "d0d11e3e",
+   "task": "T15-unit-convert",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T16-invoice-number-A-r1",
+   "label": "d5f913e3",
+   "task": "T16-invoice-number",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T16-invoice-number-B-r1",
+   "label": "74de584d",
+   "task": "T16-invoice-number",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T17-hotel-stay-A-r1",
+   "label": "bdd08f4f",
+   "task": "T17-hotel-stay",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T17-hotel-stay-B-r1",
+   "label": "4b77d412",
+   "task": "T17-hotel-stay",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T18-overtime-pay-B-r1",
+   "label": "6ec80d42",
+   "task": "T18-overtime-pay",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T18-overtime-pay-A-r1",
+   "label": "708ba205",
+   "task": "T18-overtime-pay",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T19-seat-groups-B-r1",
+   "label": "aa9931e4",
+   "task": "T19-seat-groups",
+   "condition": "B",
+   "replicate": 1
+  },
+  {
+   "run_id": "T19-seat-groups-A-r1",
+   "label": "0b435f38",
+   "task": "T19-seat-groups",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T20-name-normalise-A-r1",
+   "label": "057c9672",
+   "task": "T20-name-normalise",
+   "condition": "A",
+   "replicate": 1
+  },
+  {
+   "run_id": "T20-name-normalise-B-r1",
+   "label": "6ae53684",
+   "task": "T20-name-normalise",
+   "condition": "B",
+   "replicate": 1
+  }
+ ]
+}

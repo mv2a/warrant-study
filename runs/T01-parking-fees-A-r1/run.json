@@ -1,0 +1,158 @@
+{
+ "run_id": "T01-parking-fees-A-r1",
+ "label": "848d35e7",
+ "task": "T01-parking-fees",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T17:56:30Z",
+ "workspace_digest_start": "a247328b4f37bd8064b14d6c809dc883ddbb10798caacd6062a4b706a0a3f77e",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "a247328b4f37bd8064b14d6c809dc883ddbb10798caacd6062a4b706a0a3f77e",
+   "builder_wall_s": 292.7,
+   "tokens_cumulative": 38840,
+   "output_tokens_cumulative": 9796,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "707e97a75fb56a2ec446b7bd53b4ded790239dcbd955ca8ff68c25e7ac1f2f82",
+   "builder_wall_s": 289.2,
+   "tokens_cumulative": 133976,
+   "output_tokens_cumulative": 37053,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true,
+    "P3": true
+   },
+   "builder_error": null,
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 163449,
+ "claude_reported_cost_usd": 2.3359,
+ "ended": "accepted",
+ "final_submission": 2,
+ "audit": {
+  "X-G1": {
+   "ok": false,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X-G2": {
+   "ok": false,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X-G3": {
+   "ok": false,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X-G4": {
+   "ok": false,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X-G5": {
+   "ok": true,
+   "covers": [
+    "G5"
+   ]
+  },
+  "X-C1": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X-C2": {
+   "ok": false,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X-C3": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X-S1": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X-S2": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X-S3": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X-S4": {
+   "ok": true,
+   "covers": [
+    "S4"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C2",
+  "G1",
+  "G2",
+  "G3",
+  "G4"
+ ],
+ "escaped_defects": 5,
+ "false_pass": 1,
+ "correct_delivery": 0,
+ "tokens": 133976,
+ "tokens_input": 96923,
+ "tokens_output": 37053,
+ "model_calls": 15,
+ "cost_usd": 0.0,
+ "wall_minutes": 11.03,
+ "finished": "2026-09-29T18:07:32Z"
+}

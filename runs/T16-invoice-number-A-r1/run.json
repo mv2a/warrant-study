@@ -1,0 +1,162 @@
+{
+ "run_id": "T16-invoice-number-A-r1",
+ "label": "d5f913e3",
+ "task": "T16-invoice-number",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-30T03:08:36Z",
+ "workspace_digest_start": "ad2d6b7140d7d1a59760b3250c53696dffd87e425c7e71170bcd1b5076469213",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "71fb5ed31ad015d9fac7a7dcbca93da3b69cb44b9eb626f903f17f65bd430c61",
+   "builder_wall_s": 330.5,
+   "tokens_cumulative": 867629,
+   "output_tokens_cumulative": 21415,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 868392,
+ "claude_reported_cost_usd": 4.9279,
+ "ended": "accepted",
+ "final_submission": 1,
+ "audit": {
+  "X1": {
+   "ok": true,
+   "covers": [
+    "C5"
+   ]
+  },
+  "X2": {
+   "ok": true,
+   "covers": [
+    "C5"
+   ]
+  },
+  "X3": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X4": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X5": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X6": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X7": {
+   "ok": false,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X8": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X9": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X10": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X11": {
+   "ok": true,
+   "covers": [
+    "C4"
+   ]
+  },
+  "X12": {
+   "ok": true,
+   "covers": [
+    "C4"
+   ]
+  },
+  "X13": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X14": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X15": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X16": {
+   "ok": true,
+   "covers": [
+    "S4"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C2"
+ ],
+ "escaped_defects": 1,
+ "false_pass": 1,
+ "correct_delivery": 0,
+ "tokens": 867629,
+ "tokens_input": 846214,
+ "tokens_output": 21415,
+ "model_calls": 56,
+ "cost_usd": 0.0,
+ "wall_minutes": 7.23,
+ "finished": "2026-09-30T03:15:50Z"
+}

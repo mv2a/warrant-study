@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+import json, sys
+
+def calc_regular_cents(rate_cents, minutes):
+    return (rate_cents * minutes + 30) // 60
+
+def calc_overtime_cents(rate_cents, minutes):
+    return (rate_cents * minutes * 3 + 60) // 120
+
+def calc_double_cents(rate_cents, minutes):
+    return (rate_cents * minutes * 2 + 30) // 60
+
+def main():
+    try:
+        request = json.load(sys.stdin)
+    except Exception:
+        sys.exit(2)
+
+    if not isinstance(request, dict):
+        sys.exit(2)
+
+    minutes = request.get("minutes")
+    rate_cents = request.get("rate_cents")
+
+    if minutes is None or rate_cents is None:
+        sys.exit(2)
+
+    if not isinstance(minutes, list) or len(minutes) != 7:
+        sys.exit(2)
+    if not isinstance(rate_cents, int) or isinstance(rate_cents, bool):
+        sys.exit(2)
+    if not (1 <= rate_cents <= 100000):
+        sys.exit(2)
+
+    for m in minutes:
+        if not isinstance(m, int) or isinstance(m, bool):
+            sys.exit(2)
+        if not (0 <= m <= 1440):
+            sys.exit(2)
+
+    all_nonzero = all(m > 0 for m in minutes)
+
+    regular = 0
+    overtime = 0
+    double = 0
+
+    for i, m in enumerate(minutes):
+        if all_nonzero and i == 6:
+            reg = 0
+            over = min(m, 480)
+            dbl = max(m - 480, 0)
+        else:
+            reg = min(m, 480)
+            over = min(max(m - 480, 0), 180)
+            dbl = max(m - 660, 0)
+
+        regular += reg
+        overtime += over
+        double += dbl
+
+    if regular > 2400:
+        overflow = regular - 2400
+        regular -= overflow
+        overtime += overflow
+
+    regular_cents = calc_regular_cents(rate_cents, regular)
+    overtime_cents = calc_overtime_cents(rate_cents, overtime)
+    double_cents = calc_double_cents(rate_cents, double)
+    total_cents = regular_cents + overtime_cents + double_cents
+
+    output = {
+        "regular_minutes": regular,
+        "overtime_minutes": overtime,
+        "double_minutes": double,
+        "regular_cents": regular_cents,
+        "overtime_cents": overtime_cents,
+        "double_cents": double_cents,
+        "total_cents": total_cents,
+    }
+
+    sys.stdout.write(json.dumps(output))
+
+if __name__ == "__main__":
+    main()

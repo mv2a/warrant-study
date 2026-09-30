@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+import sys, json
+
+
+def fail():
+    sys.exit(2)
+
+
+def validate(data):
+    if not isinstance(data, dict):
+        fail()
+    required_fields = ('diners', 'items', 'tip_percent')
+    for field in required_fields:
+        if field not in data:
+            fail()
+    diners = data['diners']
+    items = data['items']
+    tip_percent = data['tip_percent']
+    if not isinstance(diners, list) or not diners:
+        fail()
+    if not isinstance(items, list) or not items:
+        fail()
+    if not isinstance(tip_percent, int) or not (0 <= tip_percent <= 100):
+        fail()
+    diner_names = []
+    diner_pays = {}
+    for d in diners:
+        if not isinstance(d, dict):
+            fail()
+        if 'name' not in d or 'pays' not in d:
+            fail()
+        name = d['name']
+        pays = d['pays']
+        if not isinstance(name, str) or name == '':
+            fail()
+        if not isinstance(pays, str) or pays not in ('own', 'share'):
+            fail()
+        if name in diner_names:
+            fail()
+        diner_names.append(name)
+        diner_pays[name] = pays
+    for it in items:
+        if not isinstance(it, dict):
+            fail()
+        if 'diner' not in it or 'price_cents' not in it:
+            fail()
+        name = it['diner']
+        price = it['price_cents']
+        if not isinstance(name, str) or name not in diner_names:
+            fail()
+        if not isinstance(price, int) or price < 1:
+            fail()
+    return diner_names, diner_pays, items, tip_percent
+
+
+def main():
+    try:
+        data = json.load(sys.stdin)
+    except Exception:
+        fail()
+    diner_names, diner_pays, items, tip_percent = validate(data)
+
+    subtotal = sum(it['price_cents'] for it in items)
+    tip_cents = (subtotal * tip_percent + 50) // 100
+    total = subtotal + tip_cents
+
+    own_parts = {name: 0 for name in diner_names}
+    for it in items:
+        if diner_pays[it['diner']] == 'own':
+            own_parts[it['diner']] += it['price_cents']
+
+    share_diners = [n for n in diner_names if diner_pays[n] == 'share']
+    share_count = len(share_diners)
+    pool = sum(it['price_cents'] for it in items if diner_pays[it['diner']] == 'share')
+
+    part_num = {}
+    part_den = {}
+    for name in diner_names:
+        if diner_pays[name] == 'own':
+            part_num[name] = own_parts[name]
+            part_den[name] = 1
+        else:
+            part_num[name] = pool
+            part_den[name] = share_count if share_count else 1
+
+    fair_num = {}
+    fair_den = {}
+    for name in diner_names:
+        fair_num[name] = part_num[name] * total
+        fair_den[name] = part_den[name] * subtotal
+
+    base_share = {}
+    frac_num = {}
+    for name in diner_names:
+        num = fair_num[name]
+        den = fair_den[name]
+        base_share[name] = num // den
+        frac_num[name] = num % den
+
+    sum_base = sum(base_share.values())
+    missing = total - sum_base
+    if missing < 0 or missing > len(diner_names):
+        fail()
+
+    order = diner_names
+    sorted_diners = sorted(order, key=lambda n: (-frac_num[n], order.index(n)))
+
+    shares = {name: base_share[name] for name in diner_names}
+    for i in range(missing):
+        shares[sorted_diners[i]] += 1
+
+    if sum(shares.values()) != total:
+        fail()
+
+    output = {
+        'subtotal_cents': subtotal,
+        'tip_cents': tip_cents,
+        'total_cents': total,
+        'shares': shares
+    }
+
+    json.dump(output, sys.stdout, separators=(',', ':'))
+    print()
+
+if __name__ == '__main__':
+    main()

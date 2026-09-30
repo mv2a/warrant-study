@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+import sys, json
+
+def main():
+    try:
+        data = json.load(sys.stdin)
+    except Exception:
+        sys.exit(2)
+    if not isinstance(data, dict):
+        sys.exit(2)
+    minutes = data.get("minutes")
+    rate_cents = data.get("rate_cents")
+    if minutes is None or rate_cents is None:
+        sys.exit(2)
+    if not isinstance(minutes, list) or len(minutes) != 7:
+        sys.exit(2)
+    for m in minutes:
+        if type(m) is not int or m < 0 or m > 1440:
+            sys.exit(2)
+    if type(rate_cents) is not int or rate_cents < 1 or rate_cents > 100000:
+        sys.exit(2)
+
+    day7_is_seventh = all(m > 0 for m in minutes)
+    regular_minutes = 0
+    overtime_minutes = 0
+    double_minutes = 0
+
+    for i, m in enumerate(minutes):
+        if i == 6 and day7_is_seventh:
+            regular = 0
+            overtime = min(m, 480)
+            double = max(0, m - 480)
+        else:
+            regular = min(m, 480)
+            overtime = min(max(0, m - 480), 180)
+            double = max(0, m - 660)
+        regular_minutes += regular
+        overtime_minutes += overtime
+        double_minutes += double
+
+    if regular_minutes > 2400:
+        overflow = regular_minutes - 2400
+        regular_minutes = 2400
+        overtime_minutes += overflow
+
+    def round_half_up(num, den):
+        return (num + den // 2) // den
+
+    regular_cents = round_half_up(rate_cents * regular_minutes, 60)
+    overtime_cents = round_half_up(rate_cents * overtime_minutes * 3, 120)
+    double_cents = round_half_up(rate_cents * double_minutes, 30)
+
+    total_cents = regular_cents + overtime_cents + double_cents
+
+    result = {
+        "regular_minutes": regular_minutes,
+        "overtime_minutes": overtime_minutes,
+        "double_minutes": double_minutes,
+        "regular_cents": regular_cents,
+        "overtime_cents": overtime_cents,
+        "double_cents": double_cents,
+        "total_cents": total_cents,
+    }
+
+    sys.stdout.write(json.dumps(result, separators=(',', ':')))
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()

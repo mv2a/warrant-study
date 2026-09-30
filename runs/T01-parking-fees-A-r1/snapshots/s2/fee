@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+import sys
+import json
+
+# Exit with status 2 and no output on stdout if input is invalid.
+# Error messages are written to stderr.
+
+# Constants for fee calculation
+TIME_CENTS_PER_STARTED_HOUR = 250
+DAILY_CAP_CENTS = 1600
+OVERNIGHT_CENTS_PER_NIGHT = 600
+LOST_TICKET_CENTS = 2500
+MINUTES_PER_DAY = 1440
+MINUTES_PER_WEEK = 10080
+
+
+def error(message="invalid input\n"):
+    sys.stderr.write(message)
+    sys.exit(2)
+
+
+def read_input():
+    try:
+        data = json.load(sys.stdin)
+    except Exception:
+        error()
+    return data
+
+
+def validate_request(req):
+    if not isinstance(req, dict):
+        error()
+    required = ("entry", "exit", "lost_ticket")
+    for key in required:
+        if key not in req:
+            error()
+    entry = req["entry"]
+    exit_ = req["exit"]
+    lost_ticket = req["lost_ticket"]
+    # Type checks: entry and exit must be int (not bool), lost_ticket must be bool
+    if type(entry) is not int or type(exit_) is not int or type(lost_ticket) is not bool:
+        error()
+    # Value range checks
+    if not (0 <= entry <= 10079) or not (0 <= exit_ <= 10079):
+        error()
+    return entry, exit_, lost_ticket
+
+
+def compute_minutes(entry, exit_):
+    if exit_ >= entry:
+        return exit_ - entry
+    else:
+        return MINUTES_PER_WEEK - entry + exit_
+
+
+def compute_time_cents(entry, minutes):
+    """Compute time_cents based on 24h periods starting at entry."""
+    time_cents = 0
+    remaining = minutes
+    period = 0
+    while remaining > 0:
+        # minutes in this 24h period (or remaining minutes if less)
+        period_minutes = min(MINUTES_PER_DAY, remaining)
+        if period == 0:
+            # First period: subtract free 15 minutes
+            period_minutes -= 15
+            if period_minutes < 0:
+                period_minutes = 0
+        # Compute started hours
+        started_hours = (period_minutes + 59) // 60
+        period_cents = started_hours * TIME_CENTS_PER_STARTED_HOUR
+        if period_cents > DAILY_CAP_CENTS:
+            period_cents = DAILY_CAP_CENTS
+        time_cents += period_cents
+        # Subtract the actual minutes consumed from the remaining
+        if period == 0:
+            used = min(MINUTES_PER_DAY, remaining)
+            remaining -= used
+        else:
+            used = period_minutes
+            remaining -= used
+        period += 1
+    return time_cents
+
+
+def count_midnights(entry, exit_):
+    if exit_ >= entry:
+        return exit_ // MINUTES_PER_DAY - entry // MINUTES_PER_DAY
+    else:
+        # Wrap around week: one boundary at the week end (10080) plus any before exit
+        return 1 + (exit_ // MINUTES_PER_DAY)
+
+
+def main():
+    req = read_input()
+    entry, exit_, lost_ticket = validate_request(req)
+    minutes = compute_minutes(entry, exit_)
+    time_cents = compute_time_cents(entry, minutes)
+    overnight_cents = count_midnights(entry, exit_) * OVERNIGHT_CENTS_PER_NIGHT
+    lost_ticket_cents = LOST_TICKET_CENTS if lost_ticket else 0
+    total_cents = time_cents + overnight_cents + lost_ticket_cents
+    out = {
+        "minutes": minutes,
+        "time_cents": time_cents,
+        "overnight_cents": overnight_cents,
+        "lost_ticket_cents": lost_ticket_cents,
+        "total_cents": total_cents,
+    }
+    sys.stdout.write(json.dumps(out))
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()

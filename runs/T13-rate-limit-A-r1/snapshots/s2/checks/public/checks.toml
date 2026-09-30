@@ -1,0 +1,17 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C1"]
+statement = "The limit command follows the interface: a two-client log gets one accept or reject per request and a matching per-client count, and a burst of 0 or text that isn't JSON is refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3"]
+statement = "The three example logs in the intent get exactly the decisions and per-client counts the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["scenarios"]

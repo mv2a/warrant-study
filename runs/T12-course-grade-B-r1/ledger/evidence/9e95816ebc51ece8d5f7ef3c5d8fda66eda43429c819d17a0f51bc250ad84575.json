@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:3853077b26bd046ee701e91087b38559c62431ff5fc1058bbbd340ed78030bc0",
+    "check": {
+      "covers": [
+        "C2"
+      ],
+      "digest": "sha256:2b79c5c3799cf54b159197c922ab24e49e1c05d677ef284aee25325f4227ad5f",
+      "id": "H6",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "invalid.py"
+    ],
+    "durationSeconds": 2.037,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:5a1647db6c4c755eb6534a4ad6c7b41a59a1381f9dea2384cb1917b37cbccf90",
+      "tail": "a quiz score of true: expected a refusal (status 2, no output), got status 0 and {'percent': 79.3, 'letter': 'C+'}\na final of false: expected a refusal (status 2, no output), got status 0 and {'percent': 51.0, 'letter': 'F'}\na homework score of true: expected a refusal (status 2, no output), got status 0 and {'percent': 71.9, 'letter': 'C'}\na days_late of true: expected a refusal (status 2, no output), got status 0 and {'percent': 81.9, 'letter': 'B'}"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T00:20:42Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "e8ec7c728f66089323d91941f24133458bb70c2925e2430327fabd86d1653023"
+      },
+      "name": "workspace"
+    }
+  ]
+}

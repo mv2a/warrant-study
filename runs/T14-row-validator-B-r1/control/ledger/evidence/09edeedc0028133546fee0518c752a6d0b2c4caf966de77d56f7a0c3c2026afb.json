@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:18586f5231af2e03f9d331a5d515a13603939d4541187fa064d5e2501eeb335d",
+    "check": {
+      "covers": [
+        "C3"
+      ],
+      "digest": "sha256:b8a94acea32d2fd1a10c32adc3b6295e04fbcb1effb25889f1ee647222bf3cc8",
+      "id": "H8",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "order.py"
+    ],
+    "durationSeconds": 0.026,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:8d94bacea95d26009f4314a6bb6fb27ae98ba0210cd5ccf36ce3e7dfbd2b260b",
+      "tail": "Traceback (most recent call last):\n  File \"/tmp/warrant-brvk1zi1/run-10/check/order.py\", line 5, in <module>\n    from _cmd import call, finish\n  File \"/tmp/warrant-brvk1zi1/run-10/check/_cmd.py\", line 3, in <module>\n    import json\n  File \"/usr/local/lib/python3.11/json/__init__.py\", line 106, in <module>\n    from .decoder import JSONDecoder, JSONDecodeError\n  File \"/usr/local/lib/python3.11/json/decoder.py\", line 3, in <module>\n    import re\n  File \"/usr/local/lib/python3.11/re/__init__.py\", line 124, in <module>\n    import enum\n  File \"/usr/local/lib/python3.11/enum.py\", line 3, in <module>\n    from types import MappingProxyType, DynamicClassAttribute\n  File \"/tmp/warrant-brvk1zi1/run-10/check/types.py\", line 6, in <module>\n    from _cmd import call, finish\nImportError: cannot import name 'call' from partially initialized module '_cmd' (most likely due to a circular import) (/tmp/warrant-brvk1zi1/run-10/check/_cmd.py)"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T01:50:11Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "ce13a486696b23f0187100365c3a79fb22d91d203c9224dc2701a324ff239abf"
+      },
+      "name": "workspace"
+    }
+  ]
+}

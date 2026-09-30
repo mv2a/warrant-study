@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+import json, sys
+
+def main():
+    try:
+        raw = sys.stdin.read()
+        request = json.loads(raw)
+    except json.JSONDecodeError:
+        sys.exit(2)
+    if not isinstance(request, dict):
+        sys.exit(2)
+
+    required = ("principal_cents", "annual_rate_bp", "months")
+    for field in required:
+        if field not in request or not isinstance(request[field], int):
+            sys.exit(2)
+
+    principal_cents = request["principal_cents"]
+    annual_rate_bp = request["annual_rate_bp"]
+    months = request["months"]
+
+    if not (1 <= principal_cents <= 1_000_000_000):
+        sys.exit(2)
+    if not (0 <= annual_rate_bp <= 5000):
+        sys.exit(2)
+    if not (1 <= months <= 480):
+        sys.exit(2)
+
+    if annual_rate_bp == 0:
+        payment_cents = (principal_cents + months - 1) // months
+    else:
+        bp = annual_rate_bp
+        P = principal_cents
+        n = months
+        base = 120000 + bp
+        pow_base_n = pow(base, n)
+        pow_120k_n = pow(120000, n)
+        numerator = P * bp * pow_base_n
+        denominator = 120000 * (pow_base_n - pow_120k_n)
+        payment_cents = (numerator + denominator - 1) // denominator
+
+    rows = []
+    total_interest_cents = 0
+    balance = principal_cents
+    for month in range(1, months + 1):
+        interest_cents = (balance * annual_rate_bp + 60000) // 120000
+        if payment_cents > balance + interest_cents:
+            payment = balance + interest_cents
+            principal_paid = balance
+            balance = 0
+        else:
+            payment = payment_cents
+            principal_paid = payment - interest_cents
+            balance -= principal_paid
+
+        row = {
+            "month": month,
+            "payment_cents": payment,
+            "interest_cents": interest_cents,
+            "principal_cents": principal_paid,
+            "balance_cents": balance,
+        }
+        rows.append(row)
+        total_interest_cents += interest_cents
+        if balance == 0:
+            break
+
+    result = {
+        "payment_cents": payment_cents,
+        "total_interest_cents": total_interest_cents,
+        "rows": rows,
+    }
+    sys.stdout.write(json.dumps(result, separators=(",", ":")))
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()

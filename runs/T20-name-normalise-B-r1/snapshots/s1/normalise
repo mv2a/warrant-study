@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+import json
+import sys
+import re
+import unicodedata
+
+HONORIFICS = {'mr', 'mrs', 'ms', 'miss', 'mx', 'dr', 'prof', 'rev', 'sir', 'dame'}
+PARTICLES = {'da', 'de', 'del', 'della', 'der', 'di', 'du', 'la', 'le', 'van', 'von'}
+
+def main():
+    # Read JSON from stdin
+    try:
+        raw = sys.stdin.read()
+        request = json.loads(raw)
+    except Exception:
+        sys.exit(2)
+
+    if not isinstance(request, dict):
+        sys.exit(2)
+
+    if 'name' not in request:
+        sys.exit(2)
+
+    name = request['name']
+    if not isinstance(name, str):
+        sys.exit(2)
+
+    # Validate length
+    if len(name) > 100:
+        sys.exit(2)
+
+    # G1: tidy whitespace
+    tidied = re.sub(r'\s+', ' ', name.strip())
+
+    # G2: remove leading honorifics
+    words = tidied.split(' ')
+    i = 0
+    while i < len(words):
+        w = words[i]
+        if w.endswith('.'):
+            base = w[:-1]
+        else:
+            base = w
+        if base.lower() in HONORIFICS:
+            i += 1
+            continue
+        break
+    cleaned_words = words[i:]
+    cleaned = ' '.join(cleaned_words)
+
+    # Validate that cleaned has at least one letter
+    if not any(ch.isalpha() for ch in cleaned):
+        sys.exit(2)
+
+    # G3: capitalization
+    def capitalize_word(word):
+        res = []
+        prev = None
+        for j, ch in enumerate(word):
+            if j == 0 or (prev in "-'’." if prev is not None else False):
+                res.append(ch.upper())
+            else:
+                res.append(ch.lower())
+            prev = ch
+        return ''.join(res)
+
+    display_words = []
+    for idx, word in enumerate(cleaned_words):
+        cap = capitalize_word(word)
+        if cap.lower() in PARTICLES:
+            if idx != 0 and idx != len(cleaned_words) - 1:
+                cap = cap.lower()
+        display_words.append(cap)
+    display = ' '.join(display_words)
+
+    # G5: key
+    def make_key(display):
+        key_chars = []
+        for ch in display:
+            if ch == 'ß':
+                key_chars.append('ß')
+                continue
+            decomposed = unicodedata.normalize('NFKD', ch)
+            for d in decomposed:
+                if unicodedata.category(d).startswith('L'):
+                    key_chars.append(d.lower())
+        return ''.join(key_chars)
+
+    key = make_key(display)
+
+    output = {"display": display, "key": key}
+    sys.stdout.write(json.dumps(output))
+
+if __name__ == "__main__":
+    main()
+

@@ -1,0 +1,46 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:da8ed961383ea01a4abf322ee53f4405ee97722a5de43757a17fbc47f0e61741",
+    "check": {
+      "covers": [
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "C2"
+      ],
+      "digest": "sha256:d4f0d2bfab74ff71ebcf45fe08ec5c9b804c000d592fb2f8b95376ec990265ce",
+      "id": "H12",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "model.py"
+    ],
+    "durationSeconds": 5.54,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:31eacba1b7a53fe8bce8c934226c4ba3e32abd8f6b0bd52c32d548f8dc69cd22",
+      "tail": "generated log 59 (burst 6, rate 100): request 90 ('batch' at 1294 ms) should be accept, got reject\ngenerated log 60 (burst 4, rate 100): request 13 ('api' at 66 ms) should be accept, got reject\ngenerated log 68 (burst 5, rate 100): request 23 ('x' at 452 ms) should be accept, got reject"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T01:03:15Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "7bf33a06329457702b9650807c9ae33a17e57555cb983ca7eab229acba1d76e3"
+      },
+      "name": "workspace"
+    }
+  ]
+}

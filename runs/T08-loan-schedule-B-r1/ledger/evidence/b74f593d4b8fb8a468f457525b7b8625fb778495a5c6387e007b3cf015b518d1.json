@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:9e3f23230d22da4b3a9994951b703f1f613a2acfe9cef23577995397ccbcc4b4",
+    "check": {
+      "covers": [
+        "C1"
+      ],
+      "digest": "sha256:131aa9a5ea0a2ecb8224239693c41702bd46fe23d9d2adc9a08326939e2f13cf",
+      "id": "H1",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "interface.py"
+    ],
+    "durationSeconds": 0.075,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:61282138aa2f3cc8bc467045320bb8507c372083f261fb8e368f0e80c2e992ff",
+      "tail": "the workspace has no executable named schedule"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-29T22:38:42Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "88d7c88cebf64647a2d9c4996a0f5200bd78f79bb6e9bb5118508e746307ee21"
+      },
+      "name": "workspace"
+    }
+  ]
+}

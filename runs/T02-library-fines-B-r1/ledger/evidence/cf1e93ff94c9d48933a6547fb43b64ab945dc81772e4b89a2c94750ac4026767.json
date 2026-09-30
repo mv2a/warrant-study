@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:83754074c9d762fea525379a5d69e086411339bb14250e62038f2cb378e00ea0",
+    "check": {
+      "covers": [
+        "C3"
+      ],
+      "digest": "sha256:2180facd072131a7abad1d9918fcd2c51317fd61e797e19b53cf17f6a6d10c0e",
+      "id": "H7",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "invalid.py"
+    ],
+    "durationSeconds": 1.518,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:0470c8c25e0688b238643d905e08090dc8028be59522297de7d902203e8e325e",
+      "tail": "a due_day of true: expected a refusal (status 2, no fines), got status 0 and {'items': [{'id': 'ok', 'days_late': 8, 'fine_cents': 125}, {'id': 'b2', 'days_late': 8, 'fine_cents': 125}], 'total_cents': 250}\na returned_day of false: expected a refusal (status 2, no fines), got status 0 and {'items': [{'id': 'ok', 'days_late': 8, 'fine_cents': 125}, {'id': 'b2', 'days_late': 0, 'fine_cents': 0}], 'total_cents': 125}\na returned_day of true: expected a refusal (status 2, no fines), got status 0 and {'items': [{'id': 'ok', 'days_late': 8, 'fine_cents': 125}, {'id': 'b2', 'days_late': 1, 'fine_cents': 0}], 'total_cents': 125}"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-29T19:02:21Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "60abaa6f3968fea7963e635fb06471dac4a488d04f09d7b63709d80d09de96ca"
+      },
+      "name": "workspace"
+    }
+  ]
+}

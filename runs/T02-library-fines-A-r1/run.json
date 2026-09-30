@@ -1,0 +1,202 @@
+{
+ "run_id": "T02-library-fines-A-r1",
+ "label": "aa65c8e3",
+ "task": "T02-library-fines",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T18:38:10Z",
+ "workspace_digest_start": "887c02431522ba60913ff6485ddacc4b48a93ac70f213bb44759eaa78fa73dc8",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "887c02431522ba60913ff6485ddacc4b48a93ac70f213bb44759eaa78fa73dc8",
+   "builder_wall_s": 324.1,
+   "tokens_cumulative": 80347,
+   "output_tokens_cumulative": 35631,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "887c02431522ba60913ff6485ddacc4b48a93ac70f213bb44759eaa78fa73dc8",
+   "builder_wall_s": 73.2,
+   "tokens_cumulative": 89032,
+   "output_tokens_cumulative": 35631,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "70ccd3bbb5082096bd5be9c1feaaff3155cd5dd233decbce6b35dcaf95026b8e",
+   "builder_wall_s": 486.0,
+   "tokens_cumulative": 762791,
+   "output_tokens_cumulative": 89018,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 769452,
+ "claude_reported_cost_usd": 6.0728,
+ "ended": "accepted",
+ "final_submission": 3,
+ "audit": {
+  "X01": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X02": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X03": {
+   "ok": true,
+   "covers": [
+    "C1",
+    "C3"
+   ]
+  },
+  "X04": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X05": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X06": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X07": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X08": {
+   "ok": true,
+   "covers": [
+    "C3",
+    "C1"
+   ]
+  },
+  "X09": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X10": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X11": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X12": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X13": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X14": {
+   "ok": true,
+   "covers": [
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "C2"
+   ]
+  },
+  "X15": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X16": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X17": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C3"
+ ],
+ "escaped_defects": 1,
+ "false_pass": 1,
+ "correct_delivery": 0,
+ "tokens": 762791,
+ "tokens_input": 673773,
+ "tokens_output": 89018,
+ "model_calls": 41,
+ "cost_usd": 0.0,
+ "wall_minutes": 15.49,
+ "finished": "2026-09-29T18:53:39Z"
+}

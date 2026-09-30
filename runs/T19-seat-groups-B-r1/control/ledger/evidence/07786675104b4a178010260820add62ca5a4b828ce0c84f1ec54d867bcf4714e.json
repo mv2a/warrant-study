@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:5e380da0c48c9449574c08527a5a99884d98bdb79348db5be04b62de40ca04c1",
+    "check": {
+      "covers": [
+        "G4"
+      ],
+      "digest": "sha256:db7ec96e38ece8c3cf4b40c97898df97da3590a25d739b76ca6bbd10f769ace4",
+      "id": "H4",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "refusals.py"
+    ],
+    "durationSeconds": 3.066,
+    "exitCode": 0,
+    "output": {
+      "digest": "sha256:7e8ebfed9f2219e8cce624fbde041efe4feb84a047e569ebf68237b4e469e544",
+      "tail": "refusals ok: 10 hand-made cases, 248 generated refusals"
+    },
+    "result": "pass",
+    "startedAt": "2026-09-30T06:12:28Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "1ffc0d724801f3156079131665319ed7e17e923184e26f376725d33838119d62"
+      },
+      "name": "workspace"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+import sys, json
+
+
+def main():
+    try:
+        data = sys.stdin.read()
+        if not data.strip():
+            raise ValueError
+        req = json.loads(data)
+    except Exception:
+        sys.exit(2)
+    # Validate request
+    if not isinstance(req, dict):
+        sys.exit(2)
+    required = ['workday', 'min_length', 'quorum', 'busy']
+    for key in required:
+        if key not in req:
+            sys.exit(2)
+    workday = req['workday']
+    min_length = req['min_length']
+    quorum = req['quorum']
+    busy = req['busy']
+    # Validate types
+    if (not isinstance(workday, list) or len(workday)!=2 or
+        not all(isinstance(x,int) for x in workday)):
+        sys.exit(2)
+    ws, we = workday
+    if not (0 <= ws < we <= 1440):
+        sys.exit(2)
+    if not (isinstance(min_length, int) and min_length >=1):
+        sys.exit(2)
+    if not (isinstance(quorum, int) and quorum >=1):
+        sys.exit(2)
+    if not isinstance(busy, list) or len(busy)==0:
+        sys.exit(2)
+    # Validate each person
+    for person in busy:
+        if not isinstance(person, list):
+            sys.exit(2)
+        for interval in person:
+            if (not isinstance(interval, list) or len(interval)!=2 or
+                not all(isinstance(x,int) for x in interval)):
+                sys.exit(2)
+            s, e = interval
+            if not (0 <= s < e <= 1440):
+                sys.exit(2)
+    # Quorum must be <= number of people
+    if quorum > len(busy):
+        sys.exit(2)
+    total_people = len(busy)
+    # Compute busy counts per minute
+    busy_counts = [0]*1440
+    for person in busy:
+        busy_minutes = set()
+        for s,e in person:
+            start = max(s, ws)
+            end = min(e, we)
+            if start < end:
+                busy_minutes.update(range(start, end))
+        for m in busy_minutes:
+            busy_counts[m] += 1
+    # Determine free minutes
+    free = [ (busy_counts[m] <= total_people - quorum) for m in range(ws, we) ]
+    # Build stretches
+    slots = []
+    in_stretch = False
+    start_min = None
+    for idx, m in enumerate(range(ws, we)):
+        if free[idx]:
+            if not in_stretch:
+                in_stretch = True
+                start_min = m
+        else:
+            if in_stretch:
+                end_min = m
+                if end_min - start_min >= min_length:
+                    slots.append([start_min, end_min])
+                in_stretch = False
+    if in_stretch:
+        end_min = we
+        if end_min - start_min >= min_length:
+            slots.append([start_min, end_min])
+    # Output
+    print(json.dumps({"slots": slots}))
+    sys.exit(0)
+
+if __name__=="__main__":
+    main()

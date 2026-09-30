@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:5e380da0c48c9449574c08527a5a99884d98bdb79348db5be04b62de40ca04c1",
+    "check": {
+      "covers": [
+        "G1"
+      ],
+      "digest": "sha256:49f10b459f2f8e0a50f6a8c5eca7382932dd41568fb833bf90e7abfb5a1cd7b3",
+      "id": "H1",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "order.py"
+    ],
+    "durationSeconds": 7.755,
+    "exitCode": 0,
+    "output": {
+      "digest": "sha256:8f6ad4ade60d4985325d5348ad513d695d7c76276c7bc2a67776226003f34530",
+      "tail": "booking order ok: 6 hand-made cases, 40 generated cases, 113 variations"
+    },
+    "result": "pass",
+    "startedAt": "2026-09-30T06:16:54Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "1ffc0d724801f3156079131665319ed7e17e923184e26f376725d33838119d62"
+      },
+      "name": "workspace"
+    }
+  ]
+}

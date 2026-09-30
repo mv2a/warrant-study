@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:62b026c1f069c20cde430c40245f0d0630a3d5f482a12d3bd699a3cc720caaf4",
+    "check": {
+      "covers": [
+        "C3"
+      ],
+      "digest": "sha256:737eeb9d8d4bbe3bc6e4b5c3f36ef55091af12512c645eac2e20b12f2e128f21",
+      "id": "H7",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "invalid.py"
+    ],
+    "durationSeconds": 2.021,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:fe747f5e36941f4e95fefbce46ebe2e23c526a925ee15af2f9554a27108dcb73",
+      "tail": "a price of true: expected a refusal (status 2, no output), got status 0 and {'subtotal_cents': 1201, 'tip_cents': 180, 'total_cents': 1381, 'shares': {'Zara': 1380, 'Omar': 1}}\na tip of true: expected a refusal (status 2, no output), got status 0 and {'subtotal_cents': 2000, 'tip_cents': 20, 'total_cents': 2020, 'shares': {'Zara': 1212, 'Omar': 808}}\na tip of false: expected a refusal (status 2, no output), got status 0 and {'subtotal_cents': 2000, 'tip_cents': 0, 'total_cents': 2000, 'shares': {'Zara': 1200, 'Omar': 800}}"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-29T20:18:32Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "4fa671fe809a7d1a5040ff0e863ff3ecf68cd34a605831d19fe6b44581eff269"
+      },
+      "name": "workspace"
+    }
+  ]
+}

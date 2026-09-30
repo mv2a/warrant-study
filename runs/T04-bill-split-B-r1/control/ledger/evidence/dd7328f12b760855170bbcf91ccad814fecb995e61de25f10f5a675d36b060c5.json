@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:62b026c1f069c20cde430c40245f0d0630a3d5f482a12d3bd699a3cc720caaf4",
+    "check": {
+      "covers": [
+        "C4"
+      ],
+      "digest": "sha256:de9f31591b93e98c8c9535029aeb0a6a26b2c7b76a0d740fbabebf4936720051",
+      "id": "H8",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "interface.py"
+    ],
+    "durationSeconds": 2.575,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:fc1bee0794700bb204184c6257de07bca99e7de385ef51d54aa1f4deeadc03ac",
+      "tail": "random bill 1 with extra fields: exited with status 2, expected 0\nrandom bill 2 with extra fields: exited with status 2, expected 0\nrandom bill 3 with extra fields: exited with status 2, expected 0\nrandom bill 4 with extra fields: exited with status 2, expected 0\nrandom bill 5 with extra fields: exited with status 2, expected 0\nrandom bill 6 with extra fields: exited with status 2, expected 0\nrandom bill 7 with extra fields: exited with status 2, expected 0\nrandom bill 8 with extra fields: exited with status 2, expected 0\nrandom bill 9 with extra fields: exited with status 2, expected 0\nrandom bill 10 with extra fields: exited with status 2, expected 0\n...and 15 more"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-29T20:22:13Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "e426269a63ce1d36cd9908e2e8abcc4161c34f4a75a76ec02b1cb9b2bf5336d3"
+      },
+      "name": "workspace"
+    }
+  ]
+}

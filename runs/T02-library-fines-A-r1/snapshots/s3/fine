@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+import sys, json
+
+
+def main():
+    try:
+        data = sys.stdin.read()
+        obj = json.loads(data)
+    except Exception:
+        sys.stderr.write("invalid JSON\n")
+        sys.exit(2)
+
+    if not isinstance(obj, dict):
+        sys.stderr.write("root is not object\n")
+        sys.exit(2)
+
+    if 'items' not in obj:
+        sys.stderr.write("missing items\n")
+        sys.exit(2)
+
+    items = obj['items']
+    if not isinstance(items, list):
+        sys.stderr.write("items not list\n")
+        sys.exit(2)
+
+    seen_ids = set()
+    output_items = []
+    total_fine = 0
+
+    rates = {'book': 25, 'dvd': 100, 'reference': 150}
+    grace = {'book': 3, 'dvd': 3, 'reference': 0}
+    caps = {'book': 800, 'dvd': 2000, 'reference': 1500}
+
+    for item in items:
+        if not isinstance(item, dict):
+            sys.stderr.write("item not object\n")
+            sys.exit(2)
+
+        for key in ('id', 'type', 'due_day', 'returned_day'):
+            if key not in item:
+                sys.stderr.write(f"missing {key}\n")
+                sys.exit(2)
+
+        id_val = item['id']
+        if not isinstance(id_val, str) or id_val == '':
+            sys.stderr.write("invalid id\n")
+            sys.exit(2)
+        if id_val in seen_ids:
+            sys.stderr.write("duplicate id\n")
+            sys.exit(2)
+        seen_ids.add(id_val)
+
+        type_val = item['type']
+        if type_val not in rates:
+            sys.stderr.write("invalid type\n")
+            sys.exit(2)
+
+        due = item['due_day']
+        ret = item['returned_day']
+        if not isinstance(due, int) or due < 0:
+            sys.stderr.write("invalid due_day\n")
+            sys.exit(2)
+        if not isinstance(ret, int) or ret < 0:
+            sys.stderr.write("invalid returned_day\n")
+            sys.exit(2)
+
+        days_late = ret - due
+        if days_late < 0:
+            days_late = 0
+
+        charged_days = days_late - grace[type_val]
+        if charged_days < 0:
+            charged_days = 0
+
+        fine = charged_days * rates[type_val]
+        if fine > caps[type_val]:
+            fine = caps[type_val]
+
+        output_items.append({'id': id_val, 'days_late': days_late, 'fine_cents': fine})
+        total_fine += fine
+
+    total_cents = total_fine
+    if total_cents > 2500:
+        total_cents = 2500
+
+    out = {'items': output_items, 'total_cents': total_cents}
+    sys.stdout.write(json.dumps(out))
+    sys.stdout.write('\n')
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()

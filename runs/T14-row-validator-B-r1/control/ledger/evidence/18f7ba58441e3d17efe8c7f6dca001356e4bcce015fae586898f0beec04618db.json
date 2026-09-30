@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:18586f5231af2e03f9d331a5d515a13603939d4541187fa064d5e2501eeb335d",
+    "check": {
+      "covers": [
+        "C4"
+      ],
+      "digest": "sha256:914a535e322be77eb5490f7f07cd4b7e8a248983c7b57a0c6c83d2971f0cccd6",
+      "id": "H9",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "refusals.py"
+    ],
+    "durationSeconds": 0.06,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:f722d352c75991bc0f07c418e3c9b8dfb09c44fbb4e8f42269afe408d8762fd1",
+      "tail": "Traceback (most recent call last):\n  File \"/tmp/warrant-p_e0dhkj/run-11/check/refusals.py\", line 3, in <module>\n    import json\n  File \"/usr/local/lib/python3.11/json/__init__.py\", line 106, in <module>\n    from .decoder import JSONDecoder, JSONDecodeError\n  File \"/usr/local/lib/python3.11/json/decoder.py\", line 3, in <module>\n    import re\n  File \"/usr/local/lib/python3.11/re/__init__.py\", line 124, in <module>\n    import enum\n  File \"/usr/local/lib/python3.11/enum.py\", line 3, in <module>\n    from types import MappingProxyType, DynamicClassAttribute\n  File \"/tmp/warrant-p_e0dhkj/run-11/check/types.py\", line 6, in <module>\n    from _cmd import call, finish\n  File \"/tmp/warrant-p_e0dhkj/run-11/check/_cmd.py\", line 5, in <module>\n    import subprocess\n  File \"/usr/local/lib/python3.11/subprocess.py\", line 46, in <module>\n    import locale\n  File \"/usr/local/lib/python3.11/locale.py\", line 19, in <module>\n    import functools\n  File \"/usr/local/lib/python3.11/functools.py\", line 22, in <module>\n    from types import GenericAlias\nImportError: cannot import name 'GenericAlias' from partially initialized module 'types' (most likely due to a circular import) (/tmp/warrant-p_e0dhkj/run-11/check/types.py)"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T01:20:23Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "ecd76d8a2e5d29e58bff7621858be56723689a8266bde4c022e7f16f4131eee6"
+      },
+      "name": "workspace"
+    }
+  ]
+}

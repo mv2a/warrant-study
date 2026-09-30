@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:da8ed961383ea01a4abf322ee53f4405ee97722a5de43757a17fbc47f0e61741",
+    "check": {
+      "covers": [
+        "C2"
+      ],
+      "digest": "sha256:63e29c960b74be52f9dc8b147a724de821fdceac0dd6ad50288f46a549025ded",
+      "id": "H6",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "exact.py"
+    ],
+    "durationSeconds": 8.605,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:beb46cb01b157d438beeaefceefb17294ec5ad94d7c4694edca3a661173e3d80",
+      "tail": "rate 10, asking every 10 ms: request 11 ('x' at 100 ms) should be accept, got reject\nrate 10, burst 4, asking every 10 ms: request 14 ('x' at 100 ms) should be accept, got reject\nrate 9, burst 2, every 10 ms: request 102 ('z' at 1000 ms) should be accept, got reject\nrate 10, burst 3, every 10 ms: request 13 ('z' at 100 ms) should be accept, got reject\nrate 30, burst 2, every 7 ms: request 102 ('z' at 700 ms) should be accept, got reject\nrate 30, burst 2, every 10 ms: request 12 ('z' at 100 ms) should be accept, got reject\nrate 70, burst 2, every 3 ms: request 102 ('z' at 300 ms) should be accept, got reject\nrate 70, burst 3, every 7 ms: request 103 ('z' at 700 ms) should be accept, got reject\nrate 70, burst 3, every 10 ms: request 13 ('z' at 100 ms) should be accept, got reject\nrate 100, burst 3, every 1 ms: request 13 ('z' at 10 ms) should be accept, got reject\n...and 7 more"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T01:03:01Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "7bf33a06329457702b9650807c9ae33a17e57555cb983ca7eab229acba1d76e3"
+      },
+      "name": "workspace"
+    }
+  ]
+}

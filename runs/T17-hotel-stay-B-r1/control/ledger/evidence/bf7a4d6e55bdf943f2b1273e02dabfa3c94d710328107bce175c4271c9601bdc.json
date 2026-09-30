@@ -1,0 +1,46 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:015bbf3335f46a9cc8a3cc5d56fd3958e699b22e987f3bf3c64691ae6832813f",
+    "check": {
+      "covers": [
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "C2"
+      ],
+      "digest": "sha256:a0657c4931cee6e723708582820df36f9696910110e73da4647cc2a546275d4d",
+      "id": "H9",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "model.py"
+    ],
+    "durationSeconds": 120.077,
+    "exitCode": null,
+    "output": {
+      "digest": "sha256:9debdc26ae0c0253e9aa1b506837e092250e59cbf018d0ba8ff3412e965fca7f",
+      "tail": "\n[warrant] stopped after the 120s timeout"
+    },
+    "result": "error",
+    "startedAt": "2026-09-30T04:45:15Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "fa8764d326d988eb3d673a2242481e9de59749a66393c678fd6bd36314b96aa5"
+      },
+      "name": "workspace"
+    }
+  ]
+}

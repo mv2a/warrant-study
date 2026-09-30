@@ -1,0 +1,17 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C1", "C2"]
+statement = "The normalise command follows the interface: a plain name gets exit status 0 and exactly the string fields display and key, while an empty name and text that is not JSON are refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The five example requests in the intent's scenarios give exactly the display names and keys the intent says."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["names"]

@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+import json, sys
+
+# Price tables for each zone
+BASE_PRICES = {
+    1: [(500, 450), (1000, 540), (2000, 690), (5000, 920), (10000, 1350)],
+    2: [(500, 520), (1000, 630), (2000, 810), (5000, 1090), (10000, 1600)],
+    3: [(500, 610), (1000, 740), (2000, 960), (5000, 1310), (10000, 1930)],
+    4: [(500, 780), (1000, 950), (2000, 1240), (5000, 1700), (10000, 2520)],
+}
+EXTRA_KG_PRICE = {1: 85, 2: 105, 3: 130, 4: 175}
+
+MAX_BILLABLE = 30000
+MAX_LONGEST = 150
+MAX_LENGTH_GIRTH = 300
+OVER_SIZED_LONGEST = 100
+OVER_SIZED_LENGTH_GIRTH = 220
+SURCHARGE = 1500
+
+
+def main():
+    try:
+        data = json.load(sys.stdin)
+    except Exception:
+        sys.exit(2)
+    if not isinstance(data, dict):
+        sys.exit(2)
+    required = ['zone', 'weight_g', 'length_cm', 'width_cm', 'height_cm']
+    for key in required:
+        if key not in data:
+            sys.exit(2)
+        val = data[key]
+        if type(val) is not int or val <= 0:
+            sys.exit(2)
+    zone = data['zone']
+    weight_g = data['weight_g']
+    length_cm = data['length_cm']
+    width_cm = data['width_cm']
+    height_cm = data['height_cm']
+    if zone not in (1, 2, 3, 4):
+        sys.exit(2)
+    # Dimensional weight in grams, rounded up
+    dim_weight = (length_cm * width_cm * height_cm + 5 - 1) // 5
+    billable_g = weight_g if weight_g > dim_weight else dim_weight
+    # Check refusal conditions
+    # Billable weight over 30,000 g
+    if billable_g > MAX_BILLABLE:
+        sys.exit(2)
+    # Longest side over 150 cm
+    dims = sorted([length_cm, width_cm, height_cm], reverse=True)
+    longest = dims[0]
+    other1, other2 = dims[1], dims[2]
+    girth = 2 * (other1 + other2)
+    if longest > MAX_LONGEST:
+        sys.exit(2)
+    if longest + girth > MAX_LENGTH_GIRTH:
+        sys.exit(2)
+    # Compute base price
+    if billable_g <= 500:
+        base_cents = BASE_PRICES[zone][0][1]
+    elif billable_g <= 1000:
+        base_cents = BASE_PRICES[zone][1][1]
+    elif billable_g <= 2000:
+        base_cents = BASE_PRICES[zone][2][1]
+    elif billable_g <= 5000:
+        base_cents = BASE_PRICES[zone][3][1]
+    elif billable_g <= 10000:
+        base_cents = BASE_PRICES[zone][4][1]
+    else:
+        base_10k = BASE_PRICES[zone][4][1]
+        extra_kg = (billable_g - 10000 + 1000 - 1) // 1000
+        per_kg = EXTRA_KG_PRICE[zone]
+        base_cents = base_10k + extra_kg * per_kg
+    # Surcharge
+    surcharge_cents = SURCHARGE if longest > OVER_SIZED_LONGEST or longest + girth > OVER_SIZED_LENGTH_GIRTH else 0
+    total_cents = base_cents + surcharge_cents
+    result = {
+        "billable_g": billable_g,
+        "base_cents": base_cents,
+        "surcharge_cents": surcharge_cents,
+        "total_cents": total_cents
+    }
+    print(json.dumps(result))
+
+if __name__ == "__main__":
+    main()

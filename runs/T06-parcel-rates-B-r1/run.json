@@ -1,0 +1,192 @@
+{
+ "run_id": "T06-parcel-rates-B-r1",
+ "label": "9540bf12",
+ "task": "T06-parcel-rates",
+ "condition": "B",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T21:04:16Z",
+ "workspace_digest_start": "56fbff5dac74e3ba489be296a452432cd5cd332a3be67a1cfabd1608c31520c4",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "826e71deda9166217af8c9e552bcba151e24a916e1d2b841ea91248ffb85e9df",
+   "builder_wall_s": 523.4,
+   "tokens_cumulative": 369453,
+   "output_tokens_cumulative": 23343,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true,
+    "P3": true
+   },
+   "builder_error": null,
+   "gate": "merge: WARRANTED for ../tmp/ws (sha256:4afcc6d801d6)\n  strength   tested\n  grounds    passing evidence from P1, P2, P3, H1, H2, H3, H4, H5, H6, H7, H8\nRecorded in ledger entry #3.",
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 320260,
+ "claude_reported_cost_usd": 2.4895,
+ "ended": "accepted",
+ "final_submission": 1,
+ "audit": {
+  "X01": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X02": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X03": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X04": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X05": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X06": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X07": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X08": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X09": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X10": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X11": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X12": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X13": {
+   "ok": true,
+   "covers": [
+    "S4"
+   ]
+  },
+  "X14": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X15": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X16": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X17": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X18": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X19": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X20": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X21": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  }
+ },
+ "promises_broken": [],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 1,
+ "tokens": 369453,
+ "tokens_input": 346110,
+ "tokens_output": 23343,
+ "model_calls": 27,
+ "cost_usd": 0.0,
+ "wall_minutes": 11.47,
+ "finished": "2026-09-29T21:15:44Z"
+}

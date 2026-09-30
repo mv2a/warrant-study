@@ -1,0 +1,252 @@
+{
+ "run_id": "T20-name-normalise-A-r1",
+ "label": "057c9672",
+ "task": "T20-name-normalise",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-30T06:25:01Z",
+ "workspace_digest_start": "b33c45c8167d9af79588abefd690826dcea59effc21354b7024913002d77799b",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "b33c45c8167d9af79588abefd690826dcea59effc21354b7024913002d77799b",
+   "builder_wall_s": 336.3,
+   "tokens_cumulative": 61427,
+   "output_tokens_cumulative": 32449,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "b33c45c8167d9af79588abefd690826dcea59effc21354b7024913002d77799b",
+   "builder_wall_s": 675.8,
+   "tokens_cumulative": 136799,
+   "output_tokens_cumulative": 96449,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "b33c45c8167d9af79588abefd690826dcea59effc21354b7024913002d77799b",
+   "builder_wall_s": 460.8,
+   "tokens_cumulative": 172136,
+   "output_tokens_cumulative": 128449,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 4,
+   "digest": "b33c45c8167d9af79588abefd690826dcea59effc21354b7024913002d77799b",
+   "builder_wall_s": 550.0,
+   "tokens_cumulative": 207550,
+   "output_tokens_cumulative": 160449,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  },
+  {
+   "k": 5,
+   "digest": "b33c45c8167d9af79588abefd690826dcea59effc21354b7024913002d77799b",
+   "builder_wall_s": 11.7,
+   "tokens_cumulative": 220438,
+   "output_tokens_cumulative": 160449,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false
+   },
+   "builder_error": null,
+   "accepted": false
+  }
+ ],
+ "accepted": false,
+ "tokens_reported": 153557,
+ "claude_reported_cost_usd": 5.1096,
+ "ended": "submissions",
+ "final_submission": 5,
+ "audit": {
+  "X1": {
+   "ok": false,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X2": {
+   "ok": false,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X3": {
+   "ok": false,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X4": {
+   "ok": false,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X5": {
+   "ok": false,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X6": {
+   "ok": false,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X7": {
+   "ok": false,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X8": {
+   "ok": false,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X9": {
+   "ok": false,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X10": {
+   "ok": false,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X11": {
+   "ok": false,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X12": {
+   "ok": false,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X13": {
+   "ok": false,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X14": {
+   "ok": false,
+   "covers": [
+    "G5"
+   ]
+  },
+  "X15": {
+   "ok": false,
+   "covers": [
+    "G5"
+   ]
+  },
+  "X16": {
+   "ok": false,
+   "covers": [
+    "G5"
+   ]
+  },
+  "X17": {
+   "ok": false,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X18": {
+   "ok": false,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X19": {
+   "ok": false,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X20": {
+   "ok": false,
+   "covers": [
+    "S4"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C1",
+  "C2",
+  "G1",
+  "G2",
+  "G3",
+  "G4",
+  "G5",
+  "S1",
+  "S2",
+  "S3",
+  "S4"
+ ],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 0,
+ "tokens": 220438,
+ "tokens_input": 59989,
+ "tokens_output": 160449,
+ "model_calls": 17,
+ "cost_usd": 0.0,
+ "wall_minutes": 34.04,
+ "finished": "2026-09-30T06:59:04Z"
+}

@@ -1,0 +1,44 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:015bbf3335f46a9cc8a3cc5d56fd3958e699b22e987f3bf3c64691ae6832813f",
+    "check": {
+      "covers": [
+        "G1",
+        "G3",
+        "G4"
+      ],
+      "digest": "sha256:9c30d50e203f73cf6fb969ad170f21051126e54a7a98e5db24fc48b6ac2dcbe6",
+      "id": "P3",
+      "strength": "tested",
+      "visibility": "public"
+    },
+    "command": [
+      "python3",
+      "one_night.py"
+    ],
+    "durationSeconds": 70.118,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:84a11dcb4a2e6b1a69aa891ac98577d3bb04e2cf46f87e452989ee5a529f7082",
+      "tail": "one sun night at 20000: expected a total of 20275, got None (status 124)\none mon night at 20000: expected a total of 20275, got None (status 124)\none tue night at 20000: expected a total of 20275, got None (status 124)\none wed night at 20000: expected a total of 20275, got None (status 124)\none thu night at 20000: expected a total of 20275, got None (status 124)\none fri night at 20000: expected a total of 25275, got None (status 124)"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T04:56:01Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "fa8764d326d988eb3d673a2242481e9de59749a66393c678fd6bd36314b96aa5"
+      },
+      "name": "workspace"
+    }
+  ]
+}

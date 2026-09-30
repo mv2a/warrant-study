@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+import json, sys
+
+
+def main():
+    try:
+        text = sys.stdin.read()
+        request = json.loads(text)
+    except Exception:
+        sys.exit(2)
+    if type(request) is not dict:
+        sys.exit(2)
+    if 'budget_cents' not in request or 'products' not in request:
+        sys.exit(2)
+    budget = request['budget_cents']
+    products = request['products']
+    if type(budget) is not int or budget < 0:
+        sys.exit(2)
+    if type(products) is not list:
+        sys.exit(2)
+    required_fields = ('sku', 'on_hand', 'on_order', 'daily_demand', 'lead_time_days',
+                       'safety_stock', 'pack_size', 'unit_cost_cents', 'priority')
+    seen_skus = set()
+    processed = []
+    for prod in products:
+        if type(prod) is not dict:
+            sys.exit(2)
+        for field in required_fields:
+            if field not in prod:
+                sys.exit(2)
+        sku = prod['sku']
+        if type(sku) is not str or sku == '':
+            sys.exit(2)
+        if sku in seen_skus:
+            sys.exit(2)
+        seen_skus.add(sku)
+        for field in required_fields[1:]:
+            val = prod[field]
+            if type(val) is not int:
+                sys.exit(2)
+        if prod['on_hand'] < 0 or prod['on_order'] < 0 or prod['daily_demand'] < 0 or prod['lead_time_days'] < 0 or prod['safety_stock'] < 0:
+            sys.exit(2)
+        if prod['pack_size'] < 1 or prod['unit_cost_cents'] < 1 or prod['priority'] < 1:
+            sys.exit(2)
+        processed.append(prod)
+    orders = []
+    for prod in processed:
+        target = prod['daily_demand'] * prod['lead_time_days'] + prod['safety_stock']
+        units_needed = target - prod['on_hand'] - prod['on_order']
+        if units_needed <= 0:
+            wanted = 0
+        else:
+            pack_size = prod['pack_size']
+            wanted = ((units_needed + pack_size - 1) // pack_size) * pack_size
+        orders.append({'sku': prod['sku'],
+                       'wanted': wanted,
+                       'quantity': 0,
+                       'cost_cents': 0})
+    sorted_indices = sorted(range(len(processed)), key=lambda i: processed[i]['priority'])
+    remaining_budget = budget
+    for idx in sorted_indices:
+        prod = processed[idx]
+        order = orders[idx]
+        wanted = order['wanted']
+        if wanted == 0:
+            continue
+        pack_size = prod['pack_size']
+        unit_cost_cents = prod['unit_cost_cents']
+        packs_wanted = wanted // pack_size
+        pack_cost = pack_size * unit_cost_cents
+        max_affordable_packs = remaining_budget // pack_cost
+        packs_to_order = packs_wanted if packs_wanted <= max_affordable_packs else max_affordable_packs
+        quantity = packs_to_order * pack_size
+        cost = quantity * unit_cost_cents
+        remaining_budget -= cost
+        order['quantity'] = quantity
+        order['cost_cents'] = cost
+    total_cost_cents = budget - remaining_budget
+    response = {'orders': orders,
+                'total_cost_cents': total_cost_cents,
+                'budget_left_cents': remaining_budget}
+    sys.stdout.write(json.dumps(response))
+    sys.stdout.flush()
+
+if __name__ == '__main__':
+    main()

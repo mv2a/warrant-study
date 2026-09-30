@@ -1,0 +1,17 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C3", "C4"]
+statement = "The tax command follows the interface: two valid requests exit with status 0 and get an object with exactly the six fields as whole-cent integers, repeating the income, and a request with a negative income is refused with exit status 2."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The four example filers in the intent get exactly the responses the intent gives for them."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]

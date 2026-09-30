@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:015bbf3335f46a9cc8a3cc5d56fd3958e699b22e987f3bf3c64691ae6832813f",
+    "check": {
+      "covers": [
+        "C1"
+      ],
+      "digest": "sha256:b3b4482e8cef527193ec90cc07ca70118fef439d8cc062600a782b625ba2fb99",
+      "id": "P1",
+      "strength": "tested",
+      "visibility": "public"
+    },
+    "command": [
+      "python3",
+      "contract.py"
+    ],
+    "durationSeconds": 30.091,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:76acf3bd2ffe294386dc43b58bac9a602fc79554f083dd2c2fdd57c65446cfa9",
+      "tail": "a valid request should exit 0, got status 124\na valid request should print one JSON object, got None\n0 nights: should be refused with status 2 and nothing on standard output, got status 124 and None\ntext that is not JSON: should be refused with status 2 and nothing on standard output, got status 124 and None"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T04:26:55Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "fa8764d326d988eb3d673a2242481e9de59749a66393c678fd6bd36314b96aa5"
+      },
+      "name": "workspace"
+    }
+  ]
+}

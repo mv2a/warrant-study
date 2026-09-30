@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+import sys
+import json
+from fractions import Fraction
+
+def round_half_up(frac: Fraction) -> int:
+    a = frac.numerator
+    b = frac.denominator
+    return (2*a + b) // (2*b)
+
+def main():
+    data = sys.stdin.read()
+    try:
+        request = json.loads(data)
+    except json.JSONDecodeError:
+        sys.exit(2)
+
+    if not isinstance(request, dict):
+        sys.exit(2)
+
+    # Required fields
+    if 'income_cents' not in request or 'dependents' not in request:
+        sys.exit(2)
+
+    income_cents = request['income_cents']
+    dependents = request['dependents']
+
+    # Validate types
+    if not isinstance(income_cents, int) or not isinstance(dependents, int):
+        sys.exit(2)
+
+    # Validate values
+    if income_cents < 0 or dependents < 0 or dependents > 20:
+        sys.exit(2)
+
+    # Compute allowance
+    STANDARD_ALLOWANCE = 1200000  # cents
+    UPPER_LIMIT = 8000000  # 80,000 marks in cents
+    if income_cents <= UPPER_LIMIT:
+        allowance_cents = STANDARD_ALLOWANCE
+    else:
+        diff = income_cents - UPPER_LIMIT
+        # reduction rounded up to next cent: ceil(diff/5)
+        reduction_cents = (diff + 4) // 5
+        allowance_cents = max(0, STANDARD_ALLOWANCE - reduction_cents)
+
+    # Compute taxable income
+    taxable_cents = max(0, income_cents - allowance_cents)
+
+    # Compute tax before credit
+    tax_fraction = Fraction(0, 1)
+    if taxable_cents > 0:
+        # Band thresholds
+        B1_END = 1000000
+        B2_END = 4000000
+        B3_END = 10000000
+
+        # Band 1
+        part = min(taxable_cents, B1_END)
+        tax_fraction += Fraction(part) * Fraction(5, 100)
+
+        # Band 2
+        if taxable_cents > B1_END:
+            part = min(taxable_cents, B2_END) - B1_END
+            tax_fraction += Fraction(part) * Fraction(15, 100)
+
+        # Band 3
+        if taxable_cents > B2_END:
+            part = min(taxable_cents, B3_END) - B2_END
+            tax_fraction += Fraction(part) * Fraction(25, 100)
+
+        # Band 4
+        if taxable_cents > B3_END:
+            part = taxable_cents - B3_END
+            tax_fraction += Fraction(part) * Fraction(38, 100)
+
+    tax_before_credit_cents = round_half_up(tax_fraction)
+
+    # Compute credit
+    CREDIT_PER_DEPENDENT = 45000
+    credit_amount = dependents * CREDIT_PER_DEPENDENT
+    credit_cents = min(credit_amount, tax_before_credit_cents)
+
+    tax_cents = tax_before_credit_cents - credit_cents
+
+    response = {
+        "income_cents": income_cents,
+        "allowance_cents": allowance_cents,
+        "taxable_cents": taxable_cents,
+        "tax_before_credit_cents": tax_before_credit_cents,
+        "credit_cents": credit_cents,
+        "tax_cents": tax_cents
+    }
+
+    print(json.dumps(response))
+
+if __name__ == "__main__":
+    main()

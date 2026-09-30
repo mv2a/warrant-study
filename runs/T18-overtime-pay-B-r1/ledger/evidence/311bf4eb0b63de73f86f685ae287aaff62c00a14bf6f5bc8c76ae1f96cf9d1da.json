@@ -1,0 +1,46 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:0ed0d2744b5965e4ac33f7dd77540f85a7bba53122514927a7f6de0b09886947",
+    "check": {
+      "covers": [
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5"
+      ],
+      "digest": "sha256:c0d959ac10655f486b4dc13e59bbe0d35a5415b8e26728243379c3cebfa06380",
+      "id": "P2",
+      "strength": "tested",
+      "visibility": "public"
+    },
+    "command": [
+      "python3",
+      "scenarios.py"
+    ],
+    "durationSeconds": 0.066,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:48b34e73d6f508eb1ae94fd12886f1b589b1a58277240ae12135d67584f487c1",
+      "tail": "the workspace has no executable named pay"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T05:40:21Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "0b191a7b611b20de4d74c61d01be51a6f014946c85af8c6b28a0c9d17d8db342"
+      },
+      "name": "workspace"
+    }
+  ]
+}

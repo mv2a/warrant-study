@@ -1,0 +1,198 @@
+#!/usr/bin/env python3
+"""
+Small command-line program to allocate seats for theatre groups.
+The program reads one JSON object from standard input and writes a JSON object to standard output.
+If the input is malformed, the program exits with status 2 and writes nothing.
+
+The implementation follows the specification in intent.md and the visible checks.
+"""
+
+import sys
+import json
+import re
+
+# ---------------------------------------------------------------------------
+# Validation helpers
+# ---------------------------------------------------------------------------
+
+def is_whole_int(x):
+    """Return True if x is an integer (not bool) and not a float.
+    In JSON, bool is separate from number, but in Python bool is subclass of int.
+    The spec requires whole numbers, so bool should be rejected.
+    """
+    return type(x) is int
+
+
+def validate_request(data):
+    """Validate the request structure according to the spec.
+    Return a tuple (valid, error_message). For the purposes of this program, we
+    simply return False on the first error.
+    """
+    # Must be a dict
+    if not isinstance(data, dict):
+        return False
+
+    # rows
+    rows = data.get("rows")
+    if not isinstance(rows, list) or len(rows) == 0 or len(rows) > 26:
+        return False
+    for r in rows:
+        if not is_whole_int(r) or r < 1 or r > 50:
+            return False
+
+    # groups
+    groups = data.get("groups")
+    if groups is None or not isinstance(groups, list):
+        return False
+
+    seen_ids = set()
+    for g in groups:
+        if not isinstance(g, dict):
+            return False
+        g_id = g.get("id")
+        if not isinstance(g_id, str) or g_id == "":
+            return False
+        if g_id in seen_ids:
+            return False
+        seen_ids.add(g_id)
+
+        sz = g.get("size")
+        if not is_whole_int(sz) or sz < 1:
+            return False
+
+        if "may_split" in g:
+            ms = g["may_split"]
+            if type(ms) is not bool:
+                return False
+
+    # blocked
+    if "blocked" in data:
+        blocked = data["blocked"]
+        if not isinstance(blocked, list):
+            return False
+        blocked_set = set()
+        for seat_name in blocked:
+            if not isinstance(seat_name, str):
+                return False
+            # Regex for seat name: uppercase letter A-Z followed by number without leading zeros
+            m = re.match(r"^([A-Z])([1-9][0-9]*)$", seat_name)
+            if not m:
+                return False
+            letter, num_str = m.groups()
+            row_idx = ord(letter) - ord('A')
+            if row_idx < 0 or row_idx >= len(rows):
+                return False
+            seat_num = int(num_str)
+            if seat_num < 1 or seat_num > rows[row_idx]:
+                return False
+            if seat_name in blocked_set:
+                return False
+            blocked_set.add(seat_name)
+
+    return True
+
+# ---------------------------------------------------------------------------
+# Seat allocation
+# ---------------------------------------------------------------------------
+
+def allocate_seats(data):
+    """Perform seat allocation and return the response dict.
+    """
+    rows = data["rows"]
+    groups = data["groups"]
+    blocked = data.get("blocked", [])
+
+    # Initialize free seat flags: True for free, False for blocked or sold
+    free_flags = [[True] * seats for seats in rows]
+
+    # Mark blocked seats as not free
+    for seat_name in blocked:
+        # seat_name is already validated
+        letter = seat_name[0]
+        num_str = seat_name[1:]
+        row_idx = ord(letter) - ord('A')
+        seat_idx = int(num_str) - 1
+        free_flags[row_idx][seat_idx] = False
+
+    seated_entries = []
+    refused_entries = []
+
+    for g in groups:
+        group_id = g["id"]
+        size = g["size"]
+        may_split = g.get("may_split", False)
+
+        # Count free seats
+        total_free = sum(sum(row) for row in free_flags)
+        if total_free < size:
+            refused_entries.append({"id": group_id, "reason": "not_enough_seats"})
+            continue
+
+        # Try to find contiguous block in frontmost row
+        found = False
+        for r, seat_count in enumerate(rows):
+            if seat_count < size:
+                continue
+            row_flags = free_flags[r]
+            # Slide window of length size
+            for start in range(0, seat_count - size + 1):
+                if all(row_flags[start:start+size]):
+                    # Allocate block
+                    seat_names = []
+                    for s in range(start, start+size):
+                        row_flags[s] = False
+                        seat_names.append(f"{chr(ord('A')+r)}{s+1}")
+                    seated_entries.append({"id": group_id, "seats": seat_names})
+                    found = True
+                    break
+            if found:
+                break
+
+        if found:
+            continue
+
+        # Cannot seat together
+        if may_split:
+            # Split allowed; we already know total_free >= size
+            allocated = []
+            for r, seat_count in enumerate(rows):
+                row_flags = free_flags[r]
+                for s in range(seat_count):
+                    if row_flags[s]:
+                        row_flags[s] = False
+                        allocated.append(f"{chr(ord('A')+r)}{s+1}")
+                        if len(allocated) == size:
+                            break
+                if len(allocated) == size:
+                    break
+            seated_entries.append({"id": group_id, "seats": allocated})
+        else:
+            refused_entries.append({"id": group_id, "reason": "not_together"})
+
+    free_count = sum(sum(row) for row in free_flags)
+    return {"seated": seated_entries, "refused": refused_entries, "free": free_count}
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+def main():
+    # Read entire stdin
+    try:
+        data_text = sys.stdin.read()
+    except Exception:
+        sys.exit(2)
+    try:
+        data = json.loads(data_text)
+    except Exception:
+        sys.exit(2)
+
+    if not validate_request(data):
+        sys.exit(2)
+
+    response = allocate_seats(data)
+    # Output JSON
+    sys.stdout.write(json.dumps(response))
+
+if __name__ == "__main__":
+    main()

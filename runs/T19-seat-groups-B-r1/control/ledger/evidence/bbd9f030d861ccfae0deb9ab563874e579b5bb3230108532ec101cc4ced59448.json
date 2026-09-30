@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:5e380da0c48c9449574c08527a5a99884d98bdb79348db5be04b62de40ca04c1",
+    "check": {
+      "covers": [
+        "C3"
+      ],
+      "digest": "sha256:2d5d1cf467a6a6d9ba5d97d9d64a5a8ed760de9e37e7f57adc21329cf28a7ff5",
+      "id": "H7",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "invalid.py"
+    ],
+    "durationSeconds": 2.667,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:f1202cab89821e1ac9b18388e16a06881da722d42d8157b9be89d6496c164cbf",
+      "tail": "a row count of true: expected a refusal (status 2, no output), got status 0 and {'seated': [{'id': 'a', 'seats': ['A1', 'A2']}], 'refused': [], 'free': 3}\na size of true: expected a refusal (status 2, no output), got status 0 and {'seated': [{'id': 'a', 'seats': ['A1']}], 'refused': [], 'free': 7}\nmay_split null: expected a refusal (status 2, no output), got status 0 and {'seated': [{'id': 'a', 'seats': ['A1', 'A2']}], 'refused': [], 'free': 6}\nblocked that is null: expected a refusal (status 2, no output), got status 0 and {'seated': [{'id': 'a', 'seats': ['A1', 'A2']}], 'refused': [], 'free': 6}\nan ignored top-level field holding Infinity: expected a refusal (status 2, no output), got status 0 and {'seated': [{'id': 'a', 'seats': ['A1', 'A2']}], 'refused': [], 'free': 6}\nan ignored group field holding NaN: expected a refusal (status 2, no output), got status 0 and {'seated': [{'id': 'a', 'seats': ['A1', 'A2']}], 'refused': [], 'free': 6}\nan ignored nested field holding -Infinity: expected a refusal (status 2, no output), got status 0 and {'seated': [], 'refused': [], 'free': 8}"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T06:17:17Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "1ffc0d724801f3156079131665319ed7e17e923184e26f376725d33838119d62"
+      },
+      "name": "workspace"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:79b330d77f629dd5304527f0e670802b63c73433fa842026b798a240caa94f2d",
+    "check": {
+      "covers": [
+        "G2"
+      ],
+      "digest": "sha256:28c086846be37cb8b0eb74c51e8de90c22b301391a0f22cdcf7591b8363166aa",
+      "id": "P3",
+      "strength": "tested",
+      "visibility": "public"
+    },
+    "command": [
+      "python3",
+      "table.py"
+    ],
+    "durationSeconds": 0.253,
+    "exitCode": 0,
+    "output": {
+      "digest": "sha256:3e31a4b71e8d5ef50c86f721f997b893a99025dd7fb523a30e97f07fa1117221",
+      "tail": "rate table ok: 4 parcels"
+    },
+    "result": "pass",
+    "startedAt": "2026-09-29T21:13:05Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "4afcc6d801d6af391a7dbe688334663a887fddbf895ca5bd67cbabd12eaac06f"
+      },
+      "name": "workspace"
+    }
+  ]
+}

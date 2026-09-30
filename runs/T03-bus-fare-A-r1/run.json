@@ -1,0 +1,140 @@
+{
+ "run_id": "T03-bus-fare-A-r1",
+ "label": "3c803596",
+ "task": "T03-bus-fare",
+ "condition": "A",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T19:40:53Z",
+ "workspace_digest_start": "19218f8dbe4466a1fe72099c8cf6df3a309de6b8ee3b93bb43bfbf7505a37a9d",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "d93230305fe60901807aa0ed1582a5f5e3ad84de4bf3b0dde6f6626a5d8140d4",
+   "builder_wall_s": 571.6,
+   "tokens_cumulative": 1735086,
+   "output_tokens_cumulative": 33014,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 1737611,
+ "claude_reported_cost_usd": 9.5666,
+ "ended": "accepted",
+ "final_submission": 1,
+ "audit": {
+  "X1": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X2": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X3": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X4": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X5": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X6": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X7": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X8": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X9": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X10": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X11": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X12": {
+   "ok": true,
+   "covers": [
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "C1"
+   ]
+  }
+ },
+ "promises_broken": [],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 1,
+ "tokens": 1735086,
+ "tokens_input": 1702072,
+ "tokens_output": 33014,
+ "model_calls": 110,
+ "cost_usd": 0.0,
+ "wall_minutes": 10.14,
+ "finished": "2026-09-29T19:51:01Z"
+}

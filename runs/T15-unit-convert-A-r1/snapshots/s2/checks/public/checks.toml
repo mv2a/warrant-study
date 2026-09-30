@@ -1,0 +1,22 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C5"]
+statement = "The convert command follows the interface: two valid requests get exit status 0 and an object with exactly the string fields value, unit and dimension, and a request with an unknown unit is refused with status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "contract.py"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3"]
+statement = "The three requests written in the intent's scenarios get exactly the outputs, or the refusal, that the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+
+[[check]]
+id = "P3"
+covers = ["G1", "G2", "G3"]
+statement = "Six everyday conversions come out right: 1 yd is 36 in, 1 km is 100000 cm, 1 kg is 1000.0 g, 2 st is 28 lb, 1 l is 1000 ml and 1 gal is 8 pt."
+strength = "tested"
+run = ["python3", "samples.py"]

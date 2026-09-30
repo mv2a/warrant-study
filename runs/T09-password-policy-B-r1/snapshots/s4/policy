@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+import sys, json
+
+
+def ascii_lower(s):
+    return ''.join(c.lower() if 'A' <= c <= 'Z' else c for c in s)
+
+
+def validate(request):
+    if not isinstance(request, dict):
+        sys.exit(2)
+    keys = set(request.keys())
+    if keys != {"password", "username", "banned"}:
+        sys.exit(2)
+    password = request["password"]
+    username = request["username"]
+    banned = request["banned"]
+    if not isinstance(password, str) or not isinstance(username, str):
+        sys.exit(2)
+    if not isinstance(banned, list):
+        sys.exit(2)
+    # Username constraints
+    if not username or len(username) > 32:
+        sys.exit(2)
+    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_")
+    for c in username:
+        if c not in allowed:
+            sys.exit(2)
+    # Banned list constraints
+    if len(banned) > 20:
+        sys.exit(2)
+    for e in banned:
+        if not isinstance(e, str) or not e:
+            sys.exit(2)
+
+
+def check_rules(password, username, banned):
+    violations = set()
+    # G1: length
+    length = len(password)
+    if length < 12:
+        violations.add("too_short")
+    if length > 64:
+        violations.add("too_long")
+    # G2: character classes
+    classes = set()
+    for c in password:
+        oc = ord(c)
+        if 97 <= oc <= 122:
+            classes.add("lowercase")
+        elif 65 <= oc <= 90:
+            classes.add("uppercase")
+        elif 48 <= oc <= 57:
+            classes.add("digit")
+        else:
+            classes.add("symbol")
+    if len(classes) < 3:
+        violations.add("classes")
+    # G3: username substring
+    if len(username) >= 4:
+        uname_norm = ascii_lower(username)
+        pw_norm = ascii_lower(password)
+        for i in range(len(uname_norm) - 3):
+            sub = uname_norm[i:i+4]
+            if sub in pw_norm:
+                violations.add("username")
+                break
+    # G4: repeat
+    if len(password) >= 3:
+        prev = password[0]
+        count = 1
+        for c in password[1:]:
+            if c == prev:
+                count += 1
+                if count >= 3:
+                    violations.add("repeat")
+                    break
+            else:
+                prev = c
+                count = 1
+    # G5: banned entries
+    if banned:
+        pw_norm = ascii_lower(password)
+        for e in banned:
+            e_norm = ascii_lower(e)
+            if e_norm in pw_norm:
+                violations.add("banned")
+                break
+    return sorted(violations)
+
+
+def main():
+    data_raw = sys.stdin.read()
+    if not data_raw.strip():
+        sys.exit(2)
+    try:
+        data = json.loads(data_raw)
+    except Exception:
+        sys.exit(2)
+    validate(data)
+    password = data["password"]
+    username = data["username"]
+    banned = data["banned"]
+    violations = check_rules(password, username, banned)
+    ok = not violations
+    output = {"ok": ok, "violations": violations}
+    sys.stdout.write(json.dumps(output, separators=(',', ':')))
+
+if __name__ == "__main__":
+    main()

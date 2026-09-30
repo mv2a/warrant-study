@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:acd09f6cf85fe6150f67e2d759ca41f32825f2c552d46cc7ba3da05bca0e4acc",
+    "check": {
+      "covers": [
+        "C1"
+      ],
+      "digest": "sha256:4d8d6bece93b649b8c014a4421f49d114171a040fae2734cf09450af247cc7f1",
+      "id": "H4",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "giftcards.py"
+    ],
+    "durationSeconds": 4.377,
+    "exitCode": 0,
+    "output": {
+      "digest": "sha256:f054b1d8cc4c71deb1d386f82c9d8a50bb2710a926a890dea6990c074cde50a4",
+      "tail": "gift cards ok: 58 comparisons"
+    },
+    "result": "pass",
+    "startedAt": "2026-09-29T20:36:55Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "2e37431c459471f4c9d29cf502ef43ad9aab7d96ba6684f9e83fdbaaaf3c3154"
+      },
+      "name": "workspace"
+    }
+  ]
+}

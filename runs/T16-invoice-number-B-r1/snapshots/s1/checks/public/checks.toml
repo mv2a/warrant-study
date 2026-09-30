@@ -1,0 +1,17 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C4", "C5"]
+statement = "The next command answers two valid requests with status 0 and an object holding exactly a text number and a whole-number sequence, and refuses a request for the unknown branch coimbra with status 2."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The four example requests in the intent get exactly the number and sequence the intent gives, and the Lisbon number sent for braga is refused with status 2."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["numbering"]

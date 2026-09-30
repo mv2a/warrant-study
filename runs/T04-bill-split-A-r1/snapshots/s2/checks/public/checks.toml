@@ -1,0 +1,25 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C3", "C4"]
+statement = "The split command follows the interface: two valid requests exit 0 with exactly subtotal_cents, tip_cents, total_cents and shares, all in whole cents with one share per diner, and an item naming an unlisted diner is refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3"]
+statement = "The three example requests in the intent get exactly the responses the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]
+
+[[check]]
+id = "P3"
+covers = ["C1"]
+statement = "For five fixed bills, every diner gets one share of zero or more whole cents and the shares add up to total_cents."
+strength = "tested"
+run = ["python3", "sums.py"]
+tags = ["money"]

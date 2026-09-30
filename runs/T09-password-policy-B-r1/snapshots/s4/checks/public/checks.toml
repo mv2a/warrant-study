@@ -1,0 +1,25 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C1", "C3", "S4"]
+statement = "The policy command follows the interface: two valid requests, one passing and one failing the policy, exit 0 with exactly the fields ok (true or false) and violations (a list of strings), while the request of scenario S4 and text that is not JSON are refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3"]
+statement = "The three judged example requests in the intent exit 0 and get exactly the answers the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["rules"]
+
+[[check]]
+id = "P3"
+covers = ["G1", "G2"]
+statement = "A 65-character password breaks too_long and a 64-character one does not, and a password made only of lowercase letters and digits breaks classes while one that adds a hyphen does not."
+strength = "tested"
+run = ["python3", "basics.py"]
+tags = ["rules"]

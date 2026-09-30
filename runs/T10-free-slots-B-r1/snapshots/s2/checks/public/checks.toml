@@ -1,0 +1,17 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C4", "C5"]
+statement = "The slots command answers two valid requests with exit status 0 and an object whose only field, slots, is a list of [start, end] pairs of whole numbers, and refuses a request with no busy field with status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "interface.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The example requests in the intent, S1 to S4 including S4 with quorum 4, get exactly the slots the intent gives."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["slots"]

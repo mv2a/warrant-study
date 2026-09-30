@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""
+Simple unit conversion program.
+
+The program reads a single JSON object from standard input, validates the input
+and performs a unit conversion according to the rules in intent.md.
+
+On success it prints a JSON object with the converted value, the target unit and the
+dimension. On failure it exits with status code 2 and produces no output.
+
+Only the standard library is used.
+"""
+
+import json
+import sys
+import re
+from fractions import Fraction
+
+# Unit definitions – sizes relative to a base unit for each dimension
+# Length: base = mm
+unit_size = {
+    # Length units
+    "mm": Fraction(1, 1),
+    "cm": Fraction(10, 1),
+    "m": Fraction(1000, 1),
+    "km": Fraction(1000000, 1),
+    "in": Fraction(127, 5),  # 25.4 mm
+    "ft": Fraction(1524, 5),  # 12 in
+    "yd": Fraction(4572, 5),  # 3 ft
+    "mi": Fraction(8046720, 5),  # 5280 ft
+    # Mass units – base = mg
+    "mg": Fraction(1, 1),
+    "g": Fraction(1000, 1),
+    "kg": Fraction(1000000, 1),
+    "t": Fraction(1000000000, 1),
+    "lb": Fraction(45359237, 100),
+    "oz": Fraction(45359237, 1600),
+    "st": Fraction(317514659, 50),
+    # Volume units – base = ml
+    "ml": Fraction(1, 1),
+    "l": Fraction(1000, 1),
+    "m3": Fraction(1000000, 1),
+    "gal": Fraction(473176473, 125000),
+    "floz": Fraction(473176473, 16000000),
+    "pt": Fraction(473176473, 1000000),
+    "qt": Fraction(473176473, 500000),
+}
+
+# Dimension mapping for each unit
+unit_dimension = {
+    # Length
+    "mm": "length",
+    "cm": "length",
+    "m": "length",
+    "km": "length",
+    "in": "length",
+    "ft": "length",
+    "yd": "length",
+    "mi": "length",
+    # Mass
+    "mg": "mass",
+    "g": "mass",
+    "kg": "mass",
+    "t": "mass",
+    "lb": "mass",
+    "oz": "mass",
+    "st": "mass",
+    # Volume
+    "ml": "volume",
+    "l": "volume",
+    "m3": "volume",
+    "gal": "volume",
+    "floz": "volume",
+    "pt": "volume",
+    "qt": "volume",
+}
+
+# Regular expression for a valid value string (digits, optionally followed by a point and digits)
+value_re = re.compile(r'^[0-9]+(?:\.[0-9]+)?$')
+
+
+def round_half_up(frac: Fraction, places: int) -> str:
+    """Round a Fraction to *places* decimal places using half‑up rule.
+    Returns the string representation without scientific notation.
+    """
+    factor = 10 ** places
+    scaled = frac * factor
+    num, den = scaled.numerator, scaled.denominator
+    div, rem = divmod(num, den)
+    if rem * 2 >= den:
+        div += 1
+    if places == 0:
+        return str(div)
+    s = str(div).zfill(places)
+    int_part = s[:-places] or "0"
+    frac_part = s[-places:]
+    return f"{int_part}.{frac_part}"
+
+
+def main():
+    try:
+        raw = sys.stdin.read()
+        raw = raw.strip()
+        if not raw:
+            raise ValueError("empty input")
+        data = json.loads(raw)
+        # Validate that data is an object with exactly the required keys
+        if not isinstance(data, dict):
+            raise ValueError("not an object")
+        required_keys = {"value", "from", "to", "places"}
+        if set(data.keys()) != required_keys:
+            raise ValueError("wrong keys")
+        # Validate types
+        if not isinstance(data["value"], str) or not value_re.fullmatch(data["value"]):
+            raise ValueError("invalid value")
+        if not isinstance(data["from"], str) or not isinstance(data["to"], str):
+            raise ValueError("invalid unit type")
+        if not isinstance(data["places"], int) or not (0 <= data["places"] <= 12):
+            raise ValueError("invalid places")
+        from_unit = data["from"]
+        to_unit = data["to"]
+        # Units must be known and of same dimension
+        if from_unit not in unit_size or to_unit not in unit_size:
+            raise ValueError("unknown unit")
+        if unit_dimension[from_unit] != unit_dimension[to_unit]:
+            raise ValueError("dimension mismatch")
+        # Parse numeric value
+        value = Fraction(data["value"])
+        # Compute conversion factor
+        ratio = unit_size[from_unit] / unit_size[to_unit]
+        result = value * ratio
+        # Round to requested places
+        places = data["places"]
+        value_str = round_half_up(result, places)
+        output = {
+            "value": value_str,
+            "unit": to_unit,
+            "dimension": unit_dimension[to_unit],
+        }
+        sys.stdout.write(json.dumps(output, separators=(",", ":")))
+    except Exception:
+        sys.exit(2)
+
+
+if __name__ == "__main__":
+    main()
+

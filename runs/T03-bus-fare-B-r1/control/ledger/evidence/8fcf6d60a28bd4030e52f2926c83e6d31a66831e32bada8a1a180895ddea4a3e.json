@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:5f9340bf334b9af4a72b7f4399d6c5d56e2761c104caf6ba2265e9cdb6321c18",
+    "check": {
+      "covers": [
+        "C2"
+      ],
+      "digest": "sha256:08a6dbedbd1477d4ef9c8adb8e6c2245898303620c1614a7652e7da296a5cf17",
+      "id": "H6",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "invalid.py"
+    ],
+    "durationSeconds": 2.346,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:d9021f7dadf418996674cad6ddb57fd09db44844f3845f68e65adfec2ee41339",
+      "tail": "an age of true: expected a refusal (status 2, no output), got status 0 and {'fares_cents': [0], 'total_cents': 0}\nan age of false: expected a refusal (status 2, no output), got status 0 and {'fares_cents': [0], 'total_cents': 0}\na boarding minute of true: expected a refusal (status 2, no output), got status 0 and {'fares_cents': [365], 'total_cents': 365}\na from_zone of true: expected a refusal (status 2, no output), got status 0 and {'fares_cents': [460], 'total_cents': 460}"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-29T19:30:21Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "11ad4b70604c38398985734dce82b1b0ff0805a7a8b2c7ca69521ca30ae18107"
+      },
+      "name": "workspace"
+    }
+  ]
+}

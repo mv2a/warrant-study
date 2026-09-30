@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+import json, sys
+
+# Validate an interval of the form [start, end]
+# Ensures it is a list of two integers with 0 <= start < end <= 1440
+
+def validate_interval(interval, name):
+    if not isinstance(interval, list) or len(interval) != 2:
+        sys.stderr.write(f"{name} must be a list of two integers\n")
+        sys.exit(2)
+    start, end = interval
+    if type(start) is not int or type(end) is not int:
+        sys.stderr.write(f"{name} elements must be integers\n")
+        sys.exit(2)
+    if start < 0 or end > 1440 or start >= end:
+        sys.stderr.write(f"{name} interval out of bounds\n")
+        sys.exit(2)
+
+# Compute free slots
+# workday: [work_start, work_end]
+# min_length: minimum length of a slot (int >=1)
+# quorum: minimum number of people free at each minute
+# busy: list of lists of intervals for each person
+
+def compute_slots(workday, min_length, quorum, busy):
+    work_start, work_end = workday
+    minutes = work_end - work_start
+    num_people = len(busy)
+    # For each person, create a boolean list marking busy minutes within the workday
+    busy_flags_per_person = []
+    for person_intervals in busy:
+        flags = [False] * minutes
+        for interval in person_intervals:
+            s, e = interval
+            # Clip interval to the workday
+            s_adj = max(s, work_start)
+            e_adj = min(e, work_end)
+            if s_adj < e_adj:
+                start_idx = s_adj - work_start
+                end_idx = e_adj - work_start
+                for i in range(start_idx, end_idx):
+                    flags[i] = True
+        busy_flags_per_person.append(flags)
+    # Determine for each minute whether enough people are free
+    free_bool = []
+    for i in range(minutes):
+        busy_count = sum(flags[i] for flags in busy_flags_per_person)
+        free_bool.append(busy_count <= num_people - quorum)
+    # Gather contiguous free stretches that are at least min_length long
+    slots = []
+    slot_start = None
+    for i, is_free in enumerate(free_bool):
+        if is_free:
+            if slot_start is None:
+                slot_start = work_start + i
+        else:
+            if slot_start is not None:
+                slot_end = work_start + i
+                if slot_end - slot_start >= min_length:
+                    slots.append([slot_start, slot_end])
+                slot_start = None
+    # If a slot extends to the end of the workday
+    if slot_start is not None:
+        slot_end = work_end
+        if slot_end - slot_start >= min_length:
+            slots.append([slot_start, slot_end])
+    return slots
+
+
+def main():
+    text = sys.stdin.read()
+    try:
+        data = json.loads(text)
+    except Exception:
+        sys.stderr.write("invalid JSON\n")
+        sys.exit(2)
+    if not isinstance(data, dict):
+        sys.stderr.write("input must be a JSON object\n")
+        sys.exit(2)
+    required_fields = ["workday", "min_length", "quorum", "busy"]
+    for f in required_fields:
+        if f not in data:
+            sys.stderr.write(f"missing field {f}\n")
+            sys.exit(2)
+    workday = data["workday"]
+    min_length = data["min_length"]
+    quorum = data["quorum"]
+    busy = data["busy"]
+    # Validate workday
+    validate_interval(workday, "workday")
+    # Validate min_length
+    if type(min_length) is not int or min_length < 1:
+        sys.stderr.write("min_length must be a positive integer\n")
+        sys.exit(2)
+    # Validate busy
+    if not isinstance(busy, list) or len(busy) < 1:
+        sys.stderr.write("busy must be a non-empty list\n")
+        sys.exit(2)
+    for i, person in enumerate(busy):
+        if not isinstance(person, list):
+            sys.stderr.write(f"busy[{i}] must be a list\n")
+            sys.exit(2)
+        for j, interval in enumerate(person):
+            validate_interval(interval, f"busy[{i}][{j}]")
+    # Validate quorum
+    if type(quorum) is not int or quorum < 1 or quorum > len(busy):
+        sys.stderr.write("quorum must be an integer between 1 and the number of people\n")
+        sys.exit(2)
+    # Compute slots
+    slots = compute_slots(workday, min_length, quorum, busy)
+    # Output JSON
+    print(json.dumps({"slots": slots}))
+
+if __name__ == "__main__":
+    main()

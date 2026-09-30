@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:acd09f6cf85fe6150f67e2d759ca41f32825f2c552d46cc7ba3da05bca0e4acc",
+    "check": {
+      "covers": [
+        "C4"
+      ],
+      "digest": "sha256:2d1d9578e51fa410fd1b59fb8ff978dfc7ab651237e80416917058f2afac1523",
+      "id": "H7",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "invalid.py"
+    ],
+    "durationSeconds": 1.86,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:23def59613ce9dd47f8c540fabc6eff1375107a108df8cc4e196471f81444d3f",
+      "tail": "a price of true: expected a refusal (status 2, no output), got status 0 and {'eligible_cents': 2502, 'base_points': 25, 'bonus_points': 56, 'total_points': 81}\na price of false: expected a refusal (status 2, no output), got status 0 and {'eligible_cents': 2500, 'base_points': 25, 'bonus_points': 56, 'total_points': 81}\na quantity of true: expected a refusal (status 2, no output), got status 0 and {'eligible_cents': 3750, 'base_points': 37, 'bonus_points': 83, 'total_points': 120}\nbonus_categories of null: expected a refusal (status 2, no output), got status 0 and {'eligible_cents': 2500, 'base_points': 25, 'bonus_points': 12, 'total_points': 37}"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-29T20:37:06Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "2e37431c459471f4c9d29cf502ef43ad9aab7d96ba6684f9e83fdbaaaf3c3154"
+      },
+      "name": "workspace"
+    }
+  ]
+}

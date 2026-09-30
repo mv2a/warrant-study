@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:72e8693351bb90550ff3597a95e94761911c09ec9700e0c6253fb382762aa35a",
+    "check": {
+      "covers": [
+        "G5"
+      ],
+      "digest": "sha256:c76f4bade9bb0554db0414799e50bd28fff29e7afcdd582fa56994ccee3aab30",
+      "id": "H5",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "lost_ticket.py"
+    ],
+    "durationSeconds": 0.076,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:f926a518bfd93a0c0d035d0551f152c01099e453f82188487fc810bfd5769f28",
+      "tail": "the workspace has no executable named fee"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-29T18:26:35Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "f8373765b0075520b92a3471d512d942a7fe95882d8d985c14fcb51efb1ae179"
+      },
+      "name": "workspace"
+    }
+  ]
+}

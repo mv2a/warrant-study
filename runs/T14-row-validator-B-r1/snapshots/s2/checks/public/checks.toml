@@ -1,0 +1,17 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C1", "C4"]
+statement = "The validate command follows the interface: two requests get an object with exactly valid and errors, each error has exactly row, field and code, valid is true only when errors is empty, and a schema with the unknown type \"date\" is refused with status 2 and no output."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3"]
+statement = "The three ROSTER scenarios in the intent give exactly the output the intent states, with status 0."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["scenarios"]

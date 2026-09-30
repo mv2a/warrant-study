@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+import sys, json
+
+
+def main():
+    data = sys.stdin.read()
+    try:
+        request = json.loads(data)
+    except json.JSONDecodeError:
+        sys.exit(2)
+
+    if not isinstance(request, dict):
+        sys.exit(2)
+
+    tier = request.get("tier")
+    if tier not in ("standard", "silver", "gold"):
+        sys.exit(2)
+
+    items = request.get("items")
+    if not isinstance(items, list):
+        sys.exit(2)
+
+    bonus_categories = request.get("bonus_categories")
+    if bonus_categories is not None:
+        if not isinstance(bonus_categories, list):
+            sys.exit(2)
+        for cat in bonus_categories:
+            if not isinstance(cat, str):
+                sys.exit(2)
+        bonus_set = set(bonus_categories)
+    else:
+        bonus_set = set()
+
+    for item in items:
+        if not isinstance(item, dict):
+            sys.exit(2)
+        if not all(k in item for k in ("category", "price_cents", "quantity")):
+            sys.exit(2)
+        cat = item["category"]
+        if not isinstance(cat, str) or cat == "":
+            sys.exit(2)
+        price = item["price_cents"]
+        if not isinstance(price, int) or price < 0:
+            sys.exit(2)
+        qty = item["quantity"]
+        if not isinstance(qty, int) or qty < 1:
+            sys.exit(2)
+
+    eligible_cents = 0
+    promo_cents = 0
+    for item in items:
+        cat = item["category"]
+        if cat == "gift_card":
+            continue
+        cents = item["price_cents"] * item["quantity"]
+        eligible_cents += cents
+        if cat in bonus_set:
+            promo_cents += cents
+
+    base_points = eligible_cents // 100
+
+    if tier == "standard":
+        tier_total = base_points
+    elif tier == "silver":
+        tier_total = base_points * 5 // 4
+    else:  # gold
+        tier_total = base_points * 3 // 2
+    tier_bonus = tier_total - base_points
+
+    category_bonus = (promo_cents // 100) * 2
+
+    bonus_points = tier_bonus + category_bonus
+    if bonus_points > 500:
+        bonus_points = 500
+
+    total_points = base_points + bonus_points
+
+    output = {
+        "eligible_cents": eligible_cents,
+        "base_points": base_points,
+        "bonus_points": bonus_points,
+        "total_points": total_points,
+    }
+    sys.stdout.write(json.dumps(output))
+
+
+if __name__ == "__main__":
+    main()

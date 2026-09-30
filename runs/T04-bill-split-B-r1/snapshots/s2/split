@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+import sys
+import json
+from fractions import Fraction
+
+def exit_refuse() -> None:
+    sys.exit(2)
+
+def main() -> None:
+    try:
+        raw = sys.stdin.read()
+        if not raw.strip():
+            exit_refuse()
+        request = json.loads(raw)
+    except Exception:
+        exit_refuse()
+
+    if not isinstance(request, dict):
+        exit_refuse()
+
+    # Required keys
+    if 'diners' not in request or 'items' not in request or 'tip_percent' not in request:
+        exit_refuse()
+    diners = request['diners']
+    items = request['items']
+    tip_percent = request['tip_percent']
+
+    # Validate diners
+    if not isinstance(diners, list) or not diners:
+        exit_refuse()
+    diner_names = []
+    diner_pays = {}
+    for d in diners:
+        if not isinstance(d, dict):
+            exit_refuse()
+        name = d.get('name')
+        pays = d.get('pays')
+        if not isinstance(name, str) or name == '':
+            exit_refuse()
+        if not isinstance(pays, str) or pays not in ('own', 'share'):
+            exit_refuse()
+        if name in diner_names:
+            exit_refuse()
+        diner_names.append(name)
+        diner_pays[name] = pays
+
+    # Validate items
+    if not isinstance(items, list) or not items:
+        exit_refuse()
+    for item in items:
+        if not isinstance(item, dict):
+            exit_refuse()
+        diner = item.get('diner')
+        price = item.get('price_cents')
+        if not isinstance(diner, str):
+            exit_refuse()
+        if diner not in diner_names:
+            exit_refuse()
+        if not isinstance(price, int) or price < 1:
+            exit_refuse()
+
+    # Validate tip_percent
+    if not isinstance(tip_percent, int) or not (0 <= tip_percent <= 100):
+        exit_refuse()
+
+    # Compute subtotal
+    subtotal_cents = sum(item['price_cents'] for item in items)
+
+    # Compute tip cents (half‑cent up)
+    tip_cents = (subtotal_cents * tip_percent + 50) // 100
+    total_cents = subtotal_cents + tip_cents
+
+    # Sum items per diner
+    items_sum_per_diner = {name: 0 for name in diner_names}
+    for item in items:
+        items_sum_per_diner[item['diner']] += item['price_cents']
+
+    # Pool for sharers
+    sharer_names = [name for name, pays in diner_pays.items() if pays == 'share']
+    pool_total = sum(items_sum_per_diner[name] for name in sharer_names)
+    num_sharers = len(sharer_names)
+
+    # Share subtotals
+    share_subtotal = {}
+    for name in diner_names:
+        if diner_pays[name] == 'own':
+            share_subtotal[name] = Fraction(items_sum_per_diner[name], 1)
+        else:  # share
+            if num_sharers > 0:
+                share_subtotal[name] = Fraction(pool_total, num_sharers)
+            else:
+                share_subtotal[name] = Fraction(0, 1)
+
+    # Fair amounts
+    fair = {}
+    for name in diner_names:
+        fair[name] = share_subtotal[name] * Fraction(total_cents, subtotal_cents)
+
+    # Floor shares and fractional parts
+    floor_shares = {}
+    fractional_parts = {}
+    floor_sum = 0
+    for name in diner_names:
+        f = fair[name]
+        floor_val = f.numerator // f.denominator
+        floor_shares[name] = floor_val
+        fractional_parts[name] = f - floor_val
+        floor_sum += floor_val
+
+    leftover = total_cents - floor_sum
+
+    # Sort diners by fractional part descending, then by original order
+    order_map = {name: idx for idx, name in enumerate(diner_names)}
+    sorted_diners = sorted(
+        diner_names,
+        key=lambda n: (-fractional_parts[n], order_map[n])
+    )
+
+    # Distribute leftover cents
+    shares = floor_shares.copy()
+    for i in range(leftover):
+        shares[sorted_diners[i]] += 1
+
+    # Prepare output
+    output = {
+        'subtotal_cents': subtotal_cents,
+        'tip_cents': tip_cents,
+        'total_cents': total_cents,
+        'shares': shares
+    }
+
+    json.dump(output, sys.stdout, separators=(',', ':'))
+    sys.stdout.write('\n')
+    sys.exit(0)
+
+if __name__ == '__main__':
+    main()

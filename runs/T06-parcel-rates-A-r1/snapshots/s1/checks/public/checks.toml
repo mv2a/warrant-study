@@ -1,0 +1,25 @@
+# Visible checks: the builder may read and run these.
+
+[[check]]
+id = "P1"
+covers = ["C1", "C3"]
+statement = "The rate command follows the interface: two valid requests get exactly billable_g, base_cents, surcharge_cents and total_cents as integers with the total equal to base plus surcharge, and a request for zone 7 is refused with status 2 and nothing on standard output."
+strength = "tested"
+run = ["python3", "contract.py"]
+tags = ["interface"]
+
+[[check]]
+id = "P2"
+covers = ["S1", "S2", "S3", "S4"]
+statement = "The four example parcels in the intent get exactly the responses the intent gives, and the fourth is refused with status 2."
+strength = "tested"
+run = ["python3", "scenarios.py"]
+tags = ["money"]
+
+[[check]]
+id = "P3"
+covers = ["G2"]
+statement = "Four small parcels, one in the middle of each of four weight brackets and one in each zone, pay the base price in the rate table."
+strength = "tested"
+run = ["python3", "table.py"]
+tags = ["money"]

@@ -1,0 +1,215 @@
+{
+ "run_id": "T01-parking-fees-B-r1",
+ "label": "bc588e90",
+ "task": "T01-parking-fees",
+ "condition": "B",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T18:07:33Z",
+ "workspace_digest_start": "a247328b4f37bd8064b14d6c809dc883ddbb10798caacd6062a4b706a0a3f77e",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "a247328b4f37bd8064b14d6c809dc883ddbb10798caacd6062a4b706a0a3f77e",
+   "builder_wall_s": 348.1,
+   "tokens_cumulative": 81917,
+   "output_tokens_cumulative": 35418,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:f8373765b007)\n  - P1 failed\n  - P2 failed\n  - P3 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\n  - H9 failed\n  - H10 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "a247328b4f37bd8064b14d6c809dc883ddbb10798caacd6062a4b706a0a3f77e",
+   "builder_wall_s": 790.6,
+   "tokens_cumulative": 159680,
+   "output_tokens_cumulative": 73558,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:f8373765b007)\n  - P1 failed\n  - P2 failed\n  - P3 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\n  - H9 failed\n  - H10 failed\nRecorded in ledger entry #5.",
+   "accepted": false
+  },
+  {
+   "k": 3,
+   "digest": "a247328b4f37bd8064b14d6c809dc883ddbb10798caacd6062a4b706a0a3f77e",
+   "builder_wall_s": 205.0,
+   "tokens_cumulative": 177356,
+   "output_tokens_cumulative": 73558,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:f8373765b007)\n  - P1 failed\n  - P2 failed\n  - P3 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\n  - H9 failed\n  - H10 failed\nRecorded in ledger entry #7.",
+   "accepted": false
+  },
+  {
+   "k": 4,
+   "digest": "a247328b4f37bd8064b14d6c809dc883ddbb10798caacd6062a4b706a0a3f77e",
+   "builder_wall_s": 122.6,
+   "tokens_cumulative": 204084,
+   "output_tokens_cumulative": 73558,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:f8373765b007)\n  - P1 failed\n  - P2 failed\n  - P3 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\n  - H9 failed\n  - H10 failed\nRecorded in ledger entry #9.",
+   "accepted": false
+  },
+  {
+   "k": 5,
+   "digest": "a247328b4f37bd8064b14d6c809dc883ddbb10798caacd6062a4b706a0a3f77e",
+   "builder_wall_s": 355.6,
+   "tokens_cumulative": 255473,
+   "output_tokens_cumulative": 95892,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": false,
+    "P2": false,
+    "P3": false
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:f8373765b007)\n  - P1 failed\n  - P2 failed\n  - P3 failed\n  - H1 failed\n  - H2 failed\n  - H3 failed\n  - H4 failed\n  - H5 failed\n  - H6 failed\n  - H7 failed\n  - H8 failed\n  - H9 failed\n  - H10 failed\nRecorded in ledger entry #11.",
+   "accepted": false
+  }
+ ],
+ "accepted": false,
+ "tokens_reported": 314317,
+ "claude_reported_cost_usd": 6.2398,
+ "ended": "submissions",
+ "final_submission": 5,
+ "audit": {
+  "X-G1": {
+   "ok": false,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X-G2": {
+   "ok": false,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X-G3": {
+   "ok": false,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X-G4": {
+   "ok": false,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X-G5": {
+   "ok": false,
+   "covers": [
+    "G5"
+   ]
+  },
+  "X-C1": {
+   "ok": false,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X-C2": {
+   "ok": false,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X-C3": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X-S1": {
+   "ok": false,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X-S2": {
+   "ok": false,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X-S3": {
+   "ok": false,
+   "covers": [
+    "S3"
+   ]
+  },
+  "X-S4": {
+   "ok": false,
+   "covers": [
+    "S4"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C1",
+  "C2",
+  "C3",
+  "G1",
+  "G2",
+  "G3",
+  "G4",
+  "G5",
+  "S1",
+  "S2",
+  "S3",
+  "S4"
+ ],
+ "escaped_defects": 0,
+ "false_pass": 0,
+ "correct_delivery": 0,
+ "tokens": 255473,
+ "tokens_input": 159581,
+ "tokens_output": 95892,
+ "model_calls": 21,
+ "cost_usd": 0.0,
+ "wall_minutes": 30.62,
+ "finished": "2026-09-29T18:38:10Z"
+}

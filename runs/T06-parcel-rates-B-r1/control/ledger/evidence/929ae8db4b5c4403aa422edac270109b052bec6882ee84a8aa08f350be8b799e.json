@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:79b330d77f629dd5304527f0e670802b63c73433fa842026b798a240caa94f2d",
+    "check": {
+      "covers": [
+        "C2"
+      ],
+      "digest": "sha256:32e55dce62095bd281236e7a817fb30e6c3a078eb642c6dc379012818fc4372e",
+      "id": "H6",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "limits.py"
+    ],
+    "durationSeconds": 5.971,
+    "exitCode": 0,
+    "output": {
+      "digest": "sha256:3de398d6258a9eb1ff09c547f83b02be4b887c1ccd1eb34bbf252cad0946e383",
+      "tail": "limits ok: 69 parcels priced and 63 refused"
+    },
+    "result": "pass",
+    "startedAt": "2026-09-29T21:13:29Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "4afcc6d801d6af391a7dbe688334663a887fddbf895ca5bd67cbabd12eaac06f"
+      },
+      "name": "workspace"
+    }
+  ]
+}

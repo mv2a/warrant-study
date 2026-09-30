@@ -1,0 +1,152 @@
+#!/usr/bin/env python3
+import json, sys, re
+
+def error():
+    sys.exit(2)
+
+
+def main():
+    try:
+        text = sys.stdin.read()
+        request = json.loads(text)
+    except Exception:
+        error()
+    if not isinstance(request, dict):
+        error()
+
+    # Validate rows
+    rows = request.get('rows')
+    if not isinstance(rows, list) or len(rows) == 0 or len(rows) > 26:
+        error()
+    for r in rows:
+        if not isinstance(r, int) or r < 1 or r > 50:
+            error()
+    num_rows = len(rows)
+
+    # Validate blocked
+    blocked_list = request.get('blocked', [])
+    if blocked_list is not None:
+        if not isinstance(blocked_list, list):
+            error()
+        blocked_set = set()
+        seat_pat = re.compile(r'^([A-Z])([1-9]|[1-4][0-9]|50)$')
+        for s in blocked_list:
+            if not isinstance(s, str):
+                error()
+            m = seat_pat.match(s)
+            if not m:
+                error()
+            row_letter, seat_num_str = m.group(1), m.group(2)
+            row_idx = ord(row_letter) - ord('A')
+            if row_idx < 0 or row_idx >= num_rows:
+                error()
+            seat_num = int(seat_num_str)
+            if seat_num < 1 or seat_num > rows[row_idx]:
+                error()
+            if s in blocked_set:
+                error()
+            blocked_set.add(s)
+    else:
+        blocked_set = set()
+
+    # Validate groups
+    groups = request.get('groups')
+    if not isinstance(groups, list):
+        error()
+    group_ids = set()
+    group_defs = []
+    for g in groups:
+        if not isinstance(g, dict):
+            error()
+        gid = g.get('id')
+        if not isinstance(gid, str) or gid == '':
+            error()
+        if gid in group_ids:
+            error()
+        group_ids.add(gid)
+        size = g.get('size')
+        if not isinstance(size, int) or size < 1:
+            error()
+        may_split = g.get('may_split')
+        if may_split is not None and not isinstance(may_split, bool):
+            error()
+        group_defs.append({'id': gid, 'size': size, 'may_split': may_split if may_split is not None else False})
+
+    # Prepare free seats
+    free = []
+    for row_size in rows:
+        free.append([True]*row_size)
+    free_count = sum(rows)
+    seat_pat = re.compile(r'^([A-Z])([1-9]|[1-4][0-9]|50)$')
+    for s in blocked_set:
+        m = seat_pat.match(s)
+        row_letter, seat_num_str = m.group(1), m.group(2)
+        row_idx = ord(row_letter) - ord('A')
+        seat_idx = int(seat_num_str)-1
+        if free[row_idx][seat_idx]:
+            free[row_idx][seat_idx] = False
+            free_count -= 1
+
+    seated = []
+    refused = []
+
+    for g in group_defs:
+        gid = g['id']
+        sz = g['size']
+        may_split = g['may_split']
+        if free_count < sz:
+            refused.append({'id': gid, 'reason': 'not_enough_seats'})
+            continue
+        block_found = False
+        for row_idx, row_free in enumerate(free):
+            row_len = len(row_free)
+            if sz > row_len:
+                continue
+            start = 0
+            while start <= row_len - sz:
+                if all(row_free[start:start+sz]):
+                    seats_alloc = []
+                    for i in range(start, start+sz):
+                        row_free[i] = False
+                        seat_num = i+1
+                        seat_name = f"{chr(ord('A')+row_idx)}{seat_num}"
+                        seats_alloc.append(seat_name)
+                    seated.append({'id': gid, 'seats': seats_alloc})
+                    free_count -= sz
+                    block_found = True
+                    break
+                next_start = start+1
+                while next_start < row_len and not row_free[next_start]:
+                    next_start += 1
+                start = next_start
+            if block_found:
+                break
+        if block_found:
+            continue
+        if not may_split:
+            refused.append({'id': gid, 'reason': 'not_together'})
+            continue
+        seats_alloc = []
+        needed = sz
+        for row_idx, row_free in enumerate(free):
+            for seat_idx, is_free in enumerate(row_free):
+                if is_free:
+                    row_free[seat_idx] = False
+                    seat_name = f"{chr(ord('A')+row_idx)}{seat_idx+1}"
+                    seats_alloc.append(seat_name)
+                    needed -= 1
+                    free_count -= 1
+                    if needed == 0:
+                        break
+            if needed == 0:
+                break
+        if needed > 0:
+            refused.append({'id': gid, 'reason': 'not_enough_seats'})
+        else:
+            seated.append({'id': gid, 'seats': seats_alloc})
+
+    result = {'seated': seated, 'refused': refused, 'free': free_count}
+    print(json.dumps(result))
+
+if __name__ == "__main__":
+    main()

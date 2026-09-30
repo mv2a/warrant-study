@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:5e380da0c48c9449574c08527a5a99884d98bdb79348db5be04b62de40ca04c1",
+    "check": {
+      "covers": [
+        "C2"
+      ],
+      "digest": "sha256:415fcac57173a14253bd1c4f2dc8145dcfc36f35ddbb5c82b3c2c91406f4a654",
+      "id": "H6",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "integrity.py"
+    ],
+    "durationSeconds": 0.07,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:5838a01004173f775b5830ae7b7b70361c1561c2ee87a12fedb0e1ddfb779981",
+      "tail": "the workspace has no executable named seats"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-30T05:54:57Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "04b1ba760b1e423c983fe918614be3e12f8621bfa058b2ae79bc38f1f832100e"
+      },
+      "name": "workspace"
+    }
+  ]
+}

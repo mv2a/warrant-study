@@ -1,0 +1,190 @@
+{
+ "run_id": "T02-library-fines-B-r1",
+ "label": "7689082a",
+ "task": "T02-library-fines",
+ "condition": "B",
+ "replicate": 1,
+ "config": {
+  "builder_image": "wstudy-builder:1",
+  "verify_image": "python:3.11-slim",
+  "builder_backend": "ollama",
+  "model": "gpt-oss-20b-64k",
+  "model_base": "gpt-oss:20b@17052f91a42e",
+  "model_context_tokens": 65536,
+  "builder_context_tokens": 60000,
+  "ollama_url": "http://localhost:11434",
+  "max_submissions": 5,
+  "wall_clock_s": 2700,
+  "token_cap": 200000,
+  "token_cap_basis": "output",
+  "run_budget_usd": 1.0,
+  "study_budget_usd": 75.0,
+  "builder_cpus": "2",
+  "builder_memory": "2g",
+  "verify_cpus": "2",
+  "verify_memory": "1g",
+  "check_timeout_s": 120
+ },
+ "started": "2026-09-29T18:53:40Z",
+ "workspace_digest_start": "887c02431522ba60913ff6485ddacc4b48a93ac70f213bb44759eaa78fa73dc8",
+ "submissions": [
+  {
+   "k": 1,
+   "digest": "c6e9ce3895e2712e75c7a6e39f701a7b3489a15ce4da280c18abc480be728c9a",
+   "builder_wall_s": 506.3,
+   "tokens_cumulative": 1409112,
+   "output_tokens_cumulative": 37308,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: DENIED for ../tmp/ws (sha256:60abaa6f3968)\n  - H7 failed\nRecorded in ledger entry #3.",
+   "accepted": false
+  },
+  {
+   "k": 2,
+   "digest": "3616cfd60bc9b45172e43e40bca3be2f9e4af339a39df0ce1ad256eef6236eb1",
+   "builder_wall_s": 247.8,
+   "tokens_cumulative": 1600512,
+   "output_tokens_cumulative": 57438,
+   "cost_cumulative_usd": 0.0,
+   "visible": {
+    "P1": true,
+    "P2": true
+   },
+   "builder_error": null,
+   "gate": "merge: WARRANTED for ../tmp/ws (sha256:0f5ad79473dc)\n  strength   tested\n  grounds    passing evidence from P1, P2, H1, H2, H3, H4, H5, H6, H7, H8\nRecorded in ledger entry #5.",
+   "accepted": true
+  }
+ ],
+ "accepted": true,
+ "tokens_reported": 1608993,
+ "claude_reported_cost_usd": 9.883,
+ "ended": "accepted",
+ "final_submission": 2,
+ "audit": {
+  "X01": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X02": {
+   "ok": true,
+   "covers": [
+    "C1"
+   ]
+  },
+  "X03": {
+   "ok": true,
+   "covers": [
+    "C1",
+    "C3"
+   ]
+  },
+  "X04": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X05": {
+   "ok": false,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X06": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X07": {
+   "ok": true,
+   "covers": [
+    "C3"
+   ]
+  },
+  "X08": {
+   "ok": true,
+   "covers": [
+    "C3",
+    "C1"
+   ]
+  },
+  "X09": {
+   "ok": true,
+   "covers": [
+    "C2"
+   ]
+  },
+  "X10": {
+   "ok": true,
+   "covers": [
+    "G1"
+   ]
+  },
+  "X11": {
+   "ok": true,
+   "covers": [
+    "G2"
+   ]
+  },
+  "X12": {
+   "ok": true,
+   "covers": [
+    "G3"
+   ]
+  },
+  "X13": {
+   "ok": true,
+   "covers": [
+    "G4"
+   ]
+  },
+  "X14": {
+   "ok": true,
+   "covers": [
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "C2"
+   ]
+  },
+  "X15": {
+   "ok": true,
+   "covers": [
+    "S1"
+   ]
+  },
+  "X16": {
+   "ok": true,
+   "covers": [
+    "S2"
+   ]
+  },
+  "X17": {
+   "ok": true,
+   "covers": [
+    "S3"
+   ]
+  }
+ },
+ "promises_broken": [
+  "C3"
+ ],
+ "escaped_defects": 1,
+ "false_pass": 1,
+ "correct_delivery": 0,
+ "tokens": 1600512,
+ "tokens_input": 1543074,
+ "tokens_output": 57438,
+ "model_calls": 95,
+ "cost_usd": 0.0,
+ "wall_minutes": 13.9,
+ "finished": "2026-09-29T19:07:34Z"
+}

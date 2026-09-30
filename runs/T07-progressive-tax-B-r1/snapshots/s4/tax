@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+import sys, json
+
+
+def main():
+    try:
+        text = sys.stdin.read()
+        data = json.loads(text)
+        if not isinstance(data, dict):
+            raise ValueError
+        if 'income_cents' not in data or 'dependents' not in data:
+            raise ValueError
+        income = data['income_cents']
+        dependents = data['dependents']
+        if not isinstance(income, int) or not isinstance(dependents, int):
+            raise ValueError
+        if income < 0 or dependents < 0 or dependents > 20:
+            raise ValueError
+    except Exception:
+        sys.exit(2)
+    standard_allowance = 1200000
+    if income > 8000000:
+        reduction = (income - 8000000 + 4) // 5
+    else:
+        reduction = 0
+    allowance_cents = max(0, standard_allowance - reduction)
+    taxable_cents = max(0, income - allowance_cents)
+    tax_numerator = 0
+    remaining = taxable_cents
+    if remaining > 0:
+        amount = min(remaining, 1000000)
+        tax_numerator += amount * 5
+        remaining -= amount
+    if remaining > 0:
+        amount = min(remaining, 3000000)
+        tax_numerator += amount * 15
+        remaining -= amount
+    if remaining > 0:
+        amount = min(remaining, 6000000)
+        tax_numerator += amount * 25
+        remaining -= amount
+    if remaining > 0:
+        amount = remaining
+        tax_numerator += amount * 38
+    tax_before_credit_cents = (tax_numerator + 50) // 100
+    credit_possible = dependents * 45000
+    credit_cents = min(credit_possible, tax_before_credit_cents)
+    tax_cents = tax_before_credit_cents - credit_cents
+    out = {
+        'income_cents': income,
+        'allowance_cents': allowance_cents,
+        'taxable_cents': taxable_cents,
+        'tax_before_credit_cents': tax_before_credit_cents,
+        'credit_cents': credit_cents,
+        'tax_cents': tax_cents
+    }
+    sys.stdout.write(json.dumps(out))
+    sys.exit(0)
+
+if __name__ == '__main__':
+    main()

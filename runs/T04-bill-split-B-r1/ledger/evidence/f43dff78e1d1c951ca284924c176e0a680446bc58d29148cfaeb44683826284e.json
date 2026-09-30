@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:62b026c1f069c20cde430c40245f0d0630a3d5f482a12d3bd699a3cc720caaf4",
+    "check": {
+      "covers": [
+        "G1"
+      ],
+      "digest": "sha256:4c6ff5a84effde98df3af5092f574b6485f67dc8e33e9e710ce4e5bfa167733d",
+      "id": "H1",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "tip.py"
+    ],
+    "durationSeconds": 0.072,
+    "exitCode": 1,
+    "output": {
+      "digest": "sha256:cce35ea05815596c2806af1c83c9d2f6b7672da3392dace68f5067f791cca687",
+      "tail": "the workspace has no executable named split"
+    },
+    "result": "fail",
+    "startedAt": "2026-09-29T20:12:42Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "5b39e78d6061713129ed0a6502211340cc0abacd17189f15705ce1a434611e24"
+      },
+      "name": "workspace"
+    }
+  ]
+}

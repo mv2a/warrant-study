@@ -1,0 +1,42 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "baseline": "sha256:3e57534cdd2d0c49827df8696af2749cfbebb65952e4a84ff96a713e3ed2526e",
+    "check": {
+      "covers": [
+        "C1"
+      ],
+      "digest": "sha256:ed24d4b2342d8e122ca815f57b533eb184ca41ec4d5ec6f94c20f0c579331d02",
+      "id": "H4",
+      "strength": "tested",
+      "visibility": "holdout"
+    },
+    "command": [
+      "python3",
+      "rounding.py"
+    ],
+    "durationSeconds": 7.459,
+    "exitCode": 0,
+    "output": {
+      "digest": "sha256:1c4d208e0235c6e0209ad4d21d8bad59447fd6e0b196150ed584d65b88d00354",
+      "tail": "rounding ok: 118 of 118 tax amounts and 49 allowances"
+    },
+    "result": "pass",
+    "startedAt": "2026-09-29T21:34:34Z",
+    "verifier": {
+      "name": "warrant-cli",
+      "python": "3.11.16",
+      "version": "0.1.1"
+    },
+    "version": "0.1"
+  },
+  "predicateType": "https://github.com/mv2a/warrant/blob/main/SPEC.md#evidence",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "a5f30f33f24b6a14bf1eb24bc4755f3de09b37eaa1d18f1d9c932c04a161b37e"
+      },
+      "name": "workspace"
+    }
+  ]
+}
