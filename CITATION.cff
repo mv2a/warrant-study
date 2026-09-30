@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: If you use these materials, please cite them using these metadata.
+type: dataset
+title: "Warrant study: tasks, harness and run records for an exploratory evaluation of evidence-gated acceptance of code written by an AI agent"
+abstract: >-
+  Twenty small Python command-line tasks with visible checks, hidden checks, audit
+  suites, reference and deliberately broken implementations; the harness; a seeded-defect
+  evaluation of 160 broken implementations; and 40 agent runs (Claude Code driving
+  gpt-oss:20b) under visible-only acceptance and under Warrant's gate, with run records
+  and analysis. Exploratory, not pre-registered; tasks written by AI agents and reviewed
+  by an AI model.
+authors:
+  - given-names: Tiago
+    family-names: Miranda de Leao
+    orcid: "https://orcid.org/0009-0003-6386-5941"
+    alias: mv2a
+repository-code: https://github.com/mv2a/warrant-study
+url: https://github.com/mv2a/warrant-study
+license: Apache-2.0
+version: 1.0.0
+date-released: 2026-09-30
+keywords:
+  - AI coding agents
+  - hidden tests
+  - test overfitting
+  - acceptance gates
+  - mutation testing

@@ -5,8 +5,8 @@ Working repository for an exploratory evaluation of Warrant. The design is in
 `mv2a/warrant/docs/experiments/visible-vs-evidence-gated/PROTOCOL.md` (v0.1), which was
 never frozen or registered and was not run.
 
-The repository stays private until the results are published. The audit suites (X) are
-not published before all runs are complete.
+All runs are complete, so the audit suites (X) are published with everything else.
+Licence: Apache-2.0 (see `LICENSE`). To cite these materials, see `CITATION.cff`.
 
 - `tasks/Txx-slug/`: the 20 study tasks, one per directory (see `TASK_SPEC.md`). Each has
   its intent, visible checks (V), hidden checks (H), audit checks (X), a reference and

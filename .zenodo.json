@@ -1,0 +1,29 @@
+{
+  "title": "Warrant study: tasks, harness and run records for an exploratory evaluation of evidence-gated acceptance of code written by an AI agent",
+  "upload_type": "dataset",
+  "description": "<p>Materials for an exploratory evaluation of Warrant (https://doi.org/10.5281/zenodo.23029803). Twenty small Python command-line tasks, each with plain-language promises, visible checks, hidden checks, an audit suite, a reference implementation and deliberately broken implementations; the validity gates; the harness; Part 1, a seeded-defect evaluation of 160 broken implementations under visible-only acceptance and under Warrant's gate; and Part 2, 40 runs of Claude Code driving gpt-oss:20b under the two acceptance rules, with snapshots, transcripts, session logs, Warrant ledgers and the analysis.</p><p>The evaluation is exploratory and not pre-registered. The tasks, checks and implementations were written by AI agents at the author's request and reviewed by an AI model, not by an independent person. Development was AI-assisted, and the commits carry Co-Authored-By trailers.</p>",
+  "creators": [
+    {
+      "name": "Miranda de Leao, Tiago",
+      "orcid": "0009-0003-6386-5941"
+    }
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "AI coding agents",
+    "hidden tests",
+    "test overfitting",
+    "acceptance gates",
+    "mutation testing",
+    "software verification"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.23029803",
+      "relation": "references",
+      "resource_type": "software",
+      "scheme": "doi"
+    }
+  ],
+  "language": "eng"
+}
